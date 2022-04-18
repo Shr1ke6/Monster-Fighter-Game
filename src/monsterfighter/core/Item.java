@@ -1,20 +1,31 @@
 package monsterfighter.core;
 
-public abstract class Item {
-	boolean consumable;
-	boolean equipable;
-	
-	
+public class Item{
+	private final String name;
+	private final int amount;
+	private final String stat;
 
-	
-
-	public Item() {
-		// TODO Auto-generated constructor stub
+	public Item(String name, int amount, String stat) {
+		this.name = name;
+		this.amount = amount;
+		this.stat = stat;
 	}
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+	
+	public String getName() {
+		return name;
 	}
-
+	
+	public int getAmount() {
+		return amount;
+	}
+	
+	public String getStat() {
+		return stat;
+	}
+	
+	@Override
+	public String toString() {
+		return "Item: " + name + " Effect: increases " + stat + " by " + amount;
+	}
+	
 }

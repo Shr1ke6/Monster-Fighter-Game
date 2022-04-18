@@ -1,6 +1,6 @@
 package monsterfighter.core;
 
-public class Monster {
+public class Monster{
 	
 	public enum Type {
 		NORMAL("Normal"),
