@@ -1,7 +1,14 @@
+package monsterfighter.core;
 
-public class Type {
+public abstract class Item {
+	boolean consumable;
+	boolean equipable;
+	
+	
 
-	public Type() {
+	
+
+	public Item() {
 		// TODO Auto-generated constructor stub
 	}
 

@@ -1,13 +1,12 @@
-
-public abstract class Item {
-	boolean consumable;
-	boolean equipable;
+package monsterfighter.core;
+public class Potion extends Item{
+	
+	int healAmount;
 	
 	
-
 	
 
-	public Item() {
+	public Potion() {
 		// TODO Auto-generated constructor stub
 	}
 

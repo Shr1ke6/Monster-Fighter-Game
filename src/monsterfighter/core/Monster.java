@@ -1,3 +1,4 @@
+package monsterfighter.core;
 
 public class Monster {
 	

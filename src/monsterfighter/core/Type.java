@@ -1,12 +1,8 @@
+package monsterfighter.core;
 
-public class Potion extends Item{
-	
-	int healAmount;
-	
-	
-	
+public class Type {
 
-	public Potion() {
+	public Type() {
 		// TODO Auto-generated constructor stub
 	}
 
