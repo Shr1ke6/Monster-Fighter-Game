@@ -23,11 +23,11 @@ public interface GameEnvironmentUi {
     String NAME_REGEX = "[a-zA-Z]{,12}";
 
     /**
-     * Initialises this UI and sets up the given RocketManager with the rockets to be managed.
+     * Initialises this UI and sets up the given GameEnvironment with the available monsters and items.
      * Note that setup need not be complete by the time this method returns.
-     * Once setup is complete this UI must call {@link RocketManager#onSetupFinished(String, List)}.
+     * Once setup is complete this UI must call {@link GameEnvironment#onSetupFinished(String, List)}.
      *
-     * @param rocketManager The rocket manager that this UI interacts with
+     * @param gameEnvironment The game environment that this UI interacts with
      */
     void setup(GameEnvironment gameEnvironment);
 
