@@ -1,5 +1,5 @@
 package monsterfighter.core;
 
-public class Type {
+public class GameEnvironment {
 
 }
