@@ -77,5 +77,42 @@ public class CmdLineUi implements GameEnvironmentUi {
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+	 /**
+     * Handles the given option by performing the appropriate action.
+     *
+     * @param option The selected option to be carried out
+     */
+	/*
+    private void handleOption(Option option) {
+        switch (option) {
+            case SHOW_MONSTERS:
+                printMonsters(gameEnvironment.getParty());
+                break;
+            case BATTLE:
+                launch();
+                break;
+            case ITEMS:
+                clean();
+                break;
+            case REST:
+                refuel();
+                break;
+            case QUIT:
+                gameEnvironment.onFinish();
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + option);
+        }
+        
+        QUIT("Quit"),
+        REST("Rest"),
+        ITEMS("Items"),
+        SHOP("Shop"),
+        SHOW_MONSTERS("Show Monsters"),
+        BATTLE("Battle");
+        */
 }
+	
+
+
