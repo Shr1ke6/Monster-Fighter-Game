@@ -18,6 +18,7 @@ public class Monster{
 	}
 	
 	private final String name;
+	private String nickname;
 	private final Type type;
 	private int maxHealth;
 	private int damage;
@@ -25,6 +26,7 @@ public class Monster{
 	
 	public Monster(String name, Type type, int maxHealth, int damage, int currentHealth) {
 		this.name = name;
+		this.nickname = name;
 		this.type = type;
 		this.maxHealth = maxHealth;
 		this.damage = damage;
@@ -33,6 +35,10 @@ public class Monster{
 	
 	public String getName() {
 		return name;
+	}
+	
+	public String getNickname() {
+		return nickname;
 	}
 	
 	public Type getType() {
@@ -52,6 +58,10 @@ public class Monster{
 		return currentHealth;
 	}
 	
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+	
 	public void setMaxHealth(int healthBuff) {
 		maxHealth += healthBuff;
 	}
@@ -67,8 +77,7 @@ public class Monster{
 
 	@Override
 	public String toString() {
-		return "Monster: " + name + " Type: " + type.value + " Health: " + currentHealth + "/" + maxHealth + " Damage: " + damage 
-				;
+		return "Monster: " + name + " Nickname: " + nickname + " Type: " + type.value + " Health: " + currentHealth + "/" + maxHealth + " Damage: " + damage;
 	}
 
 }
