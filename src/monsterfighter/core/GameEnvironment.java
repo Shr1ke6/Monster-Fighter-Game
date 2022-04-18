@@ -5,7 +5,7 @@ import java.util.List;
 
 import monsterfighter.ui.GameEnvironmentUi;
 
-public class GameEnvironment {
+public abstract class GameEnvironment {
 	
 	
 	  /**
@@ -83,5 +83,10 @@ public class GameEnvironment {
 		return name;
 	}
 	
+	public class Days {
+		
+		
+		
+	}
 
 }
