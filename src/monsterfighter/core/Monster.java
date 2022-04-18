@@ -1,6 +1,6 @@
 package monsterfighter.core;
 
-public class Monster{
+public class Monster extends Purchasable{
 	
 	public enum Type {
 		NORMAL("Normal"),
@@ -23,14 +23,18 @@ public class Monster{
 	private int maxHealth;
 	private int damage;
 	private int currentHealth;
+	private final int buyPrice;
+	private final int sellPrice;
 	
-	public Monster(String name, Type type, int maxHealth, int damage, int currentHealth) {
+	public Monster(String name, Type type, int maxHealth, int damage, int currentHealth, int buyPrice, int sellPrice) {
 		this.name = name;
 		this.nickname = name;
 		this.type = type;
 		this.maxHealth = maxHealth;
 		this.damage = damage;
 		this.currentHealth = currentHealth;
+		this.buyPrice = buyPrice;
+		this.sellPrice = sellPrice;
 	}
 	
 	public String getName() {
@@ -58,6 +62,14 @@ public class Monster{
 		return currentHealth;
 	}
 	
+	public int getBuyPrice() {
+		return buyPrice;
+	}
+	
+	public int getSellPrice() {
+		return sellPrice;
+	}
+	
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
 	}
@@ -74,10 +86,13 @@ public class Monster{
 		currentHealth += healthChange;
 	}
 	
+	
+
+	
 
 	@Override
 	public String toString() {
-		return "Monster: " + name + " Nickname: " + nickname + " Type: " + type.value + " Health: " + currentHealth + "/" + maxHealth + " Damage: " + damage;
+		return super.toString() + "Monster: " + name + " Nickname: " + nickname + " Type: " + type.value + " Health: " + currentHealth + "/" + maxHealth + " Damage: " + damage;
 	}
 
 }

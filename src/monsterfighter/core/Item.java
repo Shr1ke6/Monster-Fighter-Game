@@ -1,6 +1,6 @@
 package monsterfighter.core;
 
-public class Item{
+public class Item extends Purchasable{
 	private final String name;
 	private final int amount;
 	private final String stat;
