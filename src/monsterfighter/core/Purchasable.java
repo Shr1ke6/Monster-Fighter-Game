@@ -1,5 +1,5 @@
 package monsterfighter.core;
 
-public interface Purchasable {
+public class Purchasable {
 
 }

@@ -1,5 +1,63 @@
 package monsterfighter.core;
 
-public class GameEnvironment {
+import java.util.ArrayList;
+import java.util.List;
 
+import monsterfighter.ui.GameEnvironmentUi;
+
+public class GameEnvironment {
+	
+	
+	   /**
+     * The maximum number of monsters that can be in a party.
+     */
+    public static final int MAX_MONSTERS = 3;
+
+    // The user interface to be used by this manager
+	private final GameEnvironmentUi ui;
+	
+	// The list of all {@link Monster}s
+	private final List<Monster> allMonsters;
+
+	// The list of available starting {@link Monster}s 
+	private final List<Monster> startingMonsters;
+	
+	// The list of all {@link Items}s
+	private final List<Item> allItems;
+
+	// The array list representing the players inventory. 
+	// Contains starting {@link items}s 
+	private final ArrayList<Item> inventory = new ArrayList<Item>();
+
+	// The array list of Monsters in the users party
+	private ArrayList<Monster> party;
+
+	// The name of the user using this manager
+	private String name;
+
+	/**
+	 * Creates a RocketManager with the given user interface and rockets.
+	 *
+	 * @param ui The user interface that this manager should use
+	 * @param rockets The list of available rockets that the user can choose from when
+	 *                configuring this manager
+	 */
+	public GameEnvironment(GameEnvironmentUi ui, List<Monster> monsters, List<Item> items) {
+		this.ui = ui;
+		this.allMonsters = monsters;
+		this.startingMonsters = monsters.subList(0, 3);
+		this.allItems = items;
+		for (int i = 0; i < 3; i++) {
+			this.inventory.add(items.get(0));
+		}
+	}
+	
+	/**
+	 * Gets the name of the user that configured this manager.
+	 *
+	 * @return The name entered by the user when configuring this manager
+	 */
+	public String getName() {
+		return name;
+	}
 }
