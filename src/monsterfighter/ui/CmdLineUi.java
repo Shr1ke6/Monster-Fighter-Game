@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import monsterfighter.core.GameEnvironment;
 import monsterfighter.core.Monster;
+import seng201.rocketmanager.core.Rocket;
 
 
 public class CmdLineUi implements GameEnvironmentUi {
@@ -19,7 +20,7 @@ public class CmdLineUi implements GameEnvironmentUi {
     // Flag to indicate when this ui should finish
     private boolean finish = false;
 
-	private Difficulty startingGold;
+
 
 	
 
@@ -40,25 +41,7 @@ public class CmdLineUi implements GameEnvironmentUi {
     }
     
     
-    enum Difficulty {
-	    EASY(1000),
-	    HARD(500);
-
-	    private final int startingGold;
-
-
-	    Difficulty(int startingGold){
-	        this.startingGold = startingGold;
-	      
-	    }
-
-	    public int getStartingGold() {
-
-	        return startingGold;
-	    }
-	
-
-	}
+    
 
     /**
      * Creates an instance of this UI
@@ -74,21 +57,37 @@ public class CmdLineUi implements GameEnvironmentUi {
         this.gameEnvironment = gameEnvironment;
         final String name = getName();
         final int days = getDays();
-        /*
-        final Difficulty difficulty = getDifficulty(difficulty);
-
+        final Difficulty difficulty = GameEnvironment.getDifficulty();
         final ArrayList<Monster> party = getStartingMonster();
+        
+        
+        /*
+         * 
+        
 	    gameEnvironment.onSetupFinished(name, days, party, difficulty);
 	    */
 	       
 	}
 	
+	private List<Monster> getSelectedMonsters(int rocketCount) {
+        final List<Monster> monsters = new ArrayList<>(rocketCount);
+        final List<Monster> availableRockets = new ArrayList<>(rocketManager.getAvailableRockets());
+
+        System.out.println("\nPlease select " + rocketCount + " rockets");
+
+        while (rockets.size() < rocketCount) {
+            Rocket rocket = chooseRocket("Select a rocket by entering the associated number followed by enter",
+                    availableRockets);
+
+            rockets.add(rocket);
+            availableRockets.remove(rocket);
+        }
+
+        return rockets;
+    }
 	
-	private Difficulty getDifficulty(Difficulty startingGold) {
-		// TODO Auto-generated method stub
-		this.startingGold = startingGold;
-		return startingGold;
-	}
+	
+
 
 
 	@Override

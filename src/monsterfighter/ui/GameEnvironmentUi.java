@@ -37,6 +37,27 @@ public interface GameEnvironmentUi {
      * A description of the day requirements for the player of a monster fighter.
      */
     String DAY_REQUIREMENTS = "The number of days must be between 5 and 15";
+    
+    enum Difficulty {
+	    EASY(1000),
+	    HARD(500);
+
+	    private final int startingGold;
+
+
+	    Difficulty(int startingGold){
+	        this.startingGold = startingGold;
+	      
+	    }
+
+	    public int getStartingGold() {
+
+	        return startingGold;
+	    }
+	
+
+	}
+   
 
     /**
      * Initialises this UI and sets up the given GameEnvironment with the available monsters and items.

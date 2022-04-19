@@ -76,6 +76,8 @@ public class GameEnvironment {
 	 *
 	 * @return The name entered by the user when configuring this manager
 	 */
+	
+	
 	public String getName() {
 		return name;
 	}
