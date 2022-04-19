@@ -7,11 +7,6 @@ import java.util.Scanner;
 
 import monsterfighter.core.GameEnvironment;
 import monsterfighter.core.Monster;
-<<<<<<< HEAD
-=======
-
-
->>>>>>> branch 'master' of https://eng-git.canterbury.ac.nz/sco161/monster-fighter-sco161-qzh78.git
 
 public class CmdLineUi implements GameEnvironmentUi {
 	
@@ -61,13 +56,10 @@ public class CmdLineUi implements GameEnvironmentUi {
         this.gameEnvironment = gameEnvironment;
         final String name = getName();
         final int days = getDays();
-<<<<<<< HEAD
         final Difficulty difficulty = getDifficulty();
-
-=======
         final Monster startingMonster = getStartingMonster();
         //final Difficulty difficulty = getDifficulty();
->>>>>>> branch 'master' of https://eng-git.canterbury.ac.nz/sco161/monster-fighter-sco161-qzh78.git
+
         
         
         /*
@@ -77,15 +69,6 @@ public class CmdLineUi implements GameEnvironmentUi {
 	    */
 	       
 	}
-	
-<<<<<<< HEAD
-
-	
-	
-
-
-=======
->>>>>>> branch 'master' of https://eng-git.canterbury.ac.nz/sco161/monster-fighter-sco161-qzh78.git
 
 	@Override
 	public void start() {
