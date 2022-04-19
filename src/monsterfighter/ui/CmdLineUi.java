@@ -6,8 +6,6 @@ import java.util.Scanner;
 
 import monsterfighter.core.GameEnvironment;
 import monsterfighter.core.Monster;
-import seng201.rocketmanager.core.Rocket;
-
 
 public class CmdLineUi implements GameEnvironmentUi {
 	
@@ -57,8 +55,8 @@ public class CmdLineUi implements GameEnvironmentUi {
         this.gameEnvironment = gameEnvironment;
         final String name = getName();
         final int days = getDays();
-        final Difficulty difficulty = GameEnvironment.getDifficulty();
-        final ArrayList<Monster> party = getStartingMonster();
+        final Difficulty difficulty = getDifficulty();
+
         
         
         /*
@@ -69,22 +67,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 	       
 	}
 	
-	private List<Monster> getSelectedMonsters(int rocketCount) {
-        final List<Monster> monsters = new ArrayList<>(rocketCount);
-        final List<Monster> availableRockets = new ArrayList<>(rocketManager.getAvailableRockets());
 
-        System.out.println("\nPlease select " + rocketCount + " rockets");
-
-        while (rockets.size() < rocketCount) {
-            Rocket rocket = chooseRocket("Select a rocket by entering the associated number followed by enter",
-                    availableRockets);
-
-            rockets.add(rocket);
-            availableRockets.remove(rocket);
-        }
-
-        return rockets;
-    }
 	
 	
 
@@ -171,7 +154,6 @@ public class CmdLineUi implements GameEnvironmentUi {
     }
 	
 	private int getDays() {
-        
         while (true) {
             System.out.println("Pick how many days you would like. From 5 to 15");
             try {
@@ -186,7 +168,24 @@ public class CmdLineUi implements GameEnvironmentUi {
             }
         }
     }
-
+	
+	private Difficulty getDifficulty() {
+		System.out.println("Select an option by inputting the corresponding number");
+		while (true) {
+			System.out.println("Choose a difficulty\n")
+			printDifficulties()
+			try {
+				int input = scanner.nextInt();
+			}
+		}
+		
+	}
+	
+	private void printDifficulties() {
+        for (Difficulty difficulty : Difficulty.values()) {
+            System.out.println("(" +  + ") " + option.name);
+		
+	}
 }
 	
 

@@ -1,6 +1,6 @@
 package monsterfighter.core;
 
-public class Monster extends Purchasable{
+public class Monster{
 	
 	public enum Type {
 		NORMAL("Normal"),
@@ -92,7 +92,8 @@ public class Monster extends Purchasable{
 
 	@Override
 	public String toString() {
-		return super.toString() + "Monster: " + name + " Nickname: " + nickname + " Type: " + type.value + " Health: " + currentHealth + "/" + maxHealth + " Damage: " + damage;
+		return "Monster: " + name + " Nickname: " + nickname + " Type: " + type.value + " Health: " + currentHealth + "/" + maxHealth + " Damage: " + damage;
 	}
+
 
 }

@@ -31,6 +31,9 @@ public class GameEnvironment {
 
 	// The name of the user using this manager
 	private String name;
+	
+	// The number of days the game will last
+	private int days;
 
 	/**
 	 * Creates a RocketManager with the given user interface and rockets.
@@ -84,9 +87,9 @@ public class GameEnvironment {
 	
 	public int getDays() {
 		return days;
-		
-		
 	}
+	
+	
 	
 	public String getDifficulty() {
 		return difficulty;
