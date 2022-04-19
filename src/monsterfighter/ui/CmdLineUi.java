@@ -20,6 +20,10 @@ public class CmdLineUi implements GameEnvironmentUi {
     // Flag to indicate when this ui should finish
     private boolean finish = false;
 
+	private Difficulty startingGold;
+
+	
+
     // An enum representing the various actions the user can perform
     private enum Option {
         QUIT("Quit"),
@@ -35,6 +39,27 @@ public class CmdLineUi implements GameEnvironmentUi {
             this.name = name;
         }
     }
+    
+    
+    enum Difficulty {
+	    EASY(1000),
+	    HARD(500);
+
+	    private final int startingGold;
+
+
+	    Difficulty(int startingGold){
+	        this.startingGold = startingGold;
+	      
+	    }
+
+	    public int getStartingGold() {
+
+	        return startingGold;
+	    }
+	
+
+	}
 
     /**
      * Creates an instance of this UI
@@ -52,11 +77,19 @@ public class CmdLineUi implements GameEnvironmentUi {
         final String name = getName();
         final int days = getDays();
         final ArrayList<Monster> party = getStartingMonster();
-        final String difficulty = getDifficulty();
+        final Difficulty difficulty = getDifficulty(difficulty);
 	    gameEnvironment.onSetupFinished(name, days, party, difficulty);
 	       
 	}
 	
+	
+	private Difficulty getDifficulty(Difficulty startingGold) {
+		// TODO Auto-generated method stub
+		this.startingGold = startingGold;
+		return startingGold;
+	}
+
+
 	@Override
 	public void start() {
 		// TODO Auto-generated method stub

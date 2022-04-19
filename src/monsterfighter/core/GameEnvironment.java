@@ -87,6 +87,11 @@ public class GameEnvironment {
 		return days;
 		
 		
+	}
+	
+	public String getDifficulty() {
+		return difficulty;
+		
 		
 	}
 
