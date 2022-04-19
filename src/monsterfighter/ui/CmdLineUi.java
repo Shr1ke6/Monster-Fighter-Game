@@ -179,8 +179,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 				if (option >= 0 && option < startingMonsters.size()) {
 					return startingMonsters.get(option);
 				}
-			//} catch (InputMismatchException e) {
-				//scanner.nextInt();
+	
 			} catch (Exception e) {
 				scanner.reset();
 				scanner.next();
