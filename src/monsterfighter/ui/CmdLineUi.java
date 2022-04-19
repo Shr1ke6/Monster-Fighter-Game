@@ -19,10 +19,6 @@ public class CmdLineUi implements GameEnvironmentUi {
     // Flag to indicate when this ui should finish
     private boolean finish = false;
 
-
-
-	
-
     // An enum representing the various actions the user can perform
     private enum Option {
         QUIT("Quit"),
@@ -56,7 +52,7 @@ public class CmdLineUi implements GameEnvironmentUi {
         this.gameEnvironment = gameEnvironment;
         final String name = getName();
         final int days = getDays();
-        final Difficulty difficulty = getDifficulty();
+        //final Difficulty difficulty = getDifficulty();
         final Monster startingMonster = getStartingMonster();
         //final Difficulty difficulty = getDifficulty();
 
@@ -167,13 +163,12 @@ public class CmdLineUi implements GameEnvironmentUi {
         }
     }
 	
-<<<<<<< HEAD
-	private Difficulty getDifficulty() {
+	/*private Difficulty getDifficulty() {
 		System.out.println("Select an option by inputting the corresponding number");
 		while (true) {
 			System.out.println("Choose a difficulty\n")
-			printDifficulties()
-			try {
+			//printDifficulties()
+			//try {
 				int input = scanner.nextInt();
 			}
 		}
@@ -181,11 +176,11 @@ public class CmdLineUi implements GameEnvironmentUi {
 	}
 	
 	private void printDifficulties() {
-        for (Difficulty difficulty : Difficulty.values()) {
-            System.out.println("(" +  + ") " + option.name);
+        //for (Difficulty difficulty : Difficulty.values()) {
+           // System.out.println("(" +  + ") " + option.name);
 		
-	}
-=======
+	}*/
+
 	private Monster getStartingMonster() {
 		final List<Monster> startingMonsters = new ArrayList<>(gameEnvironment.getStartingMonsters());
 		while (true) {
@@ -213,8 +208,6 @@ public class CmdLineUi implements GameEnvironmentUi {
 			i += 1;
 		}
 	}
-
->>>>>>> branch 'master' of https://eng-git.canterbury.ac.nz/sco161/monster-fighter-sco161-qzh78.git
 }
 	
 
