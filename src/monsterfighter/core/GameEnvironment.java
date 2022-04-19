@@ -11,7 +11,7 @@ public class GameEnvironment {
 	 /**
 	 * The maximum number of monsters that can be in a party.
 	 */
-    public static final int MAX_MONSTERS = 3;
+    public static final int MAX_DAYS = 15;
 
     // The user interface to be used by this manager
 	private final GameEnvironmentUi ui;
@@ -83,7 +83,8 @@ public class GameEnvironment {
 		return name;
 	}
 	
-	public class days {
+	public int getDays() {
+		return days;
 		
 		
 		

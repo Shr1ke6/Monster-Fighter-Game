@@ -6,6 +6,8 @@ import java.util.Scanner;
 
 import monsterfighter.core.GameEnvironment;
 import monsterfighter.core.Monster;
+import seng201.rocketmanager.core.Rocket;
+import seng201.rocketmanager.core.RocketManager;
 
 public class CmdLineUi implements GameEnvironmentUi {
 	
@@ -69,14 +71,16 @@ public class CmdLineUi implements GameEnvironmentUi {
 
 	@Override
 	public void quit() {
-		// TODO Auto-generated method stub
+		// TODO fix quit class gives error quits program no matter what option
+		
+		finish = true;
 		
 	}
 
 	@Override
 	public void showError(String error) {
-		// TODO Auto-generated method stub
-		
+		// TODO need to be looked at later
+		System.out.println("!!!!!!!! " + error + " !!!!!!!!");
 	}
 	
 	public String getName() {
@@ -128,6 +132,30 @@ public class CmdLineUi implements GameEnvironmentUi {
         SHOW_MONSTERS("Show Monsters"),
         BATTLE("Battle");
         */
+	
+	private int getDays() {
+        
+		StringBuilder sb = new StringBuilder();
+        for (int i = 1; i < GameEnvironment.MAX_DAYS; i++) {
+            sb.append(i).append(", ");
+        }
+        sb.append("or ").append(GameEnvironment.MAX_DAYS);
+
+        while (true) {
+            System.out.format("How many days would you like (%s)?\n", sb.toString());
+
+            try {
+                int dayCount = scanner.nextInt();
+                if (dayCount >= 1 && dayCount <= GameEnvironment.MAX_DAYS) {
+                    return dayCount;
+                }
+            } catch (Exception e) {
+                // Discard the unacceptable input
+                scanner.nextLine();
+            }
+        }
+    }
+
 }
 	
 
