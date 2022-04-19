@@ -38,30 +38,6 @@ public interface GameEnvironmentUi {
      */
     String DAY_REQUIREMENTS = "The number of days must be between 5 and 15";
     
-    
-    
-    enum Difficulty {
-	    EASY(100, 30, "Easy"),
-	    MEDIUM(50, 20, "Medium"),
-	    HARD(25, 10, "Hard");
-
-	    private final String name;
-	    private final int startingGold;
-	    private final int battleGold;
-
-	    Difficulty(int startingGold, int battleGold, String name){
-	        this.startingGold = startingGold;
-	        this.battleGold = battleGold;
-	        this.name = name;
-	    }
-	    
-	    @Override
-	    public String toString() {
-			return super.toString() + "Monster: " + name + " Nickname: " + nickname + " Type: " + type.value + " Health: " + currentHealth + "/" + maxHealth + " Damage: " + damage;
-		}
-	}
-   
-
     /**
      * Initialises this UI and sets up the given GameEnvironment with the available monsters and items.
      * Note that setup need not be complete by the time this method returns.

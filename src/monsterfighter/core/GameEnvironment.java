@@ -1,5 +1,6 @@
 package monsterfighter.core;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,13 +29,41 @@ public class GameEnvironment {
 	private final ArrayList<Item> inventory = new ArrayList<Item>();
 
 	// The array list of Monsters in the users party
-	private ArrayList<Monster> party;
+	private ArrayList<Monster> party = new ArrayList<Monster>();
 
 	// The name of the user using this manager
 	private String name;
 	
 	// The number of days the game will last
 	private int days;
+	
+	// The game difficulty
+	private Difficulty difficulty;
+	
+	// The users gold
+	private int gold = 0;
+	
+	// Enum that stores the difficulty options for the game 
+    public enum Difficulty {
+	    EASY(100, 30, "Easy"),
+	    MEDIUM(50, 20, "Medium"),
+	    HARD(25, 10, "Hard");
+
+	    private final String name;
+	    private final int startingGold;
+	    private final int battleGold;
+
+	    Difficulty(int startingGold, int battleGold, String name){
+	        this.startingGold = startingGold;
+	        this.battleGold = battleGold;
+	        this.name = name;
+	    }
+	    
+	    @Override
+	    public String toString() {
+			return "Difficulty: " + name + " Starting Gold: " + startingGold + " Gold per battle: " + battleGold ;
+		}
+	}
 
 	/**
 	 * Creates a RocketManager with the given user interface and rockets.
@@ -71,9 +100,12 @@ public class GameEnvironment {
 	 * @param name The name of the user that is playing the game.
 	 * @param party The party of the player after they selected their starting monster.
 	 */
-	public void onSetupFinished(String name, Monster startingMonster) {
+	public void onSetupFinished(String name, int days, Monster startingMonster, Difficulty difficulty) {
 		this.name = name;
+		this.days = days;
 		this.party.add(startingMonster);
+		this.difficulty = difficulty;
+		this.gold += difficulty.startingGold;
 		ui.start();
 	}
 	
@@ -92,12 +124,8 @@ public class GameEnvironment {
 		return days;
 	}
 	
-	
-	
-	public String getDifficulty() {
+	public Difficulty getDifficulty() {
 		return difficulty;
-		
-		
 	}
 	
 	public List<Monster> getStartingMonsters() {

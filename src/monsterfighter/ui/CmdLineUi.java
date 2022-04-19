@@ -1,11 +1,14 @@
 package monsterfighter.ui;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 import monsterfighter.core.GameEnvironment;
+import monsterfighter.core.GameEnvironment.Difficulty;
 import monsterfighter.core.Monster;
 
 public class CmdLineUi implements GameEnvironmentUi {
@@ -52,26 +55,31 @@ public class CmdLineUi implements GameEnvironmentUi {
         this.gameEnvironment = gameEnvironment;
         final String name = getName();
         final int days = getDays();
-        //final Difficulty difficulty = getDifficulty();
         final Monster startingMonster = getStartingMonster();
-        //final Difficulty difficulty = getDifficulty();
-
-        
-        
-        /*
-         * 
-        
-	    gameEnvironment.onSetupFinished(name, days, party, difficulty);
-	    */
+        final Difficulty difficulty = getDifficulty();
+	    gameEnvironment.onSetupFinished(name, days, startingMonster, difficulty);
+	    
 	       
 	}
 
 	@Override
 	public void start() {
-		// TODO Auto-generated method stub
-		
+		while (true) {
+			System.out.println("Pick an option:\n");
+			printOptions();
+			try {
+				int option = scanner.nextInt();
+				if (option >= 0 && option < 6) {
+					handleOption(Option.values()[option]);
+				}
+			} catch (Exception e) {
+				scanner.reset();
+				scanner.next();
+			}
+		}
 	}
-
+		
+	
 	@Override
 	public boolean confirmQuit() {
 		// TODO Auto-generated method stub
@@ -99,40 +107,32 @@ public class CmdLineUi implements GameEnvironmentUi {
      *
      * @param option The selected option to be carried out
      */
-	/*
     private void handleOption(Option option) {
         switch (option) {
             case SHOW_MONSTERS:
-                printMonsters(gameEnvironment.getParty());
+
                 break;
             case BATTLE:
-                launch();
+
                 break;
             case ITEMS:
-                clean();
+
                 break;
             case REST:
-                refuel();
+
                 break;
             case QUIT:
-                gameEnvironment.onFinish();
+
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + option);
         }
-        
-        QUIT("Quit"),
-        REST("Rest"),
-        ITEMS("Items"),
-        SHOP("Shop"),
-        SHOW_MONSTERS("Show Monsters"),
-        BATTLE("Battle");
-        */
+    }
+
 	
     private String getName() {
         while (true) {
             System.out.println("Please enter your name:");
-
             try {
                 String name = scanner.nextLine();
                 if (name.matches(NAME_REGEX)) {
@@ -163,28 +163,38 @@ public class CmdLineUi implements GameEnvironmentUi {
         }
     }
 	
-	/*private Difficulty getDifficulty() {
-		System.out.println("Select an option by inputting the corresponding number");
+	private Difficulty getDifficulty() {
 		while (true) {
-			System.out.println("Choose a difficulty\n")
-			//printDifficulties()
-			//try {
-				int input = scanner.nextInt();
+			System.out.println("Choose a difficulty:\n");
+			printDifficulties();
+			try {
+				int option = scanner.nextInt();
+				if (option >= 0 && option < 3) {
+					return Difficulty.values()[option];
+				}
+	
+			} catch (Exception e) {
+				scanner.reset();
+				scanner.next();
 			}
 		}
-		
 	}
+		
+	
 	
 	private void printDifficulties() {
-        //for (Difficulty difficulty : Difficulty.values()) {
-           // System.out.println("(" +  + ") " + option.name);
-		
-	}*/
+		int i = 0;
+        for (Difficulty difficulty : Difficulty.values()) {
+           System.out.println("(" + i + ") " + difficulty);
+           i += 1;
+        }
+	}
 
 	private Monster getStartingMonster() {
 		final List<Monster> startingMonsters = new ArrayList<>(gameEnvironment.getStartingMonsters());
+		System.out.println("Select an option by inputting the corresponding number");
 		while (true) {
-			System.out.println("Select one monster as your starting monster");
+			System.out.println("Select a starting monster:\n");
 			printStartingMonsters(startingMonsters);
 			try {
 				int option = scanner.nextInt();
@@ -207,7 +217,13 @@ public class CmdLineUi implements GameEnvironmentUi {
 			i += 1;
 		}
 	}
+
+
+private void printOptions() {
+		int i = 0;
+	    for (Option option : Option.values()) {
+	       System.out.println("(" + i + ") " + option.name);
+	       i += 1;
+	    }
+	}
 }
-	
-
-
