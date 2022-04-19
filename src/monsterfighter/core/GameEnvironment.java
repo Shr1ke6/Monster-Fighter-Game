@@ -5,7 +5,7 @@ import java.util.List;
 
 import monsterfighter.ui.GameEnvironmentUi;
 
-public abstract class GameEnvironment {
+public class GameEnvironment {
 	
 	
 	 /**

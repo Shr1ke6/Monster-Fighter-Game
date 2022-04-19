@@ -28,20 +28,21 @@ public class Main {
 		
 		final List<Item> items = new ArrayList<>(4);
 		
-		items.add(new Item("Small Potion", 20, "current health", 18));
-		items.add(new Item("Big Potion", 50, "current health", 18));
-		items.add(new Item("Damage Snack", 10, "damage", 18));
-		items.add(new Item("Max Health Snack", 20, "max health", 18));
+		items.add(new Item("Small Potion", 20, "current health"));
+		items.add(new Item("Big Potion", 50, "current health"));
+		items.add(new Item("Damage Snack", 10, "damage"));
+		items.add(new Item("Max Health Snack", 20, "max health"));
 		
 		GameEnvironmentUi ui;
-		
-		/*
 
-       if (args.length > 0 && (args[0].equals("cmd"))) {
-            ui = new CmdLineUi();
-            GameEnvironment environment = new GameEnvironment(ui, monsters, items);
-            manager.start();
+       // if (args.length > 0 && (args[0].equals("cmd"))) {
+    	   
+        ui = new CmdLineUi();
+        GameEnvironment environment = new GameEnvironment(ui, monsters, items);
+        environment.start();
+        /*
         } else {
+        	
             ui = new Gui();
             RocketManager manager = new RocketManager(ui, rockets);
 

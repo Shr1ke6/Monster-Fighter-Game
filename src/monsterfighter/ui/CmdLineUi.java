@@ -27,10 +27,10 @@ public class CmdLineUi implements GameEnvironmentUi {
         SHOW_MONSTERS("Show Monsters"),
         BATTLE("Battle");
 
-        public final String option;
+        public final String name;
 
-        Option(String option) {
-            this.option = option;
+        Option(String name) {
+            this.name = name;
         }
     }
 
@@ -46,6 +46,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 	public void setup(GameEnvironment gameEnvironment) {
 		// TODO Auto-generated method stub
         this.gameEnvironment = gameEnvironment;
+        System.out.println();
         final String name = getName();
         final int days = getDays();
         final ArrayList<Monster> party = getStartingMonster();
@@ -54,7 +55,6 @@ public class CmdLineUi implements GameEnvironmentUi {
 	       
 	}
 	
-
 	@Override
 	public void start() {
 		// TODO Auto-generated method stub
@@ -80,7 +80,19 @@ public class CmdLineUi implements GameEnvironmentUi {
 	}
 	
 	public String getName() {
-		
+		while(true)
+        System.out.println("Please enter your name:");
+        try {
+            String name = scanner.nextLine();
+            if (name.matches(NAME_REGEX)) {
+                return name;
+            }
+            System.out.println(NAME_REQUIREMENTS);
+        } catch (Exception e) {
+            // Discard the unacceptable input
+            scanner.nextLine();
+        }
+    }
 	}
 	 /**
      * Handles the given option by performing the appropriate action.

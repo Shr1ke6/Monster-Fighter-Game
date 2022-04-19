@@ -15,7 +15,7 @@ public interface GameEnvironmentUi {
     /**
      * A description of the name requirements for the player of a monster fighter.
      */
-    String NAME_REQUIREMENTS = "Your name must only contain letters and have a max of 12 characters";
+    String NAME_REQUIREMENTS = "Your name must contain only letters and have a max of 12 characters";
 
     /**
      * A regex for validating the name against the specified name requirements.
