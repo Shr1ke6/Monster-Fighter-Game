@@ -6,8 +6,7 @@ import java.util.Scanner;
 
 import monsterfighter.core.GameEnvironment;
 import monsterfighter.core.Monster;
-import seng201.rocketmanager.core.Rocket;
-import seng201.rocketmanager.core.RocketManager;
+
 
 public class CmdLineUi implements GameEnvironmentUi {
 	
@@ -73,12 +72,14 @@ public class CmdLineUi implements GameEnvironmentUi {
 	public void setup(GameEnvironment gameEnvironment) {
 		// TODO Auto-generated method stub
         this.gameEnvironment = gameEnvironment;
-        System.out.println();
         final String name = getName();
         final int days = getDays();
-        final ArrayList<Monster> party = getStartingMonster();
+        /*
         final Difficulty difficulty = getDifficulty(difficulty);
+
+        final ArrayList<Monster> party = getStartingMonster();
 	    gameEnvironment.onSetupFinished(name, days, party, difficulty);
+	    */
 	       
 	}
 	
@@ -116,21 +117,8 @@ public class CmdLineUi implements GameEnvironmentUi {
 		System.out.println("!!!!!!!! " + error + " !!!!!!!!");
 	}
 	
-	public String getName() {
-		while(true)
-        System.out.println("Please enter your name:");
-        try {
-            String name = scanner.nextLine();
-            if (name.matches(NAME_REGEX)) {
-                return name;
-            }
-            System.out.println(NAME_REQUIREMENTS);
-        } catch (Exception e) {
-            // Discard the unacceptable input
-            scanner.nextLine();
-        }
-    }
-	}
+
+
 	 /**
      * Handles the given option by performing the appropriate action.
      *
@@ -166,25 +154,36 @@ public class CmdLineUi implements GameEnvironmentUi {
         BATTLE("Battle");
         */
 	
-	private int getDays() {
-        
-		StringBuilder sb = new StringBuilder();
-        for (int i = 1; i < GameEnvironment.MAX_DAYS; i++) {
-            sb.append(i).append(", ");
-        }
-        sb.append("or ").append(GameEnvironment.MAX_DAYS);
-
+    private String getName() {
         while (true) {
-            System.out.format("How many days would you like (%s)?\n", sb.toString());
+            System.out.println("Please enter your name:");
 
             try {
-                int dayCount = scanner.nextInt();
-                if (dayCount >= 1 && dayCount <= GameEnvironment.MAX_DAYS) {
-                    return dayCount;
+                String name = scanner.nextLine();
+                if (name.matches(NAME_REGEX)) {
+                    return name;
                 }
+                System.out.println(NAME_REQUIREMENTS);
             } catch (Exception e) {
                 // Discard the unacceptable input
                 scanner.nextLine();
+            }
+        }
+    }
+	
+	private int getDays() {
+        
+        while (true) {
+            System.out.println("Pick how many days you would like. From 5 to 15");
+            try {
+            	int days = scanner.nextInt();
+            	if (days <= MAX_DAYS && days >= MIN_DAYS) {
+            		return days;
+            	}
+            	System.out.println(DAY_REQUIREMENTS);
+            } catch (Exception e) {
+                // Discard the unacceptable input
+                scanner.nextInt();
             }
         }
     }

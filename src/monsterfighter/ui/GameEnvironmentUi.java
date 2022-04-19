@@ -15,12 +15,28 @@ public interface GameEnvironmentUi {
     /**
      * A description of the name requirements for the player of a monster fighter.
      */
-    String NAME_REQUIREMENTS = "Your name must contain only letters and have a max of 12 characters";
+    String NAME_REQUIREMENTS = "Your name must contain only letters, must not be empty and have a max of 12 characters";
 
     /**
      * A regex for validating the name against the specified name requirements.
      */
-    String NAME_REGEX = "[a-zA-Z]{,12}";
+    String NAME_REGEX = "[a-zA-Z]{1,12}";
+    
+	 /**
+	 * The maximum number of days that a game can last.
+	 */
+    int MAX_DAYS = 15;
+    
+    /**
+	 * The minimum number of days that a game can last.
+	 */
+    int MIN_DAYS = 5;
+    
+    
+    /**
+     * A description of the day requirements for the player of a monster fighter.
+     */
+    String DAY_REQUIREMENTS = "The number of days must be between 5 and 15";
 
     /**
      * Initialises this UI and sets up the given GameEnvironment with the available monsters and items.
