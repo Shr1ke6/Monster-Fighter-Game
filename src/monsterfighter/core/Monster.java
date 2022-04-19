@@ -95,4 +95,5 @@ public class Monster{
 		return "Monster: " + name + " Nickname: " + nickname + " Type: " + type.value + " Health: " + currentHealth + "/" + maxHealth + " Damage: " + damage;
 	}
 
+
 }
