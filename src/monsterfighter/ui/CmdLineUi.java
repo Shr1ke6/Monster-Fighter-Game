@@ -1,11 +1,17 @@
 package monsterfighter.ui;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 import monsterfighter.core.GameEnvironment;
 import monsterfighter.core.Monster;
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> branch 'master' of https://eng-git.canterbury.ac.nz/sco161/monster-fighter-sco161-qzh78.git
 
 public class CmdLineUi implements GameEnvironmentUi {
 	
@@ -55,8 +61,13 @@ public class CmdLineUi implements GameEnvironmentUi {
         this.gameEnvironment = gameEnvironment;
         final String name = getName();
         final int days = getDays();
+<<<<<<< HEAD
         final Difficulty difficulty = getDifficulty();
 
+=======
+        final Monster startingMonster = getStartingMonster();
+        //final Difficulty difficulty = getDifficulty();
+>>>>>>> branch 'master' of https://eng-git.canterbury.ac.nz/sco161/monster-fighter-sco161-qzh78.git
         
         
         /*
@@ -67,11 +78,14 @@ public class CmdLineUi implements GameEnvironmentUi {
 	       
 	}
 	
+<<<<<<< HEAD
 
 	
 	
 
 
+=======
+>>>>>>> branch 'master' of https://eng-git.canterbury.ac.nz/sco161/monster-fighter-sco161-qzh78.git
 
 	@Override
 	public void start() {
@@ -164,11 +178,13 @@ public class CmdLineUi implements GameEnvironmentUi {
             	System.out.println(DAY_REQUIREMENTS);
             } catch (Exception e) {
                 // Discard the unacceptable input
-                scanner.nextInt();
+            	scanner.reset();
+				scanner.next();
             }
         }
     }
 	
+<<<<<<< HEAD
 	private Difficulty getDifficulty() {
 		System.out.println("Select an option by inputting the corresponding number");
 		while (true) {
@@ -186,6 +202,36 @@ public class CmdLineUi implements GameEnvironmentUi {
             System.out.println("(" +  + ") " + option.name);
 		
 	}
+=======
+	private Monster getStartingMonster() {
+		final List<Monster> startingMonsters = new ArrayList<>(gameEnvironment.getStartingMonsters());
+		while (true) {
+			System.out.println("Select one monster as your starting monster");
+			printStartingMonsters(startingMonsters);
+			try {
+				int option = scanner.nextInt();
+				if (option >= 0 && option < startingMonsters.size()) {
+					return startingMonsters.get(option);
+				}
+			//} catch (InputMismatchException e) {
+				//scanner.nextInt();
+			} catch (Exception e) {
+				scanner.reset();
+				scanner.next();
+			}
+		}
+		
+	}
+	
+	private void printStartingMonsters(List<Monster> startingMonsters) {
+		int i = 0;
+		for(Monster monster : startingMonsters) {
+			System.out.println("(" + i + ") " + monster);
+			i += 1;
+		}
+	}
+
+>>>>>>> branch 'master' of https://eng-git.canterbury.ac.nz/sco161/monster-fighter-sco161-qzh78.git
 }
 	
 
