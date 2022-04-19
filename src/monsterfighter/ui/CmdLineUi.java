@@ -1,12 +1,13 @@
 package monsterfighter.ui;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 import monsterfighter.core.GameEnvironment;
 import monsterfighter.core.Monster;
-import seng201.rocketmanager.core.Rocket;
+
 
 
 public class CmdLineUi implements GameEnvironmentUi {
@@ -57,8 +58,8 @@ public class CmdLineUi implements GameEnvironmentUi {
         this.gameEnvironment = gameEnvironment;
         final String name = getName();
         final int days = getDays();
-        final Difficulty difficulty = GameEnvironment.getDifficulty();
-        final ArrayList<Monster> party = getStartingMonster();
+        final Monster startingMonster = getStartingMonster();
+        //final Difficulty difficulty = getDifficulty();
         
         
         /*
@@ -69,26 +70,6 @@ public class CmdLineUi implements GameEnvironmentUi {
 	       
 	}
 	
-	private List<Monster> getSelectedMonsters(int rocketCount) {
-        final List<Monster> monsters = new ArrayList<>(rocketCount);
-        final List<Monster> availableRockets = new ArrayList<>(rocketManager.getAvailableRockets());
-
-        System.out.println("\nPlease select " + rocketCount + " rockets");
-
-        while (rockets.size() < rocketCount) {
-            Rocket rocket = chooseRocket("Select a rocket by entering the associated number followed by enter",
-                    availableRockets);
-
-            rockets.add(rocket);
-            availableRockets.remove(rocket);
-        }
-
-        return rockets;
-    }
-	
-	
-
-
 
 	@Override
 	public void start() {
@@ -182,10 +163,39 @@ public class CmdLineUi implements GameEnvironmentUi {
             	System.out.println(DAY_REQUIREMENTS);
             } catch (Exception e) {
                 // Discard the unacceptable input
-                scanner.nextInt();
+            	scanner.reset();
+				scanner.next();
             }
         }
     }
+	
+	private Monster getStartingMonster() {
+		final List<Monster> startingMonsters = new ArrayList<>(gameEnvironment.getStartingMonsters());
+		while (true) {
+			System.out.println("Select one monster as your starting monster");
+			printStartingMonsters(startingMonsters);
+			try {
+				int option = scanner.nextInt();
+				if (option >= 0 && option < startingMonsters.size()) {
+					return startingMonsters.get(option);
+				}
+			//} catch (InputMismatchException e) {
+				//scanner.nextInt();
+			} catch (Exception e) {
+				scanner.reset();
+				scanner.next();
+			}
+		}
+		
+	}
+	
+	private void printStartingMonsters(List<Monster> startingMonsters) {
+		int i = 0;
+		for(Monster monster : startingMonsters) {
+			System.out.println("(" + i + ") " + monster);
+			i += 1;
+		}
+	}
 
 }
 	

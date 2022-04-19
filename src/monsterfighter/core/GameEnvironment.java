@@ -1,6 +1,7 @@
 package monsterfighter.core;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import monsterfighter.ui.GameEnvironmentUi;
@@ -49,6 +50,8 @@ public class GameEnvironment {
 		}
 	}
 	
+
+	
 	/**
 	 * Starts this game. Must be called from the event dispatch thread (EDT) if the user interface is a Swing gui.
 	 * This method calls {@link GameEnvironmentUi#setup(GameEnvironment)} to initiate setup of the user interface.
@@ -65,9 +68,9 @@ public class GameEnvironment {
 	 * @param name The name of the user that is playing the game.
 	 * @param party The party of the player after they selected their starting monster.
 	 */
-	public void onSetupFinished(String name, List<Monster> party) {
+	public void onSetupFinished(String name, Monster startingMonster) {
 		this.name = name;
-		this.party = (ArrayList<Monster>) party;
+		this.party.add(startingMonster);
 		ui.start();
 	}
 	
@@ -92,6 +95,10 @@ public class GameEnvironment {
 		return difficulty;
 		
 		
+	}
+	
+	public List<Monster> getStartingMonsters() {
+		return Collections.unmodifiableList(startingMonsters);
 	}
 
 }
