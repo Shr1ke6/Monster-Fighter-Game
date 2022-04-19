@@ -1,9 +1,11 @@
 package monsterfighter.ui;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import monsterfighter.core.GameEnvironment;
+import monsterfighter.core.Monster;
 
 public class CmdLineUi implements GameEnvironmentUi {
 	
@@ -42,15 +44,14 @@ public class CmdLineUi implements GameEnvironmentUi {
 
 	@Override
 	public void setup(GameEnvironment gameEnvironment) {
-		/*
 		// TODO Auto-generated method stub
         this.gameEnvironment = gameEnvironment;
         final String name = getName();
-        final int rocketCount = getRocketCount();
-        final List<Rocket> selectedRockets = getSelectedRockets(rocketCount);
-
-	        rocketManager.onSetupFinished(name, selectedRockets);
-	       */
+        final int days = getDays();
+        final ArrayList<Monster> party = getStartingMonster();
+        final String difficulty = getDifficulty();
+	    gameEnvironment.onSetupFinished(name, days, party, difficulty);
+	       
 	}
 	
 
@@ -78,6 +79,9 @@ public class CmdLineUi implements GameEnvironmentUi {
 		
 	}
 	
+	public String getName() {
+		
+	}
 	 /**
      * Handles the given option by performing the appropriate action.
      *

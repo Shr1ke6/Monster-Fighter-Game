@@ -8,7 +8,7 @@ import monsterfighter.ui.GameEnvironmentUi;
 public abstract class GameEnvironment {
 	
 	
-	  /**
+	 /**
 	 * The maximum number of monsters that can be in a party.
 	 */
     public static final int MAX_MONSTERS = 3;
@@ -70,7 +70,7 @@ public abstract class GameEnvironment {
 	 */
 	public void onSetupFinished(String name, List<Monster> party) {
 		this.name = name;
-		this.party = party;
+		this.party = (ArrayList<Monster>) party;
 		ui.start();
 	}
 	
@@ -83,7 +83,7 @@ public abstract class GameEnvironment {
 		return name;
 	}
 	
-	public class Days {
+	public class days {
 		
 		
 		
