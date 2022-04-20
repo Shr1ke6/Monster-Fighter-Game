@@ -15,14 +15,20 @@ public class Item{
 		} 
 	}
 	
+	private final int index;
 	private final String name;
 	private final int amount;
 	private final Stat stat;
 
-	public Item(String name, int amount, Stat stat) {
+	public Item(int index, String name, int amount, Stat stat) {
+		this.index = index;
 		this.name = name;
 		this.amount = amount;
 		this.stat = stat;
+	}
+	
+	public int getIndex() {
+		return index;
 	}
 	
 	public String getName() {
@@ -46,20 +52,25 @@ public class Item{
         	monster.setAttack(amount);
         	break;
         case CURRENTHEALTH:
-        	monster.receiveHealth(amount);
+        	if (monster.getMaxHealth() == monster.getCurrentHealth()) {
+        		System.out.println("Cannot use potion, monster health already max");
+        	} else {
+            	monster.receiveHealth(amount);
+        	}
         	break;
         case STATUS:
-        	monster.revive(amount);
+        	if (monster.getStatus().name == "Conscious") {
+        		System.out.println("Cannot use revive, monster health above zero");
+        	} else {
+        		monster.revive(amount);
+        	}
         	break;
-
-
-
-    }
+		}
 	}
 	
 	@Override
 	public String toString() {
-		return "Item: " + name + " Effect: increases " + stat + " by " + amount;
+		return "Item: " + name + " Effect: increases " + stat.name + " by " + amount;
 	}
 	
 }
