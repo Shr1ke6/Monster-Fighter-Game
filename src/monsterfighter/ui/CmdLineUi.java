@@ -54,6 +54,7 @@ public class CmdLineUi implements GameEnvironmentUi {
         final String name = getName();
         final int days = getDays();
         final Monster startingMonster = getStartingMonster();
+        setMonsterNickname(startingMonster);
         final Difficulty difficulty = getDifficulty();
 	    gameEnvironment.onSetupFinished(name, days, startingMonster, difficulty);
 	    
@@ -63,6 +64,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 	@Override
 	public void start() {
 		while (true) {
+			System.out.println("Day: " + gameEnvironment.getDays() + " out of " + gameEnvironment.getTotalDays() + " Score: " +  10);
 			System.out.println("Pick an option:\n");
 			printOptions();
 			try {
@@ -79,16 +81,29 @@ public class CmdLineUi implements GameEnvironmentUi {
 		
 	
 	@Override
-	public boolean confirmQuit() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	
+		
 
-	@Override
+
 	public void quit() {
 		// TODO fix quit class gives error quits program no matter what option
+		while (true) {
+            System.out.println("Do you really want to quit this fun game? (y / n) ");
+            try {
+                String input = scanner.next();
+                if (input.matches("[yY]")) {
+                	System.exit(0);
+                } else if (input.matches("[nN]")) {
+                	start();
+                }
+          
+            } catch (Exception e) {
+                // Discard the unacceptable input
+                scanner.next();
+            }
+        }
 		
-		finish = true;
+		
 		
 	}
 
@@ -120,6 +135,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 
                 break;
             case QUIT:
+            	quit();
 
                 break;
             default:
@@ -225,6 +241,23 @@ public class CmdLineUi implements GameEnvironmentUi {
 		    }
 		}
 	
+    private void setMonsterNickname(Monster monster) {
+        while (true) {
+            System.out.println("Name you monster:");
+            try {
+                String monsterNickname = scanner.nextLine();
+                if (monsterNickname.matches(NAME_REGEX)) {
+                	monster.setNickname(monsterNickname);
+                }
+                System.out.print(NAME_REQUIREMENTS);
+            } catch (Exception e) {
+                // Discard the unacceptable input
+            	
+                scanner.nextLine();
+            }
+        }
+    }
+    	
 	
 	private void accessParty() {
 		final ArrayList<Monster> party = new ArrayList<>(gameEnvironment.getParty());

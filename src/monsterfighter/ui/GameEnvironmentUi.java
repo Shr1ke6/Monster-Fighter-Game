@@ -57,11 +57,7 @@ public interface GameEnvironmentUi {
      *
      * @return true if the user wants to quit, false otherwise
      */
-    boolean confirmQuit();
 
-    /**
-     * Quits the application.
-     */
     void quit();
 
     /**

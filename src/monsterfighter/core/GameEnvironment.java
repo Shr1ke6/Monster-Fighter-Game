@@ -34,8 +34,11 @@ public class GameEnvironment {
 	// The name of the user using this manager
 	private String name;
 	
-	// The number of days the game will last
-	private int days;
+	// The total number of days the game will last
+	private int totalDays;
+	
+	// The current day
+	private int days = 1;
 	
 	// The game difficulty
 	private Difficulty difficulty;
@@ -100,9 +103,9 @@ public class GameEnvironment {
 	 * @param name The name of the user that is playing the game.
 	 * @param party The party of the player after they selected their starting monster.
 	 */
-	public void onSetupFinished(String name, int days, Monster startingMonster, Difficulty difficulty) {
+	public void onSetupFinished(String name, int totalDays, Monster startingMonster, Difficulty difficulty) {
 		this.name = name;
-		this.days = days;
+		this.totalDays = totalDays;
 		this.party.add(startingMonster);
 		this.difficulty = difficulty;
 		this.gold += difficulty.startingGold;
@@ -118,6 +121,11 @@ public class GameEnvironment {
 	
 	public String getName() {
 		return name;
+	}
+	
+	
+	public int getTotalDays() {
+		return totalDays;
 	}
 	
 	public int getDays() {

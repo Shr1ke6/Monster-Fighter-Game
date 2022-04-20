@@ -1,10 +1,21 @@
 package monsterfighter.core;
 
+
 public class Purchasable {
 	
-	public String toString() {
-		return "Purchase Price: " + Monster.getBuyPrice() + "Sell Price:" + Monster.getSellPrice();
-	}
+	private final String name;
+	private final int buyPrice;
+	private final int sellPrice;
+	
+	
 
+	public String toString() {
+		String desciption = "Buy Price: " + Monster.getBuyPrice() + "Sell Price: " + Monster.getSellPrice();
+		
+		if 
+		description = "Monster: " + name + description
+		else if 
+		description = "Item: " + name + description
+	}
 
 }
