@@ -37,19 +37,19 @@ public class Item{
 		return stat;
 	}
 	
-	public void useItem() {
+	public void useItem(Monster monster) {
 		switch (stat) {
         case MAXHEALTH:
-        
+        	monster.setMaxHealth(amount);
         	break;
         case ATTACK:
-        	
+        	monster.setAttack(amount);
         	break;
         case CURRENTHEALTH:
-        
+        	monster.receiveHealth(amount);
         	break;
         case STATUS:
-        	
+        	monster.revive(amount);
         	break;
 
 

@@ -1,11 +1,8 @@
 package monsterfighter.ui;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
-import java.util.Set;
 
 import monsterfighter.core.GameEnvironment;
 import monsterfighter.core.GameEnvironment.Difficulty;

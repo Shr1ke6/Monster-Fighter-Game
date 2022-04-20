@@ -114,6 +114,11 @@ public class Monster{
 		}
 	}
 	
+	public void revive(int heal) {
+		status = Status.CONSCIOUS;
+		receiveHealth(heal);
+	}
+	
 	@Override
 	public String toString() {
 		return "Monster: " + name + " Nickname: " + nickname + " Type: " + type.value + " Health: " + currentHealth + "/" + maxHealth + " Attack: " + attack;
