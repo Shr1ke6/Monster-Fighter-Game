@@ -226,9 +226,9 @@ public class CmdLineUi implements GameEnvironmentUi {
 		}
 	
 	
-	private Monster accessParty() {
+	private void accessParty() {
 		final ArrayList<Monster> party = new ArrayList<>(gameEnvironment.getParty());
-		System.out.println("current party");
+		System.out.println("Current party");
 		while (true) {
 			System.out.println("Select a party monster:\n");
 			printParty(party);
@@ -236,7 +236,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 			try {
 				int option = scanner.nextInt();
 				if (option >= 0 && option < party.size()) {
-					party.get(option);
+					monsterOptions(option, party);
 				} else if (option == party.size()) {
 					start();
 				}
@@ -246,10 +246,47 @@ public class CmdLineUi implements GameEnvironmentUi {
 				scanner.next();
 			}
 		}
-		
 	}
 
+	private void monsterOptions(int selectedMonster, ArrayList<Monster> party) {
+		while (true) {
+			System.out.println("(0) Use item\n"
+					+ "(1) Switch Monster\n"
+					+ "(2) Back");
+			try {
+				int option = scanner.nextInt();
+				if (option == 0) {
+					System.out.println("Get fucked");
+				} else if (option == 1) {
+					switchMonsters(selectedMonster, party);
+				} else if (option == 2) {
+					accessParty();
+				}
+				
+			} catch (Exception e) {
+				scanner.reset();
+				scanner.next();
+			}
+		}
+	}
 	
+	private void switchMonsters(int monster1, ArrayList<Monster> party) {
+    	while (true) {
+    		System.out.println("Select a monster to switch with\n");
+    		printParty(party);
+			try {
+				int option = scanner.nextInt();
+				if (option >= 0 && option < party.size()) {
+					gameEnvironment.switchMonsters(monster1, option);
+					accessParty();
+				}
+			} catch (Exception e) {
+				scanner.reset();
+				scanner.next();
+			}
+    	}
+		
+	}
 
 	private void printParty(List<Monster> party) {
 	    int i = 0;
