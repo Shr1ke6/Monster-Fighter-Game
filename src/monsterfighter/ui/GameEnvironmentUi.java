@@ -13,9 +13,14 @@ package monsterfighter.ui;
 public interface GameEnvironmentUi {
 
     /**
-     * A description of the name requirements for the player of a monster fighter.
+     * A description of the naming convention for the users name
      */
     String NAME_REQUIREMENTS = "Name must contain only letters, must not be empty and have a max of 12 characters";
+    
+    /**
+     * A description of the naming convention for a monsters nickname
+     */
+    String MONSTER_NAME_REQUIREMENTS = "Name must contain only letters and have a max of 12 characters";
 
     /**
      * A regex for validating the name against the specified name requirements.

@@ -121,8 +121,6 @@ public class GameEnvironment {
 	 *
 	 * @return The name entered by the user when configuring this manager
 	 */
-	
-	
 	public String getName() {
 		return name;
 	}
@@ -151,6 +149,20 @@ public class GameEnvironment {
 	public List<ArrayList<Item>> getInventory() {
 		return Collections.unmodifiableList(inventory);
 	}
+	 
+	/**
+	 * Checks to see if user inventory is empty
+	 * @return isEmpty States whether the user's {@link inventory} is empty or not
+	 */
+	public boolean inventoryIsEmpty() {
+		boolean isEmpty = true;
+		for (ArrayList<Item> item : inventory) {
+			if (!item.isEmpty()) {
+				isEmpty = false;
+			}
+		}
+		return isEmpty;
+	}
 	
 	public void switchMonsters(int option1, int option2) {
 		Monster monster1 = party.get(option1);
@@ -159,8 +171,29 @@ public class GameEnvironment {
 		party.set(option2, monster1);
 	}
 	
-	public void useItem(int monster, int item) {
-		
+	public Item getItem(int itemID) {
+		int i = 0;
+		for (ArrayList<Item> items : inventory) {
+			if (!items.isEmpty()){
+				if (i == itemID) {
+					break;
+				}
+				i++;
+			}
+		}
+		return allItems.get(i);
+	}
+	
+	public void useItem(int monsterID, int itemID) {
+		Monster monster = party.get(monsterID);
+		Item item = getItem(itemID);
+		try {
+			item.useItem(monster);
+			inventory.get(item.getIndex()).remove(0);
+		}
+		catch (IllegalStateException e) {
+			ui.showError(e.getMessage());
+		}
 	}
 
 }

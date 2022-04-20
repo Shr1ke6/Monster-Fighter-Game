@@ -53,17 +53,15 @@ public class Item{
         	break;
         case CURRENTHEALTH:
         	if (monster.getMaxHealth() == monster.getCurrentHealth()) {
-        		System.out.println("Cannot use potion, monster health already max");
-        	} else {
-            	monster.receiveHealth(amount);
+        		throw new IllegalStateException("Cannot use " + name + ", " + monster.getNickname() + "'s health is already at max\n");
         	}
+            monster.receiveHealth(amount);
         	break;
         case STATUS:
         	if (monster.getStatus().name == "Conscious") {
-        		System.out.println("Cannot use revive, monster health above zero");
-        	} else {
-        		monster.revive(amount);
+        		throw new IllegalStateException("Cannot use " + name + ", " + monster.getNickname() + "'s health is not unconscious\n");
         	}
+        	monster.revive(amount);
         	break;
 		}
 	}

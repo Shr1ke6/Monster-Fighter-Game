@@ -25,7 +25,7 @@ public class CmdLineUi implements GameEnvironmentUi {
     	BATTLE("Battle"),
         SHOP("Shop"),
         VIEW_PARTY("View Party"),
-        ITEMS("Items"),
+        INVENTORY("Inventory"),
         REST("Rest"),
     	QUIT("Quit");
 
@@ -36,9 +36,6 @@ public class CmdLineUi implements GameEnvironmentUi {
         }
     }
     
-    
-    
-
     /**
      * Creates an instance of this UI
      */
@@ -46,7 +43,6 @@ public class CmdLineUi implements GameEnvironmentUi {
         this.scanner = new Scanner(System.in);
     }
     
-
 	@Override
 	public void setup(GameEnvironment gameEnvironment) {
 		// TODO Auto-generated method stub
@@ -64,8 +60,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 	@Override
 	public void start() {
 		while (true) {
-			System.out.println("Day: " + gameEnvironment.getDays() + " out of " + gameEnvironment.getTotalDays() + " Score: " +  10);
-			System.out.println("Pick an option:\n");
+			System.out.println("Day: " + gameEnvironment.getDays() + " out of " + gameEnvironment.getTotalDays() + " | Score: " + 10 );
 			printOptions();
 			try {
 				int option = scanner.nextInt();
@@ -81,14 +76,9 @@ public class CmdLineUi implements GameEnvironmentUi {
 		
 	
 	@Override
-	
-		
-
-
 	public void quit() {
-		// TODO fix quit class gives error quits program no matter what option
 		while (true) {
-            System.out.println("Do you really want to quit this fun game? (y / n) ");
+            System.out.println("Do you really want to quit this fun game? (y/n) ");
             try {
                 String input = scanner.next();
                 if (input.matches("[yY]")) {
@@ -102,19 +92,13 @@ public class CmdLineUi implements GameEnvironmentUi {
                 scanner.next();
             }
         }
-		
-		
-		
 	}
 
 	@Override
 	public void showError(String error) {
-		// TODO need to be looked at later
-		System.out.println("!!!!!!!! " + error + " !!!!!!!!");
+		System.out.println(error);
 	}
 	
-
-
 	 /**
      * Handles the given option by performing the appropriate action.
      *
@@ -128,8 +112,8 @@ public class CmdLineUi implements GameEnvironmentUi {
             case BATTLE:
 
                 break;
-            case ITEMS:
-
+            case INVENTORY:
+            	accessInventory();
                 break;
             case REST:
 
@@ -166,12 +150,10 @@ public class CmdLineUi implements GameEnvironmentUi {
             	int days = scanner.nextInt();
             	if (days <= MAX_DAYS && days >= MIN_DAYS) {
             		return days;
-            	}
-            	System.out.println(DAY_REQUIREMENTS);
+            	};
             } catch (Exception e) {
                 // Discard the unacceptable input
-            	scanner.reset();
-				scanner.next();
+            	scanner.nextLine();
             }
         }
     }
@@ -187,8 +169,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 				}
 	
 			} catch (Exception e) {
-				scanner.reset();
-				scanner.next();
+				scanner.nextLine();
 			}
 		}
 	}
@@ -209,15 +190,14 @@ public class CmdLineUi implements GameEnvironmentUi {
 			printStartingMonsters(startingMonsters);
 			try {
 				int option = scanner.nextInt();
+				scanner.nextLine();
 				if (option >= 0 && option < startingMonsters.size()) {
 					return startingMonsters.get(option);
 				}
 			} catch (Exception e) {
-				scanner.reset();
-				scanner.next();
+				scanner.nextLine();
 			}
 		}
-		
 	}
 	
 	private void printStartingMonsters(List<Monster> startingMonsters) {
@@ -227,7 +207,6 @@ public class CmdLineUi implements GameEnvironmentUi {
 			i++;
 		}
 	}
-
 
 	private void printOptions() {
 			int i = 0;
@@ -239,97 +218,122 @@ public class CmdLineUi implements GameEnvironmentUi {
 	
     private void setMonsterNickname(Monster monster) {
         while (true) {
-            System.out.println("Name you monster:");
+            System.out.println("Enter a nickname for " + monster.getName() + " or leave blank to skip");
             try {
-                String monsterNickname = scanner.nextLine();
-                if (monsterNickname.matches(NAME_REGEX)) {
-                	monster.setNickname(monsterNickname);
+                String name = scanner.nextLine();
+                if (name.matches(NAME_REGEX)) {
+                    monster.setNickname(name);
+                    break;
+                } else if (name == "") {
+                	break;
                 }
-                System.out.print(NAME_REQUIREMENTS);
+                System.out.println(NAME_REQUIREMENTS);
             } catch (Exception e) {
+            	System.out.println("cringe");
                 // Discard the unacceptable input
-            	
                 scanner.nextLine();
             }
         }
     }
     	
-	
 	private void accessParty() {
 		final ArrayList<Monster> party = new ArrayList<>(gameEnvironment.getParty());
-		System.out.println("Current party:");
 		while (true) {
-			System.out.println("Select a monster:");
+			System.out.println("Party:\n"
+					+ "-".repeat(7));
 			printParty(party);
 			System.out.println("\n(" + party.size() + ") Back" );
 			try {
-				int option = scanner.nextInt();
+				int option = scanner.nextInt();;
 				if (option >= 0 && option < party.size()) {
-					monsterOptions(option, party);
+					partyOptions(option, party);
 				} else if (option == party.size()) {
 					start();
 				}
 				
 			} catch (Exception e) {
-				scanner.reset();
-				scanner.next();
+				scanner.nextLine();
 			}
 		}
 	}
 
-	private void monsterOptions(int selectedMonster, ArrayList<Monster> party) {
+	private void partyOptions(int monsterID, ArrayList<Monster> party) {
 		while (true) {
-			System.out.println("(0) Use item\n"
-					+ "(1) Switch Monster\n"
-					+ "\n(2) Back");
+			System.out.println("Select an option:\n"
+					+ "(0) Use Item\n"
+					+ "(1) Switch Party Slot\n"
+					+ "(2) Set Nickname\n"
+					+ "\n(3) Back");
 			try {
 				int option = scanner.nextInt();
+				scanner.nextLine();
 				if (option == 0) {
-					monsterToItem(selectedMonster, party);
+					if (!gameEnvironment.inventoryIsEmpty()) {
+						monsterToItem(monsterID, party);
+						accessParty();
+					} else {
+						showError("Inventory is empty!\n");
+					}
 				} else if (option == 1) {
-					switchMonsters(selectedMonster, party);
+					switchMonsters(monsterID, party);
+					accessParty();
 				} else if (option == 2) {
+					setMonsterNickname(party.get(monsterID));
+					accessParty();
+				} else if (option == 3) {
 					accessParty();
 				}
-				
 			} catch (Exception e) {
-				scanner.reset();
-				scanner.next();
+				scanner.nextLine();
 			}
 		}
 	}
 	
-	private void switchMonsters(int monster1, ArrayList<Monster> party) {
+	private void switchMonsters(int monsterID, ArrayList<Monster> party) {
     	while (true) {
-    		System.out.println("Select a monster to switch " + party.get(monster1).getNickname() + " with");
+    		System.out.println("Select a monster to switch " + party.get(monsterID).getNickname() + " with:");
     		printParty(party);
+    		System.out.println("\n(" + party.size() + ") Back");
 			try {
 				int option = scanner.nextInt();
 				if (option >= 0 && option < party.size()) {
-					gameEnvironment.switchMonsters(monster1, option);
-					accessParty();
+					gameEnvironment.switchMonsters(monsterID, option);
+					break;
+				} else if (option == party.size()) {
+					partyOptions(monsterID, party);
 				}
 			} catch (Exception e) {
-				scanner.reset();
-				scanner.next();
+				scanner.nextLine();
 			}
     	}
 		
 	}
 	
-	private void monsterToItem(int selectedMonster, ArrayList<Monster> party){
+	private void monsterToItem(int monsterID, ArrayList<Monster> party){
+		final ArrayList<ArrayList<Item>> inventory = new ArrayList<>(gameEnvironment.getInventory());
 		while (true) {
-			System.out.println("Select an item to give to " + party.get(selectedMonster).getNickname());
-			printInventory();
+			System.out.println("Select an item to give to " + party.get(monsterID).getNickname() + ":");
+			int last = printInventory(inventory);
+			System.out.println("\n(" + last + ") Back");
 			try {
-				int item = scanner.nextInt();
-				if (item >= 0) {
-					gameEnvironment.useItem(selectedMonster, item);
-					accessParty();
+				int option = scanner.nextInt();
+				if (option >= 0 && option < last) {
+					Item item = gameEnvironment.getItem(option);
+					gameEnvironment.useItem(monsterID, option);
+					if (inventory.get(item.getIndex()).size() > 0) {
+						System.out.println("Used " + item.getName() + " on " + party.get(option).getNickname() + ", " + inventory.get(item.getIndex()).size() + "x " + item.getName() + "'s left");
+					} else {
+						System.out.println("Used " + item.getName() + " on " + party.get(option).getNickname() + ", no " + item.getName() + "'s left");
+						if (gameEnvironment.inventoryIsEmpty()) {
+							showError("Inventory is empty!\n");
+							partyOptions(monsterID, party);
+						}
+					}
+				} else if (option == last) {
+					partyOptions(monsterID, party);
 				}
 			} catch (Exception e) {
-				scanner.reset();
-				scanner.next();
+				scanner.nextLine();
 			}
     	}	
 	}
@@ -343,15 +347,88 @@ public class CmdLineUi implements GameEnvironmentUi {
 	    }
 	}
 	
-	private void printInventory() {
-		List<ArrayList<Item>> inventory = gameEnvironment.getInventory();
+	private void accessInventory() {
+		final ArrayList<ArrayList<Item>> inventory = new ArrayList<>(gameEnvironment.getInventory());
+		while (true) {
+			if (!gameEnvironment.inventoryIsEmpty()) {
+				System.out.println("Inventory:\n"
+						+ "-".repeat(11));
+				int last = printInventory(inventory);
+				System.out.println("\n(" + last + ") Back" );
+				try {
+					int option = scanner.nextInt();;
+					if (option >= 0 && option < last) {
+						inventoryOptions(option);
+					} else if (option == last) {
+						start();
+					}
+				} catch (Exception e) {
+					scanner.nextLine();
+				}
+				
+			} else {
+				showError("Inventory is empty!\n");;
+				start();
+			}
+		}
+	}
+	
+	private void inventoryOptions(int itemID) {
+		while (true) {
+			System.out.println("Select an option:\n"
+					+ "(0) Use "+ gameEnvironment.getItem(itemID).getName() + "\n"
+					+ "\n(1) Back");
+			try {
+				int option = scanner.nextInt();
+				scanner.nextLine();
+				if (option == 0) {
+					itemToMonster(itemID);
+					accessInventory();
+				} else if (option == 1) {
+					accessInventory();
+				} 
+			} catch (Exception e) {
+				scanner.nextLine();
+			}
+		}
+	}
+	
+	private void itemToMonster(int itemID) {
+		final ArrayList<Monster> party = new ArrayList<>(gameEnvironment.getParty());
+		final Item item = gameEnvironment.getItem(itemID);
+		final ArrayList<ArrayList<Item>> inventory = new ArrayList<>(gameEnvironment.getInventory());
+		while (true) {
+			System.out.println("Select a monster to give " + gameEnvironment.getItem(itemID).getName() + ":");
+			printParty(party);
+			System.out.println("\n(" + party.size() + ") Back");
+			try {
+				int option = scanner.nextInt();
+				if (option >= 0 && option < party.size()) {
+					gameEnvironment.useItem(option, itemID);
+					if (inventory.get(item.getIndex()).size() > 0) {
+						System.out.println("Used " + item.getName() + " on " + party.get(option).getNickname() + ", " + inventory.get(item.getIndex()).size() + "x " + item.getName() + "'s left");
+					} else {
+						System.out.println("Used " + item.getName() + " on " + party.get(option).getNickname() + ", no " + item.getName() + "'s left!");
+						accessInventory(); 
+					}					
+				} else if (option == party.size()) {
+					accessInventory();
+				}
+			} catch (Exception e) {
+				scanner.nextLine();
+			}
+    	}	
+	}
+	
+	private int printInventory(List<ArrayList<Item>> inventory) {
 	    int i = 0;
 		for (int j = 0; j < inventory.size(); j++) {
 	    	if (inventory.get(j).size() > 0) {
 		        System.out.println("(" + i + ") " + inventory.get(j).size() + "x " + inventory.get(j).get(0));
 		        i++;
 	    	}
-	    }
+		}
+		return i;
 	}
 	
 	

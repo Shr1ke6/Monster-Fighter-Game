@@ -19,7 +19,7 @@ public class Main {
 	public static void main(String[] args) {
 		final List<Monster> monsters = new ArrayList<>(6);
 		
-		monsters.add(new Monster("Fireboy", Monster.Type.FIRE, 50, 20, 50, 367, 300));
+		monsters.add(new Monster("Fireboy", Monster.Type.FIRE, 50, 20, 5, 367, 300));
 		monsters.add(new Monster("Watergirl", Monster.Type.WATER, 60, 15, 60, 367, 300));
 		monsters.add(new Monster("Dirt Monster", Monster.Type.GRASS, 70, 10, 70, 367, 300));
 		monsters.add(new Monster("BrightStar", Monster.Type.LIGHT, 70, 10, 70, 367, 300));
