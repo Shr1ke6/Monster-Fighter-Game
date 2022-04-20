@@ -9,6 +9,7 @@ import java.util.Set;
 
 import monsterfighter.core.GameEnvironment;
 import monsterfighter.core.GameEnvironment.Difficulty;
+
 import monsterfighter.core.Monster;
 
 public class CmdLineUi implements GameEnvironmentUi {
@@ -24,12 +25,12 @@ public class CmdLineUi implements GameEnvironmentUi {
 
     // An enum representing the various actions the user can perform
     private enum Option {
-        QUIT("Quit"),
-        REST("Rest"),
-        ITEMS("Items"),
+    	BATTLE("Battle"),
         SHOP("Shop"),
-        SHOW_MONSTERS("Show Monsters"),
-        BATTLE("Battle");
+        VIEW_PARTY("View Party"),
+        ITEMS("Items"),
+        REST("Rest"),
+    	QUIT("Quit");
 
         public final String name;
 
@@ -109,8 +110,8 @@ public class CmdLineUi implements GameEnvironmentUi {
      */
     private void handleOption(Option option) {
         switch (option) {
-            case SHOW_MONSTERS:
-
+            case VIEW_PARTY:
+            	accessParty();
                 break;
             case BATTLE:
 
@@ -186,7 +187,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 		int i = 0;
         for (Difficulty difficulty : Difficulty.values()) {
            System.out.println("(" + i + ") " + difficulty);
-           i += 1;
+           i++;
         }
 	}
 
@@ -214,16 +215,58 @@ public class CmdLineUi implements GameEnvironmentUi {
 		int i = 0;
 		for(Monster monster : startingMonsters) {
 			System.out.println("(" + i + ") " + monster);
-			i += 1;
+			i++;
 		}
 	}
 
 
-private void printOptions() {
-		int i = 0;
-	    for (Option option : Option.values()) {
-	       System.out.println("(" + i + ") " + option.name);
-	       i += 1;
+	private void printOptions() {
+			int i = 0;
+		    for (Option option : Option.values()) {
+		       System.out.println("(" + i + ") " + option.name);
+		       i++;
+		    }
+		}
+	
+	
+	private Monster accessParty() {
+		final ArrayList<Monster> party = new ArrayList<>(gameEnvironment.getParty());
+		System.out.println("current party");
+		while (true) {
+			System.out.println("Select a party monster:\n");
+			printParty(party);
+			System.out.println("\n(" + party.size() + ") Back" );
+			try {
+				int option = scanner.nextInt();
+				if (option >= 0 && option < party.size()) {
+					party.get(option);
+				} else if (option == party.size()) {
+					start();
+				}
+				
+			} catch (Exception e) {
+				scanner.reset();
+				scanner.next();
+			}
+		}
+		
+	}
+
+	
+
+	private void printParty(List<Monster> party) {
+	    int i = 0;
+	
+	    for (Monster monster : party) {
+	        System.out.println("(" + i + ") [Slot: " + (i+1) + "] " + monster);
+	        i++;
 	    }
 	}
+	
+	
+	
+	
+	
+	
+
 }

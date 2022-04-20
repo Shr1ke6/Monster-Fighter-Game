@@ -131,5 +131,16 @@ public class GameEnvironment {
 	public List<Monster> getStartingMonsters() {
 		return Collections.unmodifiableList(startingMonsters);
 	}
+	
+	public List<Monster> getParty() {
+		return Collections.unmodifiableList(party);
+	}
+	
+	public void switchMonsters(int option1, int option2) {
+		Monster monster1 = party.get(option1);
+		Monster monster2 = party.get(option2);
+		party.set(option1, monster2);
+		party.set(option2, monster1);
+	}
 
 }
