@@ -1,6 +1,6 @@
 package monsterfighter.core;
 
-import java.lang.reflect.Array;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,7 +26,7 @@ public class GameEnvironment {
 
 	// The array list representing the players inventory. 
 	// Contains starting {@link items}s at initialisation.
-	private final ArrayList<Item> inventory = new ArrayList<Item>();
+	private final List<ArrayList<Item>> inventory = new ArrayList<ArrayList<Item>>();
 
 	// The array list of Monsters in the users party
 	private ArrayList<Monster> party = new ArrayList<Monster>();
@@ -48,15 +48,15 @@ public class GameEnvironment {
 	
 	// Enum that stores the difficulty options for the game 
     public enum Difficulty {
-	    EASY(100, 30, "Easy"),
-	    MEDIUM(50, 20, "Medium"),
-	    HARD(25, 10, "Hard");
+	    EASY(100, 1.25, "Easy"),
+	    NORMAL(50, 1.0, "Medium"),
+	    HARD(25, 0.75, "Hard");
 
 	    private final String name;
 	    private final int startingGold;
-	    private final int battleGold;
+	    private final double battleGold;
 
-	    Difficulty(int startingGold, int battleGold, String name){
+	    Difficulty(int startingGold, double battleGold, String name){
 	        this.startingGold = startingGold;
 	        this.battleGold = battleGold;
 	        this.name = name;
@@ -64,7 +64,7 @@ public class GameEnvironment {
 	    
 	    @Override
 	    public String toString() {
-			return "Difficulty: " + name + " Starting Gold: " + startingGold + " Gold per battle: " + battleGold ;
+			return "Difficulty: " + name + " Starting Gold: " + startingGold + " Gold per battle multiplier: " + battleGold ;
 		}
 	}
 
@@ -80,8 +80,12 @@ public class GameEnvironment {
 		this.allMonsters = monsters;
 		this.startingMonsters = monsters.subList(0, 3);
 		this.allItems = items;
+		for (int i = 0; i < items.size(); i++) {
+			this.inventory.add(new ArrayList<Item>());
+		}
+		// Adds 3 potion's to the inventory 
 		for (int i = 0; i < 3; i++) {
-			this.inventory.add(items.get(0));
+			this.inventory.get(items.get(0).getIndex()).add(items.get(0));
 		}
 	}
 	
@@ -144,7 +148,7 @@ public class GameEnvironment {
 		return Collections.unmodifiableList(party);
 	}
 	
-	public List<Item> getInventory() {
+	public List<ArrayList<Item>> getInventory() {
 		return Collections.unmodifiableList(inventory);
 	}
 	

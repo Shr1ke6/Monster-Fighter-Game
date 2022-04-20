@@ -11,6 +11,7 @@ public class Monster{
 		Status(String name) {
 			this.name = name;
 		}
+		
 	}
 	
 	public enum Type {
@@ -110,7 +111,7 @@ public class Monster{
 		currentHealth -= damage;
 		if (currentHealth < 0) {
 			currentHealth = 0;
-			this.status = Status.FAINTED;
+			status = Status.FAINTED;
 		}
 	}
 	
@@ -121,7 +122,11 @@ public class Monster{
 	
 	@Override
 	public String toString() {
-		return "Monster: " + name + " Nickname: " + nickname + " Type: " + type.value + " Health: " + currentHealth + "/" + maxHealth + " Attack: " + attack;
+		String description = "Monster: " + name + " Nickname: " + nickname + " Type: " + type.value + " Health: " + currentHealth + "/" + maxHealth + " Attack: " + attack;
+		if (status.name == "Fainted") {
+			description = "[FAINTED] " + description;
+		}
+		return description;
 	}
 
 

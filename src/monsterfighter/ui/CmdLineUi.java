@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 import monsterfighter.core.GameEnvironment;
 import monsterfighter.core.GameEnvironment.Difficulty;
-
+import monsterfighter.core.Item;
 import monsterfighter.core.Monster;
 
 public class CmdLineUi implements GameEnvironmentUi {
@@ -143,7 +143,6 @@ public class CmdLineUi implements GameEnvironmentUi {
         }
     }
 
-	
     private String getName() {
         while (true) {
             System.out.println("Please enter your name:");
@@ -179,7 +178,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 	
 	private Difficulty getDifficulty() {
 		while (true) {
-			System.out.println("Choose a difficulty:\n");
+			System.out.println("Choose a difficulty:");
 			printDifficulties();
 			try {
 				int option = scanner.nextInt();
@@ -194,8 +193,6 @@ public class CmdLineUi implements GameEnvironmentUi {
 		}
 	}
 		
-	
-	
 	private void printDifficulties() {
 		int i = 0;
         for (Difficulty difficulty : Difficulty.values()) {
@@ -208,14 +205,13 @@ public class CmdLineUi implements GameEnvironmentUi {
 		final List<Monster> startingMonsters = new ArrayList<>(gameEnvironment.getStartingMonsters());
 		System.out.println("Select an option by inputting the corresponding number");
 		while (true) {
-			System.out.println("Select a starting monster:\n");
+			System.out.println("Select a starting monster:");
 			printStartingMonsters(startingMonsters);
 			try {
 				int option = scanner.nextInt();
 				if (option >= 0 && option < startingMonsters.size()) {
 					return startingMonsters.get(option);
 				}
-	
 			} catch (Exception e) {
 				scanner.reset();
 				scanner.next();
@@ -261,9 +257,9 @@ public class CmdLineUi implements GameEnvironmentUi {
 	
 	private void accessParty() {
 		final ArrayList<Monster> party = new ArrayList<>(gameEnvironment.getParty());
-		System.out.println("Current party");
+		System.out.println("Current party:");
 		while (true) {
-			System.out.println("Select a party monster:\n");
+			System.out.println("Select a monster:");
 			printParty(party);
 			System.out.println("\n(" + party.size() + ") Back" );
 			try {
@@ -285,11 +281,11 @@ public class CmdLineUi implements GameEnvironmentUi {
 		while (true) {
 			System.out.println("(0) Use item\n"
 					+ "(1) Switch Monster\n"
-					+ "(2) Back");
+					+ "\n(2) Back");
 			try {
 				int option = scanner.nextInt();
 				if (option == 0) {
-					System.out.println("Get fucked");
+					monsterToItem(selectedMonster, party);
 				} else if (option == 1) {
 					switchMonsters(selectedMonster, party);
 				} else if (option == 2) {
@@ -305,7 +301,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 	
 	private void switchMonsters(int monster1, ArrayList<Monster> party) {
     	while (true) {
-    		System.out.println("Select a monster to switch with\n");
+    		System.out.println("Select a monster to switch " + party.get(monster1).getNickname() + " with");
     		printParty(party);
 			try {
 				int option = scanner.nextInt();
@@ -320,6 +316,23 @@ public class CmdLineUi implements GameEnvironmentUi {
     	}
 		
 	}
+	
+	private void monsterToItem(int selectedMonster, ArrayList<Monster> party){
+		while (true) {
+			System.out.println("Select an item to give to " + party.get(selectedMonster).getNickname());
+			printInventory();
+			try {
+				int item = scanner.nextInt();
+				if (item >= 0) {
+					gameEnvironment.useItem(selectedMonster, item);
+					accessParty();
+				}
+			} catch (Exception e) {
+				scanner.reset();
+				scanner.next();
+			}
+    	}	
+	}
 
 	private void printParty(List<Monster> party) {
 	    int i = 0;
@@ -330,6 +343,16 @@ public class CmdLineUi implements GameEnvironmentUi {
 	    }
 	}
 	
+	private void printInventory() {
+		List<ArrayList<Item>> inventory = gameEnvironment.getInventory();
+	    int i = 0;
+		for (int j = 0; j < inventory.size(); j++) {
+	    	if (inventory.get(j).size() > 0) {
+		        System.out.println("(" + i + ") " + inventory.get(j).size() + "x " + inventory.get(j).get(0));
+		        i++;
+	    	}
+	    }
+	}
 	
 	
 	

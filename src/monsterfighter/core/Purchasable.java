@@ -2,6 +2,7 @@ package monsterfighter.core;
 
 
 public class Purchasable {
+
 	
 	private final String name;
 	private final int buyPrice;
