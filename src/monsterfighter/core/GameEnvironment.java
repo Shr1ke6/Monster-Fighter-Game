@@ -136,11 +136,19 @@ public class GameEnvironment {
 		return Collections.unmodifiableList(party);
 	}
 	
+	public List<Item> getInventory() {
+		return Collections.unmodifiableList(inventory);
+	}
+	
 	public void switchMonsters(int option1, int option2) {
 		Monster monster1 = party.get(option1);
 		Monster monster2 = party.get(option2);
 		party.set(option1, monster2);
 		party.set(option2, monster1);
+	}
+	
+	public void useItem(int monster, int item) {
+		
 	}
 
 }
