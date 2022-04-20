@@ -26,12 +26,13 @@ public class Main {
 		monsters.add(new Monster("DarkStar", Monster.Type.DARK, 50, 20, 50, 367, 300));
 		monsters.add(new Monster("Normie", Monster.Type.NORMAL, 65, 14, 65, 367, 300));
 		
-		final List<Item> items = new ArrayList<>(4);
+		final List<Item> items = new ArrayList<>(5);
 		
-		items.add(new Item("Small Potion", 20, "current health"));
-		items.add(new Item("Big Potion", 50, "current health"));
-		items.add(new Item("Damage Snack", 10, "damage"));
-		items.add(new Item("Max Health Snack", 20, "max health"));
+		items.add(new Item("Small Potion", 20, Item.Stat.CURRENTHEALTH));
+		items.add(new Item("Big Potion", 50, Item.Stat.CURRENTHEALTH));
+		items.add(new Item("Attack Snack", 10, Item.Stat.ATTACK));
+		items.add(new Item("Max Health Snack", 20, Item.Stat.CURRENTHEALTH));
+		items.add(new Item("Revive candy", 20, Item.Stat.STATUS));
 		
 		GameEnvironmentUi ui;
 

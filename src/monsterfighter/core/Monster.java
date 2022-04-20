@@ -2,6 +2,17 @@ package monsterfighter.core;
 
 public class Monster{
 	
+	public enum Status {
+		CONSCIOUS("Conscious"),
+		FAINTED("Fainted");
+		
+		public final String name;
+		
+		Status(String name) {
+			this.name = name;
+		}
+	}
+	
 	public enum Type {
 		NORMAL("Normal"),
 	    FIRE("Fire"),
@@ -23,6 +34,7 @@ public class Monster{
 	private int maxHealth;
 	private int attack;
 	private int currentHealth;
+	private Status status;
 	private final int buyPrice;
 	private final int sellPrice;
 	
@@ -33,6 +45,7 @@ public class Monster{
 		this.maxHealth = maxHealth;
 		this.attack = attack;
 		this.currentHealth = currentHealth;
+		this.status = Status.CONSCIOUS;
 		this.buyPrice = buyPrice;
 		this.sellPrice = sellPrice;
 	}
@@ -62,6 +75,10 @@ public class Monster{
 		return currentHealth;
 	}
 	
+	public Status getStatus() {
+		return status;
+	}
+	
 	public int getBuyPrice() {
 		return buyPrice;
 	}
@@ -82,7 +99,7 @@ public class Monster{
 		attack += attackBuff;
 	}
 
-	public void heal(int heal) {
+	public void receiveHealth(int heal) {
 		currentHealth += heal;
 		if (currentHealth > maxHealth) {
 			currentHealth = maxHealth;
@@ -91,10 +108,12 @@ public class Monster{
 	
 	public void receiveDamage(int damage) {
 		currentHealth -= damage;
-		if currentHealth >
+		if (currentHealth < 0) {
+			currentHealth = 0;
+			this.status = Status.FAINTED;
+		}
 	}
 	
-
 	@Override
 	public String toString() {
 		return "Monster: " + name + " Nickname: " + nickname + " Type: " + type.value + " Health: " + currentHealth + "/" + maxHealth + " Attack: " + attack;
