@@ -21,17 +21,17 @@ public class Monster{
 	private String nickname;
 	private final Type type;
 	private int maxHealth;
-	private int damage;
+	private int attack;
 	private int currentHealth;
 	private final int buyPrice;
 	private final int sellPrice;
 	
-	public Monster(String name, Type type, int maxHealth, int damage, int currentHealth, int buyPrice, int sellPrice) {
+	public Monster(String name, Type type, int maxHealth, int attack, int currentHealth, int buyPrice, int sellPrice) {
 		this.name = name;
 		this.nickname = name;
 		this.type = type;
 		this.maxHealth = maxHealth;
-		this.damage = damage;
+		this.attack = attack;
 		this.currentHealth = currentHealth;
 		this.buyPrice = buyPrice;
 		this.sellPrice = sellPrice;
@@ -53,8 +53,8 @@ public class Monster{
 		return maxHealth;
 	}
 	
-	public int getDamage() {
-		return damage;
+	public int getAttack() {
+		return attack;
 	}
 	
 	
@@ -78,21 +78,26 @@ public class Monster{
 		maxHealth += healthBuff;
 	}
 	
-	public void setDamage(int damageBuff) {
-		damage += damageBuff;
+	public void setAttack(int attackBuff) {
+		attack += attackBuff;
 	}
 
-	public void setCurrentHealth(int healthChange) {
-		currentHealth += healthChange;
+	public void heal(int heal) {
+		currentHealth += heal;
+		if (currentHealth > maxHealth) {
+			currentHealth = maxHealth;
+		}
 	}
 	
-	
-
+	public void receiveDamage(int damage) {
+		currentHealth -= damage;
+		if currentHealth >
+	}
 	
 
 	@Override
 	public String toString() {
-		return "Monster: " + name + " Nickname: " + nickname + " Type: " + type.value + " Health: " + currentHealth + "/" + maxHealth + " Damage: " + damage;
+		return "Monster: " + name + " Nickname: " + nickname + " Type: " + type.value + " Health: " + currentHealth + "/" + maxHealth + " Attack: " + attack;
 	}
 
 
