@@ -85,10 +85,12 @@ public class Monster implements Purchasable{
 		return status;
 	}
 	
+	@Override
 	public int getBuyPrice() {
 		return buyPrice;
 	}
 	
+	@Override
 	public int getSellPrice() {
 		return sellPrice;
 	}
@@ -125,16 +127,20 @@ public class Monster implements Purchasable{
 		receiveHealth(heal);
 	}
 	
+	public String basicDescription() {
+		String description = "Monster: " + name + " Type: " + type.value + " Health: " + maxHealth + " Attack: " + attack;
+		return description;
+	}
+	
 	@Override
 	public String shopDescription() {
-		String description = "Monster: " + name + " Type: " + type.value + " Health: " + currentHealth + "/" + maxHealth + " Attack: " + attack + " Buy Price: " + buyPrice + " Sell Price: " + sellPrice;
-				
+		String description = "[Buy Price: " + buyPrice + "| Sell Price: " + sellPrice + "] " + basicDescription();
 		return description;
 	}
 	
 	@Override
 	public String toString() {
-		String description = "Monster: " + name + " Nickname: " + nickname + " Type: " + type.value + " Health: " + currentHealth + "/" + maxHealth + " Attack: " + attack;
+		String description = "Nickname: " + nickname + " Monster: " + name + " Type: " + type.value + " Health: " + currentHealth + "/" + maxHealth + " Attack: " + attack;
 		if (status.name == "Fainted") {
 			description = "[FAINTED] " + description;
 		}

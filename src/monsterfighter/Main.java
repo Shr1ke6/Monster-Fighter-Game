@@ -28,11 +28,11 @@ public class Main {
 		
 		final List<Item> items = new ArrayList<>(5);
 		
-		items.add(new Item(0, "Small Potion", 20, Item.Stat.CURRENTHEALTH, 100));
-		items.add(new Item(1, "Big Potion", 50, Item.Stat.CURRENTHEALTH, 100));
-		items.add(new Item(2, "Attack Snack", 10, Item.Stat.ATTACK, 100));
-		items.add(new Item(3, "Max Health Snack", 20, Item.Stat.CURRENTHEALTH, 100));
-		items.add(new Item(4, "Revive candy", 20, Item.Stat.STATUS, 100));
+		items.add(new Item(0, "Small Potion", 20, Item.Stat.CURRENTHEALTH, 100, 3));
+		items.add(new Item(1, "Big Potion", 50, Item.Stat.CURRENTHEALTH, 100, 2));
+		items.add(new Item(2, "Attack Snack", 10, Item.Stat.ATTACK, 100, 1));
+		items.add(new Item(3, "Max Health Snack", 20, Item.Stat.CURRENTHEALTH, 100, 1));
+		items.add(new Item(4, "Revive candy", 20, Item.Stat.STATUS, 100, 1));
 		
 		GameEnvironmentUi ui;
 
