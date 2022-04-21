@@ -119,6 +119,7 @@ public class CmdLineUi implements GameEnvironmentUi {
             	accessShop();
             	break;
             case REST:
+            	
 
                 break;
             case QUIT:
