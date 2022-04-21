@@ -21,13 +21,15 @@ public class Item implements Purchasable{
 	private final Stat stat;
 	private final int buyPrice;
 	private final int sellPrice;
+	private final int storeQuantity;
 	
-	public Item(int index, String name, int amount, Stat stat, int buyPrice) {
+	public Item(int index, String name, int amount, Stat stat, int buyPrice, int storeQuantity) {
 		this.index = index;
 		this.name = name;
 		this.amount = amount;
 		this.stat = stat;
 		this.buyPrice = buyPrice;
+		this.storeQuantity = storeQuantity;
 		sellPrice = buyPrice / 2;
 	}
 	
@@ -45,6 +47,10 @@ public class Item implements Purchasable{
 	
 	public Stat getStat() {
 		return stat;
+	}
+	
+	public int getStoreQuantity() {
+		return storeQuantity;
 	}
 	
 	public void useItem(Monster monster) {
@@ -72,13 +78,22 @@ public class Item implements Purchasable{
 	
 	@Override
 	public String toString() {
-		return "Item: " + name + " Effect: increases " + stat.name + " by " + amount + " Buy Price: " + buyPrice + " Sell Price: " + sellPrice;
+		return "Item: " + name + " Effect: increases " + stat.name + " by " + amount;
 	}
 
 	@Override
 	public String shopDescription() {
-		// TODO Auto-generated method stub
-		return "Item: " + name + " Effect: increases " + stat.name + " by " + amount;
+		return "[Buy Price: " + buyPrice + "| Sell Price: " + sellPrice + "] " + toString();
+	}
+
+	@Override
+	public int getBuyPrice() {
+		return buyPrice;
+	}
+
+	@Override
+	public int getSellPrice() {
+		return sellPrice;
 	}
 	
 }

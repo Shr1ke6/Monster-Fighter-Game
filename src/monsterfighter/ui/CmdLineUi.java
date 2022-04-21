@@ -8,6 +8,8 @@ import monsterfighter.core.GameEnvironment;
 import monsterfighter.core.GameEnvironment.Difficulty;
 import monsterfighter.core.Item;
 import monsterfighter.core.Monster;
+import monsterfighter.core.Purchasable;
+import monsterfighter.core.Shop;
 
 public class CmdLineUi implements GameEnvironmentUi {
 	
@@ -207,7 +209,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 	private void printStartingMonsters(List<Monster> startingMonsters) {
 		int i = 0;
 		for(Monster monster : startingMonsters) {
-			System.out.println("(" + i + ") " + monster);
+			System.out.println("(" + i + ") " + monster.basicDescription());
 			i++;
 		}
 	}
@@ -436,9 +438,63 @@ public class CmdLineUi implements GameEnvironmentUi {
 	}
 	
 	private void accessShop() {
-		
+		while (true) {
+			System.out.println("Select a shop option:\n"
+					+ "(0) Buy\n"
+					+ "(1) Sell Monster\n"
+					+ "(2) Sell Item\n"
+					+ "\n(3) Back\n");
+			try {
+				int option = scanner.nextInt();
+				if (option == 0) {
+					if (!gameEnvironment.shopIsEmpty()) {
+						shopBuy();
+					} else {
+						showError("Shop is empty! Come back tomorrow for new items\n");
+					}
+				} else if (option == 1) {
+					
+				} else if (option == 2) {
+					
+				} else if (option == 3) {
+					start();
+				}
+			} catch (Exception e) {
+				scanner.nextLine();
+			}
+		}
 	}
 	
+	private void shopBuy() {
+		final Shop shop = gameEnvironment.getShop();
+		while (true) {
+			System.out.println("Shop:\n"
+					+ "-".repeat(6) + "Select an item to purchase itGold: " + gameEnvironment.getGold());
+			printShopInventory(shop);
+			System.out.println("\n(" + shop.getShopInventory().size() + ") Back" );
+			try {
+				int option = scanner.nextInt();
+				if (option >= 0 && option < shop.getShopInventory().size()) {
+					
+				} else if (option == shop.getShopInventory().size()) {
+					start();
+				}
+			} catch (Exception e) {
+				scanner.nextLine();
+			}
+		}
+	}
+	
+	public void printShopInventory(Shop shop) {
+		ArrayList<ArrayList<Purchasable>> shopInventory = shop.getShopInventory();
+		for (int i = 0; i < shopInventory.size(); i++) {
+			System.out.println("(" + i + ") " + shopInventory.get(i).size() + "x " + shopInventory.get(i).get(0).shopDescription());
+	    	}
+		}
+	
+	public void printPurchasable(Purchasable purchasable) {
+		for (for )
+	}
 	
 	
 	

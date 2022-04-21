@@ -46,6 +46,9 @@ public class GameEnvironment {
 	// The users gold
 	private int gold = 0;
 	
+	// The shop
+	private Shop shop;
+	
 	// Enum that stores the difficulty options for the game 
     public enum Difficulty {
 	    EASY(100, 1.25, "Easy"),
@@ -77,6 +80,7 @@ public class GameEnvironment {
 	 */
 	public GameEnvironment(GameEnvironmentUi ui, List<Monster> monsters, List<Item> items) {
 		this.ui = ui;
+		this.shop = new Shop(monsters, items);
 		this.allMonsters = monsters;
 		this.startingMonsters = monsters.subList(0, 3);
 		this.allItems = items;
@@ -125,7 +129,6 @@ public class GameEnvironment {
 		return name;
 	}
 	
-	
 	public int getTotalDays() {
 		return totalDays;
 	}
@@ -136,6 +139,14 @@ public class GameEnvironment {
 	
 	public Difficulty getDifficulty() {
 		return difficulty;
+	}
+	
+	public Shop getShop() {
+		return shop;
+	}
+	
+	public int getGold() {
+		return gold;
 	}
 	
 	public List<Monster> getStartingMonsters() {
@@ -149,7 +160,9 @@ public class GameEnvironment {
 	public List<ArrayList<Item>> getInventory() {
 		return Collections.unmodifiableList(inventory);
 	}
-	 
+	
+	
+	
 	/**
 	 * Checks to see if user inventory is empty
 	 * @return isEmpty States whether the user's {@link inventory} is empty or not
@@ -157,6 +170,20 @@ public class GameEnvironment {
 	public boolean inventoryIsEmpty() {
 		boolean isEmpty = true;
 		for (ArrayList<Item> item : inventory) {
+			if (!item.isEmpty()) {
+				isEmpty = false;
+			}
+		}
+		return isEmpty;
+	}
+	
+	/**
+	 * Checks to see if the shop is empty
+	 * @return isEmpty States whether the shop {@link shop} is empty or not
+	 */
+	public boolean shopIsEmpty() {
+		boolean isEmpty = true;
+		for (ArrayList<Purchasable> item : shop.getShopInventory()) {
 			if (!item.isEmpty()) {
 				isEmpty = false;
 			}
