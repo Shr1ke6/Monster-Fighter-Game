@@ -115,6 +115,9 @@ public class CmdLineUi implements GameEnvironmentUi {
             case INVENTORY:
             	accessInventory();
                 break;
+            case SHOP:
+            	accessShop();
+            	break;
             case REST:
 
                 break;
@@ -431,6 +434,9 @@ public class CmdLineUi implements GameEnvironmentUi {
 		return i;
 	}
 	
+	private void accessShop() {
+		
+	}
 	
 	
 	
