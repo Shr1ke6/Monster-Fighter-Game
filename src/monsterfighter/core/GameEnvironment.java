@@ -138,6 +138,12 @@ public class GameEnvironment {
 		return difficulty;
 	}
 	
+	public int getGold() {
+		return gold;
+	}
+	
+	
+	
 	public List<Monster> getStartingMonsters() {
 		return Collections.unmodifiableList(startingMonsters);
 	}
@@ -149,6 +155,8 @@ public class GameEnvironment {
 	public List<ArrayList<Item>> getInventory() {
 		return Collections.unmodifiableList(inventory);
 	}
+	
+
 	 
 	/**
 	 * Checks to see if user inventory is empty
@@ -194,6 +202,13 @@ public class GameEnvironment {
 		catch (IllegalStateException e) {
 			ui.showError(e.getMessage());
 		}
+	}
+
+
+
+	public void addToInventory(Item reward) {
+		// TODO Auto-generated method stub
+		inventory.get(reward.getIndex()).add(reward);
 	}
 
 }

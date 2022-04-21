@@ -19,12 +19,12 @@ public class Main {
 	public static void main(String[] args) {
 		final List<Monster> monsters = new ArrayList<>(6);
 		
-		monsters.add(new Monster("Fireboy", Monster.Type.FIRE, 50, 20, 5, 200));
-		monsters.add(new Monster("Watergirl", Monster.Type.WATER, 60, 15, 60, 200));
-		monsters.add(new Monster("Dirt Monster", Monster.Type.GRASS, 70, 10, 70, 200));
-		monsters.add(new Monster("BrightStar", Monster.Type.LIGHT, 70, 10, 70, 200));
-		monsters.add(new Monster("DarkStar", Monster.Type.DARK, 50, 20, 50, 200));
-		monsters.add(new Monster("Normie", Monster.Type.NORMAL, 65, 14, 65, 200));
+		monsters.add(new Monster(0, "Fireboy", Monster.Type.FIRE, 50, 20, 5, 200));
+		monsters.add(new Monster(1, "Watergirl", Monster.Type.WATER, 60, 15, 60, 200));
+		monsters.add(new Monster(2, "Dirt Monster", Monster.Type.GRASS, 70, 10, 70, 200));
+		monsters.add(new Monster(3, "BrightStar", Monster.Type.LIGHT, 70, 10, 70, 200));
+		monsters.add(new Monster(4, "DarkStar", Monster.Type.DARK, 50, 20, 50, 200));
+		monsters.add(new Monster(5, "Normie", Monster.Type.NORMAL, 65, 14, 65, 200));
 		
 		final List<Item> items = new ArrayList<>(5);
 		

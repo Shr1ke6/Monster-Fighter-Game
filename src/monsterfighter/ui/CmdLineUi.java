@@ -110,6 +110,7 @@ public class CmdLineUi implements GameEnvironmentUi {
             	accessParty();
                 break;
             case BATTLE:
+            	accessBattle();
 
                 break;
             case INVENTORY:
@@ -432,6 +433,45 @@ public class CmdLineUi implements GameEnvironmentUi {
 		return i;
 	}
 	
+	private void accessBattle() {
+		ArrayList<ArrayList<Monster>> battles = new ArrayList<ArrayList<Monster>>();
+		while (true) {
+			System.out.println("Select an option:\n"
+					+ "(0) Wild battles\n"
+					+ "(1) Trainer battles\n"
+					+ "(2) Back\n");
+			try {
+				int option = scanner.nextInt();
+				scanner.nextLine();
+				if (option == 0) {
+					accessBattle();
+				} else if (option == 1) {
+					accessBattle();
+				} else if (option == 2) {
+					start();
+			}} catch (Exception e) {
+				scanner.nextLine();
+			}
+        }	
+	}
+	
+	
+	private int printBattle(List<Monster> monsters, List<Item> items) {
+		ArrayList<ArrayList<Monster>> battles = new ArrayList<ArrayList<Monster>>();
+		int i=0;
+		for(ArrayList<Monster> selectBattle : battles )
+		    System.out.println((i++)+": "+selectBattle);
+		return i;
+	
+	}
+	
+		
+
+	
+
+	
+
+}
 	
 	
 	
@@ -439,4 +479,4 @@ public class CmdLineUi implements GameEnvironmentUi {
 	
 	
 
-}
+
