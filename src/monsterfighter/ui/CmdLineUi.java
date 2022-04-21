@@ -116,6 +116,7 @@ public class CmdLineUi implements GameEnvironmentUi {
             	accessInventory();
                 break;
             case REST:
+            	
 
                 break;
             case QUIT:

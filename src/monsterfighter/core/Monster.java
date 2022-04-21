@@ -1,6 +1,6 @@
 package monsterfighter.core;
 
-public class Monster{
+public class Monster implements Purchasable{
 	
 	public enum Status {
 		CONSCIOUS("Conscious"),
@@ -28,7 +28,7 @@ public class Monster{
 	        this.value = value;
 	    }
 	}
-	
+	private final int index;
 	private final String name;
 	private String nickname;
 	private final Type type;
@@ -39,7 +39,8 @@ public class Monster{
 	private final int buyPrice;
 	private final int sellPrice;
 	
-	public Monster(String name, Type type, int maxHealth, int attack, int currentHealth, int buyPrice, int sellPrice) {
+	public Monster(int index, String name, Type type, int maxHealth, int attack, int currentHealth, int buyPrice) {
+		this.index = index;
 		this.name = name;
 		this.nickname = name;
 		this.type = type;
@@ -48,7 +49,11 @@ public class Monster{
 		this.currentHealth = currentHealth;
 		this.status = Status.CONSCIOUS;
 		this.buyPrice = buyPrice;
-		this.sellPrice = sellPrice;
+		sellPrice = buyPrice / 2;
+	}
+	
+	public int getIndex() {
+		return index;
 	}
 	
 	public String getName() {
@@ -118,6 +123,13 @@ public class Monster{
 	public void revive(int heal) {
 		status = Status.CONSCIOUS;
 		receiveHealth(heal);
+	}
+	
+	@Override
+	public String shopDescription() {
+		String description = "Monster: " + name + " Type: " + type.value + " Health: " + currentHealth + "/" + maxHealth + " Attack: " + attack + " Buy Price: " + buyPrice + " Sell Price: " + sellPrice;
+				
+		return description;
 	}
 	
 	@Override

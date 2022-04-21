@@ -1,6 +1,6 @@
 package monsterfighter.core;
 
-public class Item{
+public class Item implements Purchasable{
 	
 	public enum Stat {
 		MAXHEALTH("Max Health"),
@@ -19,12 +19,16 @@ public class Item{
 	private final String name;
 	private final int amount;
 	private final Stat stat;
-
-	public Item(int index, String name, int amount, Stat stat) {
+	private final int buyPrice;
+	private final int sellPrice;
+	
+	public Item(int index, String name, int amount, Stat stat, int buyPrice) {
 		this.index = index;
 		this.name = name;
 		this.amount = amount;
 		this.stat = stat;
+		this.buyPrice = buyPrice;
+		sellPrice = buyPrice / 2;
 	}
 	
 	public int getIndex() {
@@ -68,6 +72,12 @@ public class Item{
 	
 	@Override
 	public String toString() {
+		return "Item: " + name + " Effect: increases " + stat.name + " by " + amount + " Buy Price: " + buyPrice + " Sell Price: " + sellPrice;
+	}
+
+	@Override
+	public String shopDescription() {
+		// TODO Auto-generated method stub
 		return "Item: " + name + " Effect: increases " + stat.name + " by " + amount;
 	}
 	
