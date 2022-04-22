@@ -24,10 +24,6 @@ public class Shop{
 		}
 	}
 	
-	//public void refillShop(List<Monster> allMonsters, List<Item> allItems) {
-	//	shopInventory.get(i).add(allMonsters.get(randomNumber));
-	//}
-	
 	public void purchase(int shopID) {
 		
 	}

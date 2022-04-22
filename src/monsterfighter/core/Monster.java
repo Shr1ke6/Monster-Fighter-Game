@@ -134,7 +134,7 @@ public class Monster implements Purchasable{
 	
 	@Override
 	public String shopDescription() {
-		String description = "[Buy Price: " + buyPrice + "| Sell Price: " + sellPrice + "] " + basicDescription();
+		String description = "[Buy Price: " + buyPrice + " | Sell Price: " + sellPrice + "] " + basicDescription();
 		return description;
 	}
 	

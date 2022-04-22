@@ -87,7 +87,7 @@ public class Item implements Purchasable{
 
 	@Override
 	public String shopDescription() {
-		return "[Buy Price: " + buyPrice + "| Sell Price: " + sellPrice + "] " + toString();
+		return "[Buy Price: " + buyPrice + " | Sell Price: " + sellPrice + "] " + toString();
 	}
 
 	@Override
