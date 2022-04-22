@@ -62,16 +62,20 @@ public class Item implements Purchasable{
         	monster.setAttack(amount);
         	break;
         case CURRENTHEALTH:
-        	if (monster.getMaxHealth() == monster.getCurrentHealth()) {
+        	if (monster.getCurrentHealth() < monster.getMaxHealth() && monster.getStatus().name == "Conscious") {
+        		monster.receiveHealth(amount);
+        	} else if (monster.getCurrentHealth() == monster.getMaxHealth()){
         		throw new IllegalStateException("Cannot use " + name + ", " + monster.getNickname() + "'s health is already at max\n");
+        	} else {
+        		throw new IllegalStateException("Cannot use " + name + ", " + monster.getNickname() + "has fainted and must first be revived\n");
         	}
-            monster.receiveHealth(amount);
         	break;
         case STATUS:
-        	if (monster.getStatus().name == "Conscious") {
+        	if (monster.getStatus().name == "Fainted") {
+        		monster.revive(amount);
+        	} else {
         		throw new IllegalStateException("Cannot use " + name + ", " + monster.getNickname() + "'s health is not unconscious\n");
         	}
-        	monster.revive(amount);
         	break;
 		}
 	}

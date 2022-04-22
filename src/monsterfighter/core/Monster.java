@@ -39,14 +39,14 @@ public class Monster implements Purchasable{
 	private final int buyPrice;
 	private final int sellPrice;
 	
-	public Monster(int index, String name, Type type, int maxHealth, int attack, int currentHealth, int buyPrice) {
+	public Monster(int index, String name, Type type, int maxHealth, int attack, int buyPrice) {
 		this.index = index;
 		this.name = name;
 		this.nickname = name;
 		this.type = type;
 		this.maxHealth = maxHealth;
 		this.attack = attack;
-		this.currentHealth = currentHealth;
+		this.currentHealth = maxHealth;
 		this.status = Status.CONSCIOUS;
 		this.buyPrice = buyPrice;
 		sellPrice = buyPrice / 2;
