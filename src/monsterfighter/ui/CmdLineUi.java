@@ -516,7 +516,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 				int option = scanner.nextInt();
 				if (option == 0) {
 					if (!gameEnvironment.shopIsEmpty()) {
-						shopBuy();
+						shopBuy(option);
 					} else {
 						showError("Shop is empty! Come back tomorrow for new items\n");
 					}
@@ -542,7 +542,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 		}
 	}
 
-	private void shopBuy() {
+	private void shopBuy(int shopID) {
 		final Shop shop = gameEnvironment.getShop();
 		while (true) {
 			System.out.println("Shop:\n"
@@ -552,6 +552,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 			try {
 				int option = scanner.nextInt();
 				if (option >= 0 && option < shop.getShopInventory().size()) {
+					gameEnvironment.purchase(shopID);
 					
 				} else if (option == shop.getShopInventory().size()) {
 					start();

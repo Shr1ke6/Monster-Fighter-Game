@@ -271,5 +271,22 @@ public class GameEnvironment {
 	public void Brawls() {
 		
 	}
+	
+	public void purchase(int shopID) {
+		Object object = shop.getShopInventory().get(shopID).get(0);
+		if (object instanceof Monster) {
+			if (party.size() >= 3) {
+				throw new IllegalStateException("party full sell a monster before u buy");	
+			} else if (party.size() <= 3) {
+				goldBalance -= ((Monster) object).getBuyPrice();
+				party.add((Monster) object);
+		} else {
+			goldBalance -= ((Item) object).getBuyPrice();
+			//inventory.add((Item) object);
+	}
 
-}
+		
+	}}}
+
+
+

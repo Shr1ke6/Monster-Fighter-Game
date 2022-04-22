@@ -29,21 +29,7 @@ public class Shop{
 	//	shopInventory.get(i).add(allMonsters.get(randomNumber));
 	//}
 	
-	public void purchase(int shopID, List<Monster> party, List<Item> inventory, int goldBalance) {
-		
-		for(int i = 0; i < party.size(); i++) {
-			if (party.get(i) >= 3) {
-				throw new IllegalStateException("party full sell a monster before u buy");	
-		} else if (party.get(i) <= 3) {
-			goldBalance = goldBalance - Shop.get(shopID)get(buyPrice);
-			party.add(shopID);
-		} else {
-			goldBalance = goldBalance - ItemGold;
-			inventory.add(shopID);
-		}
 
-		
-	}
 		
 	public ArrayList<ArrayList<Purchasable>> getShopInventory() {
 		return shopInventory;
