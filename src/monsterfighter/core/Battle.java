@@ -12,33 +12,6 @@ public class Battle {
 
 
 	
-
-	public void WildBattle(List<Monster> monsters) {
-		for (int i = 0; i < 3; i++) 
-        {
-            int index = (int)(Math.random() * monsters.size());
-     
-        }
-		
-	}
-	
-	public void TrainerBattle(List<Monster> monsters, List<Item> items) {
-		for (int i = 3; i < 5; i++) 
-        {
-            int index = (int)(Math.random() * battles.size());
-  
-            System.out.println("wild battle :"
-                               + battles.get(index));
-        }
-	}
-		
-	
-	
-	public void Trainers(List<Monster> monsters) {
-	
-		
-	}
-	
 	public void earntGold(int earntGold) {
 	    gold = gold + earntGold;
 	}
@@ -47,8 +20,6 @@ public class Battle {
 		points = points + gainedPoints;
 	}
 	
-	public void getReward(Item reward) {
-		GameEnvironment.addToInventory(reward);
-	}
+
 
 }

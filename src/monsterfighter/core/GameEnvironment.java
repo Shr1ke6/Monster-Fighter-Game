@@ -1,6 +1,5 @@
 package monsterfighter.core;
 
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -19,7 +18,7 @@ public class GameEnvironment {
 	private final List<Monster> allMonsters;
 
 	// The list of available starting {@link Monster}s 
-	private final List<Monster> startingMonsters;
+	private final List<Monster> startingMonsters = new ArrayList<Monster>();
 	
 	// The list of all {@link Items}s
 	private final List<Item> allItems;
@@ -44,10 +43,12 @@ public class GameEnvironment {
 	private Difficulty difficulty;
 	
 	// The users gold
-	private int gold = 0;
+	private int goldBalance = 0;
 	
 	// The shop
 	private Shop shop;
+	
+	private ArrayList<Battle> battles = new ArrayList<Battle>(); 
 	
 	// Enum that stores the difficulty options for the game 
     public enum Difficulty {
@@ -80,9 +81,10 @@ public class GameEnvironment {
 	 */
 	public GameEnvironment(GameEnvironmentUi ui, List<Monster> monsters, List<Item> items) {
 		this.ui = ui;
-		this.shop = new Shop(monsters, items);
 		this.allMonsters = monsters;
-		this.startingMonsters = monsters.subList(0, 3);
+		for (int i = 0; i < 3; i++) {
+			this.startingMonsters.add(monsters.get(i));
+		}
 		this.allItems = items;
 		for (int i = 0; i < items.size(); i++) {
 			this.inventory.add(new ArrayList<Item>());
@@ -91,6 +93,18 @@ public class GameEnvironment {
 		for (int i = 0; i < 3; i++) {
 			this.inventory.get(items.get(0).getIndex()).add(items.get(0));
 		}
+		this.shop = new Shop(monsters, items);
+		
+		for (int i = 0; i < 5; i++) {
+			if (i < 3) {
+				battles.add(new WildBattle(monsters));
+			} else {
+				battles.add(new TrainerBattle(monsters, i - 3));
+				
+			}
+			
+		}
+		
 	}
 	
 
@@ -116,7 +130,7 @@ public class GameEnvironment {
 		this.totalDays = totalDays;
 		this.party.add(startingMonster);
 		this.difficulty = difficulty;
-		this.gold += difficulty.startingGold;
+		this.goldBalance += difficulty.startingGold;
 		ui.start();
 	}
 	
@@ -140,20 +154,23 @@ public class GameEnvironment {
 	public Difficulty getDifficulty() {
 		return difficulty;
 	}
-	
 
-	public int getGold() {
-		return gold;
-	}
-	
+
 
 	public Shop getShop() {
 		return shop;
 	}
 	
-	public void getWildBattle() {
-		return index;
+
+
+	public int getGoldBalance() {
+		return goldBalance;
 	}
+	
+	public List<Battle> getBattles() {
+		return Collections.unmodifiableList(battles);
+	}
+	
 
 	
 	public List<Monster> getStartingMonsters() {
@@ -165,7 +182,13 @@ public class GameEnvironment {
 	}
 	
 	public List<ArrayList<Item>> getInventory() {
-		return Collections.unmodifiableList(inventory);
+		ArrayList<ArrayList<Item>> inventoryUI = new ArrayList<ArrayList<Item>>();;
+		for (ArrayList<Item> item : inventory) {
+			if (!item.isEmpty()) {
+				inventoryUI.add(item);
+			}
+		}
+		return Collections.unmodifiableList(inventoryUI);
 	}
 	
 
@@ -228,12 +251,25 @@ public class GameEnvironment {
 			ui.showError(e.getMessage());
 		}
 	}
-
-
+	
+	public void sellItem(int itemID) {
+		Item item = getItem(itemID);
+		goldBalance += item.getSellPrice();
+		inventory.get(item.getIndex()).remove(0);
+	}
+	
+	public void sellMonster(int monsterID) {
+		Monster monster = party.get(monsterID);
+		goldBalance += monster.getSellPrice();
+		party.remove(monsterID);
+	}
 
 	public void addToInventory(Item reward) {
-		// TODO Auto-generated method stub
 		inventory.get(reward.getIndex()).add(reward);
+	}
+	
+	public void Brawls() {
+		
 	}
 
 }
