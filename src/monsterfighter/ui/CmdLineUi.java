@@ -437,8 +437,8 @@ public class CmdLineUi implements GameEnvironmentUi {
 		}
 		return i;
 	}
+
 	
-<<<<<<< HEAD
 	private void accessBattle() {
 		ArrayList<ArrayList<Monster>> battles = new ArrayList<ArrayList<Monster>>();
 		while (true) {
@@ -451,6 +451,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 				scanner.nextLine();
 				if (option == 0) {
 					accessBattle();
+					gameEnvironment.getWildBattle();
 				} else if (option == 1) {
 					accessBattle();
 				} else if (option == 2) {
@@ -477,8 +478,8 @@ public class CmdLineUi implements GameEnvironmentUi {
 
 	
 
-}
-=======
+
+
 	private void accessShop() {
 		while (true) {
 			System.out.println("Select a shop option:\n"
@@ -506,8 +507,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 			}
 		}
 	}
->>>>>>> branch 'master' of https://eng-git.canterbury.ac.nz/sco161/monster-fighter-sco161-qzh78.git
-	
+
 	private void shopBuy() {
 		final Shop shop = gameEnvironment.getShop();
 		while (true) {
@@ -533,12 +533,10 @@ public class CmdLineUi implements GameEnvironmentUi {
 		for (int i = 0; i < shopInventory.size(); i++) {
 			System.out.println("(" + i + ") " + shopInventory.get(i).size() + "x " + shopInventory.get(i).get(0).shopDescription());
 	    	}
-		}
-	
-	public void printPurchasable(Purchasable purchasable) {
-		for (for )
 	}
+}
 	
+
 	
 	
 	

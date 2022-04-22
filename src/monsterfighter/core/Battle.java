@@ -13,13 +13,11 @@ public class Battle {
 
 	
 
-	public void WildBattle(List<Monster> monsters, List<Item> items) {
+	public void WildBattle(List<Monster> monsters) {
 		for (int i = 0; i < 3; i++) 
         {
-            int index = (int)(Math.random() * battles.size());
-  
-            System.out.println("wild battle :"
-                               + battles.get(index));
+            int index = (int)(Math.random() * monsters.size());
+     
         }
 		
 	}

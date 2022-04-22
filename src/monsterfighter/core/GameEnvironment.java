@@ -141,21 +141,20 @@ public class GameEnvironment {
 		return difficulty;
 	}
 	
-<<<<<<< HEAD
+
 	public int getGold() {
 		return gold;
 	}
 	
-	
-=======
+
 	public Shop getShop() {
 		return shop;
 	}
 	
-	public int getGold() {
-		return gold;
+	public void getWildBattle() {
+		return index;
 	}
->>>>>>> branch 'master' of https://eng-git.canterbury.ac.nz/sco161/monster-fighter-sco161-qzh78.git
+
 	
 	public List<Monster> getStartingMonsters() {
 		return Collections.unmodifiableList(startingMonsters);
@@ -169,13 +168,7 @@ public class GameEnvironment {
 		return Collections.unmodifiableList(inventory);
 	}
 	
-<<<<<<< HEAD
 
-	 
-=======
-	
-	
->>>>>>> branch 'master' of https://eng-git.canterbury.ac.nz/sco161/monster-fighter-sco161-qzh78.git
 	/**
 	 * Checks to see if user inventory is empty
 	 * @return isEmpty States whether the user's {@link inventory} is empty or not
