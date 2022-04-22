@@ -24,6 +24,7 @@ public class Shop{
 		}
 	}
 	
+
 	//public void refillShop(List<Monster> allMonsters, List<Item> allItems) {
 	//	shopInventory.get(i).add(allMonsters.get(randomNumber));
 	//}
@@ -39,6 +40,7 @@ public class Shop{
 			gold = gold - ItemGold;
 			inventory.add(shopID);
 		}
+
 		
 	}
 		
