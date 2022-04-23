@@ -3,6 +3,7 @@ package monsterfighter.core;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 import monsterfighter.ui.GameEnvironmentUi;
@@ -96,9 +97,9 @@ public class GameEnvironment {
 		fillShop();
 		for (int i = 0; i < 5; i++) {
 			if (i < 3) {
-				battles.add(new WildBattle());
+				//battles.add(new WildBattle());
 			} else {
-				battles.add(new TrainerBattle(monsters, i - 3));
+				//battles.add(new TrainerBattle(monsters, i - 3));
 				
 			}
 			
@@ -339,15 +340,12 @@ public class GameEnvironment {
 		}
 	}
 	
-	public void fillBattles() {
-		
-	}
+
 	
 	
 	public void nextDay() {
 		day += 1;
 		fillShop();
-		fillBattles();
 		for (Monster monster : party) {
 			monster.receiveHealth(1000000);
 		}
@@ -361,10 +359,20 @@ public class GameEnvironment {
 	}
 	
 	public String getTrainerBattle() {
-		int index = (int)(Math.random() * allMonsters.size());
-		Monster monster = allMonsters.get(index);
-		return monster.basicDescription();
+		ArrayList<Monster> trainerBattleMonsters = new ArrayList<Monster>();
+		int idx = new Random().nextInt(TrainerBattle.trainers.length);
+		String random = (TrainerBattle.trainers[idx]);
+		for (int i = 0; i < 4; i++) {
+			int index = (int)(Math.random() * allMonsters.size());
+			trainerBattleMonsters.add(allMonsters.get(index));
+		}
+		return random + " : " + "(" + trainerBattleMonsters + ")";
+	
 	}
+	
+	
+	
+
 	
 	
 	public void earntGold(int earntGold) {

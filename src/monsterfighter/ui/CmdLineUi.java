@@ -431,7 +431,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 			}
 		}
 	}
-<<<<<<< HEAD
+
 	
 	private void itemToMonster(int itemID) {
 		final List<Monster> party = gameEnvironment.getParty();
@@ -460,24 +460,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 		}
 	}
 	
-=======
 
-	private int chooseBattle(List<Battle> battles, String message) {
-		while (true) {
-			System.out.println(message);
-			printBattle(battles);
-			try {
-				int battleID = scanner.nextInt();
-				scanner.nextLine();
-				if (battleID >= 0 && battleID <= battles.size()) {
-					return battleID;
-				} 
-			} catch (Exception e) {
-				scanner.nextLine();
-			}
-		}
-	}
->>>>>>> branch 'master' of https://eng-git.canterbury.ac.nz/sco161/monster-fighter-sco161-qzh78.git
 	
 	
 	private void accessShop() {
@@ -570,7 +553,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 	
 	
 	private void accessBattle() {
-		final List<Battle> battles = gameEnvironment.getBattles();
+		//final List<Battle> battles = gameEnvironment.getBattles();
 		while (true) {
 			System.out.println("Select an option:\n"
 					+ "(0) Wild battles\n"
@@ -583,7 +566,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 					accessWildBattle();
 					
 				} else if (option == 1) {
-					//int battleID = chooseBattle(battles.subList(3, 4), "trainer battles") + 3 ;
+					accessTrainerBattle();
 					
 				} else if (option == 2) {
 					start();
@@ -595,11 +578,40 @@ public class CmdLineUi implements GameEnvironmentUi {
 	
 	
 	
+	
+
 	private void accessWildBattle() {
+		//ArrayList<Monster> arena = new ArrayList<Monster>();
 		while (true) {
 			System.out.println("Select an wild battle:\n"
 					+ "(0) " + gameEnvironment.getWildBattle() + "\n"
 					+ "(1) " + gameEnvironment.getWildBattle() + "\n"
+					+ "(2) Back\n");
+			try {
+				int option = scanner.nextInt();
+				scanner.nextLine();
+				if (option == 0) {
+					//arena.add(gameEnvironment.getWildBattle(0));
+					System.out.println("your fat" );
+					System.exit(0);
+				
+				} else if (option == 1) {
+					
+					
+				} else if (option == 2) {
+					accessBattle();
+			}} catch (Exception e) {
+				scanner.nextLine();
+			}
+        }	
+		
+	}
+	
+	private void accessTrainerBattle() {
+		while (true) {
+			System.out.println("Select an trainer battle:\n"
+					+ "(0) " + gameEnvironment.getTrainerBattle() + "\n"
+					+ "(1) " + gameEnvironment.getTrainerBattle() + "\n"
 					+ "(2) Back\n");
 			try {
 				int option = scanner.nextInt();
@@ -619,7 +631,34 @@ public class CmdLineUi implements GameEnvironmentUi {
         }	
 		
 	}
+	/*
+	public void chooseBattlesPartyMonster(ArrayList<Monster> party) {
+		while (true) {
+			System.out.println("Select an monster to use:\n"
+					+ "(0) " + party.get(1) + "\n"
+					+ "(1) " + party.get(2) + "\n"
+					+ "(2) Back\n");
+			try {
+				int option = scanner.nextInt();
+				scanner.nextLine();
+				if (option == 0) {
+					party.get(1);
+					System.out.println("you selected to use " + party.get(1));
+				} else if (option == 1) {
+					
+					
+				} else if (option == 2) {
+					accessBattle();
+			}} catch (Exception e) {
+				scanner.nextLine();
+			}
+        }	
+		
+		
+	}
 	
+
+	*/	
 	
 	
 	

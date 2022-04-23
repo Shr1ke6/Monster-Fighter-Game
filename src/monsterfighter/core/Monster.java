@@ -102,7 +102,6 @@ public class Monster implements Purchasable{
 	
 	public void setMaxHealth(int healthBuff) {
 		maxHealth += healthBuff;
-		receiveHealth(healthBuff);
 	}
 	
 	public void setAttack(int attackBuff) {
