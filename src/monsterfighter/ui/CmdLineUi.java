@@ -47,7 +47,7 @@ public class CmdLineUi implements GameEnvironmentUi {
     
 	@Override
 	public void setup(GameEnvironment gameEnvironment) {
-		// TODO Auto-generated method stub
+
         this.gameEnvironment = gameEnvironment;
         final String name = getName();
         final int days = getDays();
@@ -309,7 +309,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 				scanner.nextLine();
 				if (option == 0) {
 					if (!gameEnvironment.inventoryIsEmpty()) {
-						monsterToItem(monsterID);
+						useItem(monsterID, 0);
 						accessParty();
 					} else {
 						showError("Inventory is empty!\n");
@@ -335,34 +335,45 @@ public class CmdLineUi implements GameEnvironmentUi {
 		}
 	}
 	
-	private void monsterToItem(int monsterID){
-		final List<ArrayList<Item>> inventory = gameEnvironment.getInventory();
-		final List<Monster> party = gameEnvironment.getParty();
+	private void useItem(int objectID, int objectType){
 		while (true) {
-			if (gameEnvironment.inventoryIsEmpty()) {
-				showError("Inventory is empty!\n");
-				partyOptions(monsterID);
-			}
-			int inventoryID = chooseItem("Select an item to give to " + party.get(monsterID).getNickname() + ":", inventory);
-			if (inventoryID >= 0 && inventoryID < inventory.size()) {
-				int itemID = gameEnvironment.getItemID(inventoryID);
-				final Item item = gameEnvironment.getAllItems().get(itemID);
-				final int itemCount = inventory.get(item.getIndex()).size();
-				System.out.println(item);
-				gameEnvironment.useItem(monsterID, itemID);
-				if (itemCount != inventory.get(item.getIndex()).size()) {
-					if (inventory.get(item.getIndex()).size() > 0) {
-						System.out.println("Used " + item.getName() + " on " + party.get(monsterID).getNickname() + ", " + inventory.get(itemID).size() + "x " + item.getName() + "'s left");
-					} else {
-						System.out.println("Used " + item.getName() + " on " + party.get(monsterID).getNickname() + ", no " + item.getName() + "'s left");
-					}
+			List<Monster> party = gameEnvironment.getParty();
+			List<ArrayList<Item>> inventory = gameEnvironment.getInventory();
+			if (objectType == 0) {
+				if (gameEnvironment.inventoryIsEmpty()) {
+					showError("Inventory is empty!\n");
+					break;
 				}
-			} else if (inventoryID == inventory.size()) {
-				partyOptions(monsterID);
+				int monsterID = objectID;
+				int itemID = gameEnvironment.getItemID(chooseItem("Choose an item to give to " + party.get(monsterID).getNickname(), inventory));
+				if (itemID == inventory.size()) {
+					break;
+				}
+				gameEnvironment.useItem(monsterID, itemID);
+			} else if (objectType == 1) {
+				if (party.size() == 0) {
+					showError("Party is empty!\n");
+					break;
+				}
+				int itemID = objectID;
+				int monsterID = chooseMonster("Choose a monster to give a " + gameEnvironment.getInventory().get(itemID), party, 1);
+				if (monsterID == party.size()) {
+					break;
+				}
+				gameEnvironment.useItem(monsterID, itemID);
 			}
-    	}	
+		}
 	}
-	
+		/*
+		if (itemTotal != gameEnvironment.getInventory().get(itemID).size()) {
+			if (inventory.get(itemID).size() > 0) {
+				System.out.println("Used " + item.getName() + " on " + party.get(monsterID).getNickname() + ", " + inventory.get(itemID).size() + "x " + item.getName() + "'s left");
+			} else {
+				System.out.println("Used " + item.getName() + " on " + party.get(monsterID).getNickname() + ", no " + item.getName() + "'s left!");
+				accessParty(); 
+			}	
+		*/		
+		
 	private void accessInventory() {
 		final List<ArrayList<Item>> inventory = gameEnvironment.getInventory();
 		if (!gameEnvironment.inventoryIsEmpty()) {
@@ -411,7 +422,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 				int option = scanner.nextInt();
 				scanner.nextLine();
 				if (option == 0) {
-					itemToMonster(itemID);
+					useItem(itemID, 1);
 				} else if (option == 1) {
 					accessInventory();
 				} 
@@ -420,34 +431,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 			}
 		}
 	}
-	
-	private void itemToMonster(int itemID) {
-		final List<Monster> party = gameEnvironment.getParty();
-		final ArrayList<ArrayList<Item>> inventory = new ArrayList<>(gameEnvironment.getInventory());
-		final Item item = gameEnvironment.getAllItems().get(itemID);
-		while (true) {
-			if (party.size() == 0) {
-				showError("Party is empty!\n");
-				inventoryOptions(itemID);
-			}
-			int monsterID = chooseMonster("Select a monster to give " + item.getName() + ":", party, 1);
-			if (monsterID >= 0 && monsterID < party.size()) {
-				final int itemCount = inventory.get(item.getIndex()).size();
-				gameEnvironment.useItem(monsterID, itemID);
-				if (itemCount != inventory.get(item.getIndex()).size()) {
-					if (inventory.get(item.getIndex()).size() > 0) {
-						System.out.println("Used " + item.getName() + " on " + party.get(monsterID).getNickname() + ", " + inventory.get(itemID).size() + "x " + item.getName() + "'s left");
-					} else {
-						System.out.println("Used " + item.getName() + " on " + party.get(monsterID).getNickname() + ", no " + item.getName() + "'s left!");
-						accessInventory(); 
-					}			
-				}
-			} else  {
-				inventoryOptions(itemID);
-			}	
-		}
-	}
-	
+
 	private int chooseBattle(List<Battle> battles, String message) {
 		while (true) {
 			System.out.println(message);
@@ -506,24 +490,9 @@ public class CmdLineUi implements GameEnvironmentUi {
 			try {
 				int option = scanner.nextInt();
 				if (option == 0) {
-					if (!gameEnvironment.shopIsEmpty()) {
-						shopBuy();
-					} else {
-						showError("Shop is empty! Come back tomorrow for new items\n");
-					}
-				} else if (option == 1) {
-					if (gameEnvironment.getParty().size() > 0) {
-						sell(option);
-					} else {
-						showError("Party is empty!\n");
-					}
-					
-				} else if (option == 2) {
-					if (!gameEnvironment.inventoryIsEmpty()) {
-						sell(option);
-					} else {
-						showError("Inventory is empty!\n");
-					}
+					shopBuy();
+				} else if (option == 1 || option == 2) {
+					sell(option);
 				} else if (option == 3) {
 					start();
 				}
@@ -536,6 +505,10 @@ public class CmdLineUi implements GameEnvironmentUi {
 	private void shopBuy() {
 		final List<ArrayList<Purchasable>> shop = gameEnvironment.getShop();
 		while (true) {
+			if (gameEnvironment.shopIsEmpty()) {
+				showError("Shop is empty! Come back tomorrow for new items\n");
+				break;
+			}
 			printShopInventory("Shop:\n" + "-".repeat(6) + "\nGold: " + gameEnvironment.getGoldBalance() + "\n", shop);
 			try {
 				int shopID = scanner.nextInt();
@@ -572,13 +545,14 @@ public class CmdLineUi implements GameEnvironmentUi {
 					showError("Inventory is empty!\n");
 					break;
 				}
-				int itemID = chooseItem("Pick an item to sell:", gameEnvironment.getInventory());
-				if (itemID < gameEnvironment.getInventory().size()) {
-					final Item item = inventory.get(itemID).get(0);
+				int inventoryID = chooseItem("Pick an item to sell:", gameEnvironment.getInventory());
+				if (inventoryID < gameEnvironment.getInventory().size()) {
+					int itemID = gameEnvironment.getItemID(inventoryID);
+					System.out.println(inventoryID);
+					final Item item = inventory.get(inventoryID).get(0);
 					gameEnvironment.sellItem(itemID);
 					System.out.println("Sold " + item.getName() + " for " + item.getSellPrice() + " gold");
 				} else {
-					System.out.println("chocolate");
 					break;
 				}
 			}

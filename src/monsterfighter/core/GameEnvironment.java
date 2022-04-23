@@ -8,9 +8,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import monsterfighter.ui.GameEnvironmentUi;
 
 public class GameEnvironment {
-	
-	
-
 
     // The user interface to be used by this manager
 	private final GameEnvironmentUi ui;
@@ -92,7 +89,7 @@ public class GameEnvironment {
 		}
 		// Adds 3 potion's to the inventory 
 		for (int i = 0; i < 3; i++) {
-			this.inventory.get(items.get(0).getIndex()).add(items.get(0));
+			addToInventory(allItems.get(1));
 		}
 		fillShop();
 		for (int i = 0; i < 5; i++) {
@@ -232,11 +229,10 @@ public class GameEnvironment {
 	public int getItemID(int inventoryID) {
 		int i = 0;
 		int j = 0;
-		for (ArrayList<Item> items : inventory) {
-			if (items.isEmpty()){
+		for (ArrayList<Item> items: inventory) {
+			if (items.size() > 0) {
 				if (i == inventoryID) {
 					j = items.get(0).getIndex();
-					break;
 				}
 				i++;
 			}
@@ -249,19 +245,28 @@ public class GameEnvironment {
 		Item item = inventory.get(itemID).get(0);
 		try {
 			item.useItem(monster);
-			inventory.get(item.getIndex()).remove(0);
-		}
-		catch (IllegalStateException e) {
+			inventory.get(itemID).remove(0);
+		} catch(IllegalStateException e) {
 			ui.showError(e.getMessage());
 		}
 	}
 	
+	/**
+	 * Sells an item from inventory 
+	 * 
+	 * @param itemID
+	 */
 	public void sellItem(int itemID) {
 		Item item = inventory.get(itemID).get(0);
 		goldBalance += item.getSellPrice();
 		inventory.get(itemID).remove(0);
 	}
 	
+	/**
+	 * Sells a monster from party
+	 * 
+	 * @param monsterID
+	 */
 	public void sellMonster(int monsterID) {
 		Monster monster = party.get(monsterID);
 		goldBalance += monster.getSellPrice();
