@@ -75,7 +75,7 @@ public class Item implements Purchasable{
         	if (monster.getStatus().name == "Fainted") {
         		monster.revive(amount);
         	} else {
-        		throw new IllegalStateException("Cannot use " + name + ", " + monster.getNickname() + "'s health is not unconscious\n");
+        		throw new IllegalStateException("Cannot use " + name + ", " + monster.getNickname() + " is not unconscious\n");
         	}
         	break;
 		}
