@@ -474,7 +474,6 @@ public class CmdLineUi implements GameEnvironmentUi {
 			}
 			try {
 				List<ArrayList<Purchasable>> shop = gameEnvironment.getShop();
-				System.out.println(shop);
 				printShopInventory("Shop:\n" + "-".repeat(6) + "\nGold: " + gameEnvironment.getGoldBalance() + "\n", shop);
 				int shopID = scanner.nextInt();
 				if (shopID >= 0 && shopID < shop.size()) {
