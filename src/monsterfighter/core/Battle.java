@@ -9,17 +9,10 @@ public class Battle {
 	private int gold;
 	private int points;
 	private ArrayList<ArrayList<Monster>> battles = new ArrayList<ArrayList<Monster>>();
+	private String trainer;
 
 
 	
-	public void earntGold(int earntGold) {
-	    gold = gold + earntGold;
-	}
 	
-	public void gainedPoints(int gainedPoints) {
-		points = points + gainedPoints;
-	}
-	
-
 
 }

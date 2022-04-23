@@ -431,7 +431,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 	private int chooseBattle(List<Battle> battles, String message) {
 		while (true) {
 			System.out.println(message);
-			printBattle(battles);
+			// printBattle(battles);
 			try {
 				int battleID = scanner.nextInt();
 				scanner.nextLine();
@@ -443,39 +443,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 			}
 		}
 	}
-	
-	private void accessBattle() {
-		final List<Battle> battles = gameEnvironment.getBattles();
-		while (true) {
-			System.out.println("Select an option:\n"
-					+ "(0) Wild battles\n"
-					+ "(1) Trainer battles\n"
-					+ "(2) Back\n");
-			try {
-				int option = scanner.nextInt();
-				scanner.nextLine();
-				if (option == 0) {
-					int battleID = chooseBattle(battles.subList(0, 2), "wild battles");
-					
-					
-				} else if (option == 1) {
-					int battleID = chooseBattle(battles.subList(3, 4), "trainer battles") + 3 ;
-					
-				} else if (option == 2) {
-					start();
-			}} catch (Exception e) {
-				scanner.nextLine();
-			}
-        }	
-	}
-	
-	private void printBattle(List<Battle> battles) {
-		int i=0;
-		for(Battle selectBattle : battles )
-		    System.out.println((i++)+": "+selectBattle);
-	
-	}
-	
+
 	private void accessShop() {
 		while (true) {
 			System.out.println("Select a shop option:\n"
@@ -562,6 +530,62 @@ public class CmdLineUi implements GameEnvironmentUi {
 		}
 		System.out.println("\n(" + shop.size() + ") Back" );
 	}
+	
+	
+	
+	private void accessBattle() {
+		final List<Battle> battles = gameEnvironment.getBattles();
+		while (true) {
+			System.out.println("Select an option:\n"
+					+ "(0) Wild battles\n"
+					+ "(1) Trainer battles\n"
+					+ "(2) Back\n");
+			try {
+				int option = scanner.nextInt();
+				scanner.nextLine();
+				if (option == 0) {
+					accessWildBattle();
+					
+				} else if (option == 1) {
+					//int battleID = chooseBattle(battles.subList(3, 4), "trainer battles") + 3 ;
+					
+				} else if (option == 2) {
+					start();
+			}} catch (Exception e) {
+				scanner.nextLine();
+			}
+        }	
+	}
+	
+	
+	
+	private void accessWildBattle() {
+		while (true) {
+			System.out.println("Select an wild battle:\n"
+					+ "(0) " + gameEnvironment.getWildBattle() + "\n"
+					+ "(1) " + gameEnvironment.getWildBattle() + "\n"
+					+ "(2) Back\n");
+			try {
+				int option = scanner.nextInt();
+				scanner.nextLine();
+				if (option == 0) {
+					System.out.println("your fat" );
+					System.exit(0);
+					
+				} else if (option == 1) {
+					
+					
+				} else if (option == 2) {
+					accessBattle();
+			}} catch (Exception e) {
+				scanner.nextLine();
+			}
+        }	
+		
+	}
+	
+	
+	
 	
 	public void accessRest() {
 		while (true) {

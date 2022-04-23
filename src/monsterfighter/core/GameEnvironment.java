@@ -43,6 +43,8 @@ public class GameEnvironment {
 	// The users gold
 	private int goldBalance = 1000;
 	
+	private int points = 0;
+	
 	// The shop
 	private ArrayList<ArrayList<Purchasable>> shop = new ArrayList<ArrayList<Purchasable>>();
 	
@@ -94,9 +96,9 @@ public class GameEnvironment {
 		fillShop();
 		for (int i = 0; i < 5; i++) {
 			if (i < 3) {
-				battles.add(new WildBattle(monsters));
+				battles.add(new WildBattle());
 			} else {
-				battles.add(new TrainerBattle(monsters, i - 3));
+				//battles.add(new TrainerBattle(monsters, i - 3));
 				
 			}
 			
@@ -356,6 +358,36 @@ public class GameEnvironment {
 		}
 	}
 	
+	
+	public String getWildBattle() {
+		int index = (int)(Math.random() * allMonsters.size());
+		Monster monster = allMonsters.get(index);
+		return monster.basicDescription();
+	}
+	
+	public String getTrainerBattle() {
+		int index = (int)(Math.random() * allMonsters.size());
+		Monster monster = allMonsters.get(index);
+		return monster.basicDescription();
+	}
+	
+	
+	public void earntGold(int earntGold) {
+		goldBalance += earntGold;
+	}
+	
+	public void gainedPoints(int gainedPoints) {
+		points += gainedPoints;
+	}
+	
+	public void dropReward() {
+        int index = (int)(Math.random() * allItems.size());
+        Item item = allItems.get(index);
+        inventory.get(item.getIndex()).add((Item) item);
+	}
+
+	
 }
+
 
 
