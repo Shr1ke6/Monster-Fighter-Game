@@ -318,10 +318,11 @@ public class GameEnvironment {
 				throw new IllegalStateException("None left");	
 			}
 			Purchasable object = shop.get(shopID).get(0);
+			System.out.println(shop.get(shopID));
 			if (goldBalance >= object.getBuyPrice()) {
 				if (object instanceof Monster) {
 					if (party.size() >= 3) {
-						throw new IllegalStateException("Party full, cannot buy another monster!");	
+						throw new IllegalStateException("Party full, cannot buy another monster!\n");	
 					} else {
 						party.add((Monster) object);
 					}
@@ -329,8 +330,12 @@ public class GameEnvironment {
 					inventory.get(object.getIndex()).add((Item) object);
 				}
 				goldBalance -= object.getBuyPrice();
+				shop.get(shopID).remove(0);
+				if (shop.get(shopID).size() == 0) {
+					shop.remove(shopID);
+				}
 			} else {
-				throw new IllegalStateException("Not enough gold!");
+				throw new IllegalStateException("Not enough gold!\n");
 			}
 		} catch (IllegalStateException e) {
 			ui.showError(e.getMessage());
