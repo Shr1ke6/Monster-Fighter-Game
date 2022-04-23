@@ -301,11 +301,11 @@ public class GameEnvironment {
 		if (shop.size() > 0) {
 			shop.clear();
 		}
-		for (int i = 0; i <= allItems.size() + 1; i++) {
+		for (int i = 0; i <= allItems.size() + 2; i++) {
 			shop.add(new ArrayList<Purchasable>());
-			if (i > 1) {
-				for (int j = 0; j < ((allItems.get(i-2).getStoreQuantity()) * ((int) Math.ceil((double)day / 3))) ; j++) {
-					shop.get(i).add(allItems.get(i-2));
+			if (i > 2) {
+				for (int j = 0; j < ((allItems.get(i-3).getStoreQuantity()) * ((int) Math.ceil((double)day / 3))) ; j++) {
+					shop.get(i).add(allItems.get(i-3));
 				}
 			} else {
 				int randomNumber = ThreadLocalRandom.current().nextInt(0, allMonstersCopy.size());
@@ -323,8 +323,8 @@ public class GameEnvironment {
 			Purchasable object = shop.get(shopID).get(0);
 			if (goldBalance >= object.getBuyPrice()) {
 				if (object instanceof Monster) {
-					if (party.size() >= 3) {
-						throw new IllegalStateException("Party full, cannot buy another monster!");	
+					if (party.size() >= 4) {
+						throw new IllegalStateException("Party full, cannot buy another monster!\n");	
 					} else {
 						party.add((Monster) object);
 					}
@@ -332,8 +332,12 @@ public class GameEnvironment {
 					inventory.get(object.getIndex()).add((Item) object);
 				}
 				goldBalance -= object.getBuyPrice();
+				shop.get(shopID).remove(0);
+				if (shop.get(shopID).size() == 0) {
+					shop.remove(shopID);
+				}
 			} else {
-				throw new IllegalStateException("Not enough gold!");
+				throw new IllegalStateException("Not enough gold!\n");
 			}
 		} catch (IllegalStateException e) {
 			ui.showError(e.getMessage());
