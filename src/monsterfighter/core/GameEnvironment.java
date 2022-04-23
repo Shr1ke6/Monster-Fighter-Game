@@ -3,6 +3,7 @@ package monsterfighter.core;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import monsterfighter.ui.GameEnvironmentUi;
 
@@ -28,7 +29,7 @@ public class GameEnvironment {
 	private final List<ArrayList<Item>> inventory = new ArrayList<ArrayList<Item>>();
 
 	// The array list of Monsters in the users party
-	private ArrayList<Monster> party = new ArrayList<Monster>();
+	private ArrayList<Monster> party = new ArrayList<Monster>(3);
 
 	// The name of the user using this manager
 	private String name;
@@ -37,24 +38,24 @@ public class GameEnvironment {
 	private int totalDays;
 	
 	// The current day
-	private int days = 1;
+	private int day = 1;
 	
 	// The game difficulty
 	private Difficulty difficulty;
 	
 	// The users gold
-	private int goldBalance = 0;
+	private int goldBalance = 1000;
 	
 	// The shop
-	private Shop shop;
+	private ArrayList<ArrayList<Purchasable>> shop = new ArrayList<ArrayList<Purchasable>>();
 	
 	private ArrayList<Battle> battles = new ArrayList<Battle>(); 
 	
 	// Enum that stores the difficulty options for the game 
     public enum Difficulty {
 	    EASY(100, 1.25, "Easy"),
-	    NORMAL(50, 1.0, "Medium"),
-	    HARD(25, 0.75, "Hard");
+	    NORMAL(75, 1.0, "Medium"),
+	    HARD(50, 0.75, "Hard");
 
 	    private final String name;
 	    private final int startingGold;
@@ -93,8 +94,7 @@ public class GameEnvironment {
 		for (int i = 0; i < 3; i++) {
 			this.inventory.get(items.get(0).getIndex()).add(items.get(0));
 		}
-		this.shop = new Shop(monsters, items);
-		
+		fillShop();
 		for (int i = 0; i < 5; i++) {
 			if (i < 3) {
 				battles.add(new WildBattle(monsters));
@@ -148,30 +148,32 @@ public class GameEnvironment {
 	}
 	
 	public int getDays() {
-		return days;
+		return day;
 	}
 	
 	public Difficulty getDifficulty() {
 		return difficulty;
 	}
 
-
-
-	public Shop getShop() {
-		return shop;
-	}
-	
-
-
 	public int getGoldBalance() {
 		return goldBalance;
+	}
+	
+	public List<Monster> getAllMonsters() {
+		return Collections.unmodifiableList(allMonsters);
+	}
+	
+	public List<Item> getAllItems() {
+		return Collections.unmodifiableList(allItems);
 	}
 	
 	public List<Battle> getBattles() {
 		return Collections.unmodifiableList(battles);
 	}
 	
-
+	public List<ArrayList<Purchasable>> getShop() {
+		return Collections.unmodifiableList(shop);
+	}
 	
 	public List<Monster> getStartingMonsters() {
 		return Collections.unmodifiableList(startingMonsters);
@@ -212,7 +214,7 @@ public class GameEnvironment {
 	 */
 	public boolean shopIsEmpty() {
 		boolean isEmpty = true;
-		for (ArrayList<Purchasable> item : shop.getShopInventory()) {
+		for (ArrayList<Purchasable> item : shop) {
 			if (!item.isEmpty()) {
 				isEmpty = false;
 			}
@@ -227,22 +229,24 @@ public class GameEnvironment {
 		party.set(option2, monster1);
 	}
 	
-	public Item getItem(int itemID) {
+	public int getItemID(int inventoryID) {
 		int i = 0;
+		int j = 0;
 		for (ArrayList<Item> items : inventory) {
-			if (!items.isEmpty()){
-				if (i == itemID) {
+			if (items.isEmpty()){
+				if (i == inventoryID) {
+					j = items.get(0).getIndex();
 					break;
 				}
 				i++;
 			}
 		}
-		return allItems.get(i);
+		return j;
 	}
 	
 	public void useItem(int monsterID, int itemID) {
 		Monster monster = party.get(monsterID);
-		Item item = getItem(itemID);
+		Item item = inventory.get(itemID).get(0);
 		try {
 			item.useItem(monster);
 			inventory.get(item.getIndex()).remove(0);
@@ -253,9 +257,9 @@ public class GameEnvironment {
 	}
 	
 	public void sellItem(int itemID) {
-		Item item = getItem(itemID);
+		Item item = inventory.get(itemID).get(0);
 		goldBalance += item.getSellPrice();
-		inventory.get(item.getIndex()).remove(0);
+		inventory.get(itemID).remove(0);
 	}
 	
 	public void sellMonster(int monsterID) {
@@ -272,21 +276,76 @@ public class GameEnvironment {
 		
 	}
 	
-	public void purchase(int shopID) {
-		Object object = shop.getShopInventory().get(shopID).get(0);
-		if (object instanceof Monster) {
-			if (party.size() >= 3) {
-				throw new IllegalStateException("party full sell a monster before u buy");	
-			} else if (party.size() <= 3) {
-				goldBalance -= ((Monster) object).getBuyPrice();
-				party.add((Monster) object);
-		} else {
-			goldBalance -= ((Item) object).getBuyPrice();
-			//inventory.add((Item) object);
+	public Monster scaleMonster(Monster monster) {
+		for (int i = 0; i < day - 1; i++) {
+			int randomNumber = ThreadLocalRandom.current().nextInt(0, 2);
+			if (randomNumber == 0) {
+				monster.setMaxHealth(20);
+			} else {
+				monster.setAttack(10);
+			}
+		}
+		return monster;
 	}
-
+	
+	public void fillShop() {
+		final ArrayList<Monster> allMonstersCopy = new ArrayList<Monster>(allMonsters);
+		if (shop.size() > 0) {
+			shop.clear();
+		}
+		for (int i = 0; i <= allItems.size() + 1; i++) {
+			shop.add(new ArrayList<Purchasable>());
+			if (i > 1) {
+				for (int j = 0; j < ((allItems.get(i-2).getStoreQuantity()) * ((int) Math.ceil((double)day / 3))) ; j++) {
+					shop.get(i).add(allItems.get(i-2));
+				}
+			} else {
+				int randomNumber = ThreadLocalRandom.current().nextInt(0, allMonstersCopy.size());
+				shop.get(i).add(scaleMonster(allMonstersCopy.get(randomNumber)));
+				allMonstersCopy.remove(randomNumber);
+			}
+		}
+	}
+	
+	public void purchase(int shopID) {
+		try {
+			if (shop.get(shopID).size() == 0) {
+				throw new IllegalStateException("None left");	
+			}
+			Purchasable object = shop.get(shopID).get(0);
+			if (goldBalance >= object.getBuyPrice()) {
+				if (object instanceof Monster) {
+					if (party.size() >= 3) {
+						throw new IllegalStateException("Party full, cannot buy another monster!");	
+					} else {
+						party.add((Monster) object);
+					}
+				} else {
+					inventory.get(object.getIndex()).add((Item) object);
+				}
+				goldBalance -= object.getBuyPrice();
+			} else {
+				throw new IllegalStateException("Not enough gold!");
+			}
+		} catch (IllegalStateException e) {
+			ui.showError(e.getMessage());
+		}
+	}
+	
+	public void fillBattles() {
 		
-	}}}
-
+	}
+	
+	
+	public void nextDay() {
+		day += 1;
+		fillShop();
+		fillBattles();
+		for (Monster monster : party) {
+			monster.receiveHealth(1000000);
+		}
+	}
+	
+}
 
 

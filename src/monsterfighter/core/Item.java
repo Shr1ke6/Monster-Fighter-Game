@@ -33,6 +33,7 @@ public class Item implements Purchasable{
 		sellPrice = buyPrice / 2;
 	}
 	
+	@Override
 	public int getIndex() {
 		return index;
 	}

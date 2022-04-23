@@ -5,6 +5,7 @@ public interface Purchasable {
 	public String shopDescription();
 	public int getBuyPrice();
 	public int getSellPrice();
+	public int getIndex();
 
 }
 

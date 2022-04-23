@@ -20,7 +20,7 @@ public interface GameEnvironmentUi {
     /**
      * A description of the naming convention for a monsters nickname
      */
-    String MONSTER_NAME_REQUIREMENTS = "Name must contain only letters and have a max of 12 characters";
+    String MONSTER_NAME_REQUIREMENTS = "Nickname must contain only letters and have a max of 12 characters";
 
     /**
      * A regex for validating the name against the specified name requirements.
