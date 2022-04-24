@@ -429,23 +429,6 @@ public class CmdLineUi implements GameEnvironmentUi {
 		System.out.println("\n(" + inventory.size() + ") Back" );
 	}
 	
-	private int chooseBattle(List<Battle> battles, String message) {
-		while (true) {
-			System.out.println(message);
-			// printBattle(battles);
-			try {
-				int battleID = scanner.nextInt();
-				scanner.nextLine();
-				if (battleID >= 0 && battleID <= battles.size()) {
-					return battleID;
-				} 
-			} catch (Exception e) {
-				scanner.nextLine();
-			}
-		}
-	}
-
-
 	private void accessShop() {
 		while (true) {
 			System.out.println("Select a shop option:\n"
@@ -554,10 +537,6 @@ public class CmdLineUi implements GameEnvironmentUi {
         }	
 	}
 	
-	
-	
-	
-
 	private void accessBattle(int battleType) {
 		//ArrayList<Monster> arena = new ArrayList<Monster>();
 		while (true) {
@@ -592,12 +571,18 @@ public class CmdLineUi implements GameEnvironmentUi {
 	}
 	
 	private void printBattles(String message, int battleType) {
+		List<Battle> battles = gameEnvironment.getBattles();
 		System.out.println(message);
 		if (battleType == 0) {
-			System.out.println("Wild Battles!" );
-			
+			for (int i = 0; i < 2; i++) {
+				System.out.println("(" + i + ") " + battles.get(i));
+			}
+			System.out.println("(2) Back");
 		} else if (battleType == 1) {
-			System.out.println("Trainer Battles!" );
+			for (int i = 2; i < 5; i++) {
+				System.out.println("(" + (i - 2) + ") " + battles.get(i));		
+			}
+			System.out.println("(3) Back");
 		}
 	}
 	/*

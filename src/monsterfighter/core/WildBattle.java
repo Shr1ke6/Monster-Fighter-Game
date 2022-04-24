@@ -1,7 +1,6 @@
 package monsterfighter.core;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class WildBattle extends Battle{
 
@@ -18,7 +17,7 @@ public class WildBattle extends Battle{
 	
 	@Override
 	public String toString() {
-		String description;
+		String description = "Monster: " + getMonsters().get(0).basicDescription() + " " + super.toString() + " Reward: " + reward;
 		return description;
 	}
 	

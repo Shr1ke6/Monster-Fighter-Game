@@ -33,6 +33,16 @@ public class Item implements Purchasable{
 		sellPrice = buyPrice / 2;
 	}
 	
+	Item(Item c) {
+		this.index = c.index;
+		this.name = c.name;
+		this.amount = c.amount;
+		this.stat = c.stat;
+		this.buyPrice = c.buyPrice;
+		this.storeQuantity = c.storeQuantity;
+		sellPrice = buyPrice / 2;
+	}
+	
 	@Override
 	public int getIndex() {
 		return index;

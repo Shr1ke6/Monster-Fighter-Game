@@ -50,8 +50,8 @@ public class MainScreen {
 		
 		
 		
-		JLabel nameTest = new JLabel(Monster.getName());
-		nameTest.setBounds(24, 25, 96, 47);
-		frame.getContentPane().add(nameTest);
+		//JLabel nameTest = new JLabel(Monster.getName());
+		//nameTest.setBounds(24, 25, 96, 47);
+		//frame.getContentPane().add(nameTest);
 	}
 }

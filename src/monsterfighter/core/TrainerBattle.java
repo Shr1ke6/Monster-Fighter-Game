@@ -17,7 +17,7 @@ public class TrainerBattle extends Battle {
 
 	@Override
 	public String toString() {
-		String description;
+		String description = "Trainer: " + trainer + " " + getMonsters().size() + "x Monsters " + super.toString() +" Gold: " + gold;
 		return description;
 	}
 }

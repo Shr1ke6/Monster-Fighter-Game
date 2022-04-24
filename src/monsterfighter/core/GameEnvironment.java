@@ -1,6 +1,7 @@
 package monsterfighter.core;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -15,6 +16,9 @@ public class GameEnvironment {
 	
 	// The list of all {@link Monster}s
 	private final List<Monster> allMonsters;
+	
+	// List of trainer names
+	private final List<String> trainers = Arrays.asList("Ben","Matt","Lee","Ian","John","Eva","Nancy","Haley","Jade","Beth");
 
 	// The list of available starting {@link Monster}s 
 	private final List<Monster> startingMonsters = new ArrayList<Monster>();
@@ -47,11 +51,13 @@ public class GameEnvironment {
 	// The users gold
 	private int goldBalance = 1000;
 	
+	// The users points
 	private int points = 0;
 	
 	// The shop
 	private ArrayList<ArrayList<Purchasable>> shop = new ArrayList<ArrayList<Purchasable>>();
 	
+	// 
 	private ArrayList<Battle> battles = new ArrayList<Battle>(); 
 	
 	// Enum that stores the difficulty options for the game 
@@ -97,7 +103,6 @@ public class GameEnvironment {
 		for (int i = 0; i < 3; i++) {
 			addToInventory(allItems.get(1));
 		}
-		fillShop();
 		for (int i = 0; i < 5; i++) {
 			if (i < 3) {
 				//battles.add(new WildBattle());
@@ -131,9 +136,11 @@ public class GameEnvironment {
 	public void onSetupFinished(String name, int totalDays, Monster startingMonster, Difficulty difficulty) {
 		this.name = name;
 		this.totalDays = totalDays;
-		this.party.add(startingMonster);
+		this.party.add(new Monster(startingMonster));
 		this.difficulty = difficulty;
 		this.goldBalance += difficulty.startingGold;
+		fillShop();
+		fillBattles();
 		ui.start();
 	}
 	
@@ -160,6 +167,10 @@ public class GameEnvironment {
 
 	public int getGoldBalance() {
 		return goldBalance;
+	}
+	
+	public int getPoints() {
+		return points;
 	}
 	
 	public List<Monster> getAllMonsters() {
@@ -232,6 +243,14 @@ public class GameEnvironment {
 		party.set(option2, monster1);
 	}
 	
+	public void addToParty(Monster monster) {
+		if (party.size() >= 4) {
+			throw new IllegalStateException("Party full, cannot buy another monster!\n");	
+		} else {
+			party.add(monster);
+		}
+	}
+	
 	public int getItemID(int inventoryID) {
 		int i = 0;
 		int j = 0;
@@ -283,8 +302,8 @@ public class GameEnvironment {
 		inventory.get(reward.getIndex()).add(reward);
 	}
 	
-	public Monster scaleMonster(Monster monster) {
-		for (int i = 0; i < day - 1; i++) {
+	public Monster scaleMonster(Monster monster, int scalar) {
+		for (int i = 0; i < scalar; i++) {
 			levelUp(monster);
 		}
 		return monster;
@@ -312,7 +331,8 @@ public class GameEnvironment {
 				}
 			} else {
 				int randomNumber = ThreadLocalRandom.current().nextInt(0, allMonstersCopy.size());
-				shop.get(i).add(scaleMonster(allMonstersCopy.get(randomNumber)));
+				Monster monster = new Monster(allMonsters.get(randomNumber));
+				shop.get(i).add(scaleMonster(monster, day - 1));
 				allMonstersCopy.remove(randomNumber);
 			}
 		}
@@ -326,13 +346,9 @@ public class GameEnvironment {
 			Purchasable object = shop.get(shopID).get(0);
 			if (goldBalance >= object.getBuyPrice()) {
 				if (object instanceof Monster) {
-					if (party.size() >= 4) {
-						throw new IllegalStateException("Party full, cannot buy another monster!\n");	
-					} else {
-						party.add((Monster) object);
-					}
+					addToParty((Monster) object);
 				} else {
-					inventory.get(object.getIndex()).add((Item) object);
+					addToInventory((Item) object);
 				}
 				goldBalance -= object.getBuyPrice();
 				shop.get(shopID).remove(0);
@@ -358,15 +374,12 @@ public class GameEnvironment {
 			} else if (randomEvents.getLevelUp().get(i) == true) {
 				levelUp(party.get(i));
 			} 
-		
 		}
-		
 		if (randomEvents.getMonsterJoins() == true) {
 			int randomNumber = ThreadLocalRandom.current().nextInt(0, allMonsters.size());
 			Monster monster = allMonsters.get(randomNumber);
 			party.add(monster);
 		}
-		
 		for (Monster monster : party) {
 			monster.receiveHealth(1000000);
 			monster.setFaintedToday(false);
@@ -385,23 +398,39 @@ public class GameEnvironment {
 				Item reward = allItems.get(randomNumber);
 				ArrayList<Monster> monsters = new ArrayList<>();
 				randomNumber = ThreadLocalRandom.current().nextInt(0, allMonsters.size());
-				monsters.add(scaleMonster(allMonsters.get(randomNumber)));
-				
-				int points = calculatePoints("",i);
-				battles.add(new WildBattle(reward, i, monsters));
+				Monster monster = new Monster(allMonsters.get(randomNumber));
+				monsters.add(scaleMonster(monster, day - 3));
+				int points = calculatePoints("Wild", monsters.size());
+				battles.add(new WildBattle(reward, points, monsters));
 			} else {
-				
+				int randomNumber = ThreadLocalRandom.current().nextInt(0, party.size());
+				ArrayList<Monster> monsters = new ArrayList<>();
+				for (int j = 0; j < Math.min(randomNumber, 4); j++) {
+					Monster monster = new Monster(allMonsters.get(ThreadLocalRandom.current().nextInt(0, allMonsters.size())));
+					monsters.add(scaleMonster(monster, day - 1));
+				}
+				String trainer = trainers.get(ThreadLocalRandom.current().nextInt(0, trainers.size()));
+				int gold = calculateGold(party.size());
+				int points = calculatePoints("Trainer", monsters.size());
+				battles.add(new TrainerBattle(gold, points, monsters, trainer));
 			}
 		}
 	}
 	
-
 	public int calculatePoints(String battleType, int partySize) {
-		
+		int points = 50 * partySize;
+		if (battleType != "Wild") {
+			points += 100;
+		}
+		points *= ((day/totalDays) + 1);
 		return points;
 	}
-
 	
+	public int calculateGold(int partySize) {
+		int gold = 100 * partySize;
+		return gold;
+	}
+
 	public List<Battle> getWildBattles() {
 		return battles.subList(0, 3);
 	}
@@ -409,20 +438,5 @@ public class GameEnvironment {
 	public List<Battle> getTrainerBattles() {
 		return battles.subList(3, 5);
 	}
-	
-	public void earntGold(int earntGold) {
-		goldBalance += earntGold;
-	}
-	
-	public void gainedPoints(int gainedPoints) {
-		points += gainedPoints;
-	}
-	
-	public void dropReward() {
-        int index = (int)(Math.random() * allItems.size());
-        Item item = allItems.get(index);
-        inventory.get(item.getIndex()).add((Item) item);
-	}
-	
 }
 

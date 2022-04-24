@@ -22,7 +22,6 @@ public class Battle {
 	
 	@Override
 	public String toString() {
-		String description = "nigger";
-		return description;
+		return "Points: " + points;
 	}
 }

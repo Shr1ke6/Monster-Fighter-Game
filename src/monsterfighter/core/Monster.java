@@ -55,6 +55,19 @@ public class Monster implements Purchasable{
 		sellPrice = buyPrice / 2;
 	}
 	
+	public Monster(Monster c) {
+		this.index = c.index;
+		this.name = c.name;
+		this.nickname = c.name;
+		this.type = c.type;
+		this.maxHealth = c.maxHealth;
+		this.attack = c.attack;
+		this.currentHealth = c.maxHealth;
+		this.status = c.status;
+		this.buyPrice = c.buyPrice;
+		sellPrice = buyPrice / 2;
+	}
+	
 	@Override
 	public int getIndex() {
 		return index;
