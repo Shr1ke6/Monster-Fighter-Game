@@ -38,6 +38,9 @@ public class Monster implements Purchasable{
 	private Status status;
 	private final int buyPrice;
 	private final int sellPrice;
+	private boolean fainted = false;
+	private int wins = 0;
+	
 	
 	public Monster(int index, String name, Type type, int maxHealth, int attack, int buyPrice) {
 		this.index = index;
@@ -96,6 +99,26 @@ public class Monster implements Purchasable{
 		return sellPrice;
 	}
 	
+	public boolean getFaintedToday() {
+		return fainted;
+	}
+	
+	public int getWins() {
+		return wins;
+	}
+	
+	public void setFaintedToday(boolean status) {
+		fainted = true;
+	}
+	
+	public void setWins(int wins) {
+		if (wins == 0) {
+			this.wins = 0;
+		} else if (wins == 1) {
+			this.wins += 1;
+		}
+	}
+
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
 	}

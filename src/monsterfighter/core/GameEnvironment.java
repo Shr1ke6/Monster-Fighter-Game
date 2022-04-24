@@ -28,6 +28,9 @@ public class GameEnvironment {
 
 	// The array list of Monsters in the users party
 	private ArrayList<Monster> party = new ArrayList<Monster>(3);
+	
+	// The array list of fainted Monsters 
+	private ArrayList<Monster> fainted = new ArrayList<Monster>();
 
 	// The name of the user using this manager
 	private String name;
@@ -286,14 +289,18 @@ public class GameEnvironment {
 	
 	public Monster scaleMonster(Monster monster) {
 		for (int i = 0; i < day - 1; i++) {
-			int randomNumber = ThreadLocalRandom.current().nextInt(0, 2);
-			if (randomNumber == 0) {
-				monster.setMaxHealth(20);
-			} else {
-				monster.setAttack(10);
-			}
+			levelUp(monster);
 		}
 		return monster;
+	}
+	
+	public void levelUp(Monster monster) {
+		int randomNumber = ThreadLocalRandom.current().nextInt(0, 2);
+		if (randomNumber == 0) {
+			monster.setMaxHealth(20);
+		} else {
+			monster.setAttack(10);
+		}
 	}
 	
 	public void fillShop() {
@@ -350,8 +357,42 @@ public class GameEnvironment {
 	public void nextDay() {
 		day += 1;
 		fillShop();
+		RandomEvent randomEvents = new RandomEvent(party);
+		for (int i = 0; i < party.size(); i++) {
+			if (randomEvents.getMonsterLeaves().get(i) == true) {
+				party.remove(i);
+			} else if (randomEvents.getLevelUp().get(i) == true) {
+				levelUp(party.get(i));
+			} 
+		
+		}
+		
+		if (randomEvents.getMonsterJoins() == true) {
+			int randomNumber = ThreadLocalRandom.current().nextInt(0, allMonsters.size());
+			Monster monster = allMonsters.get(randomNumber);
+			party.add(monster);
+		}
+		
 		for (Monster monster : party) {
 			monster.receiveHealth(1000000);
+		}
+	}
+	
+	public void fillBattles() {
+		if (battles.size() > 0) {
+			battles.clear();
+		}
+		for (int i = 0; i <= allItems.size() + 2; i++) {
+			shop.add(new ArrayList<Purchasable>());
+			if (i > 2) {
+				for (int j = 0; j < ((allItems.get(i-3).getStoreQuantity()) * ((int) Math.ceil((double)day / 3))) ; j++) {
+					shop.get(i).add(allItems.get(i-3));
+				}
+			} else {
+				int randomNumber = ThreadLocalRandom.current().nextInt(0, allMonsters.size());
+				shop.get(i).add(scaleMonster(allMonsters.get(randomNumber)));
+
+			}
 		}
 	}
 	
@@ -392,6 +433,10 @@ public class GameEnvironment {
         Item item = allItems.get(index);
         inventory.get(item.getIndex()).add((Item) item);
 	}
+	
+	
+	
+	
 
 	
 }
