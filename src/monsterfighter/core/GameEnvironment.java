@@ -283,10 +283,6 @@ public class GameEnvironment {
 		inventory.get(reward.getIndex()).add(reward);
 	}
 	
-	public void Brawls() {
-		
-	}
-	
 	public Monster scaleMonster(Monster monster) {
 		for (int i = 0; i < day - 1; i++) {
 			levelUp(monster);
@@ -325,7 +321,7 @@ public class GameEnvironment {
 	public void purchase(int shopID) {
 		try {
 			if (shop.get(shopID).size() == 0) {
-				throw new IllegalStateException("None left");	
+				throw new IllegalStateException("No Items left! Come back tomorrow for new stock");	
 			}
 			Purchasable object = shop.get(shopID).get(0);
 			if (goldBalance >= object.getBuyPrice()) {
@@ -351,8 +347,6 @@ public class GameEnvironment {
 		}
 	}
 	
-
-	
 	
 	public void nextDay() {
 		day += 1;
@@ -375,50 +369,46 @@ public class GameEnvironment {
 		
 		for (Monster monster : party) {
 			monster.receiveHealth(1000000);
+			monster.setFaintedToday(false);
+			monster.setWins(0);
 		}
 	}
-	
+			
 	public void fillBattles() {
+		
 		if (battles.size() > 0) {
 			battles.clear();
 		}
-		for (int i = 0; i <= allItems.size() + 2; i++) {
-			shop.add(new ArrayList<Purchasable>());
-			if (i > 2) {
-				for (int j = 0; j < ((allItems.get(i-3).getStoreQuantity()) * ((int) Math.ceil((double)day / 3))) ; j++) {
-					shop.get(i).add(allItems.get(i-3));
-				}
+		for (int i = 0; i < 5; i++) {
+			if (i < 2) {
+				int randomNumber = ThreadLocalRandom.current().nextInt(0, allItems.size());
+				Item reward = allItems.get(randomNumber);
+				ArrayList<Monster> monsters = new ArrayList<>();
+				randomNumber = ThreadLocalRandom.current().nextInt(0, allMonsters.size());
+				monsters.add(scaleMonster(allMonsters.get(randomNumber)));
+				
+				int points = calculatePoints("",i);
+				battles.add(new WildBattle(reward, i, monsters));
 			} else {
-				int randomNumber = ThreadLocalRandom.current().nextInt(0, allMonsters.size());
-				shop.get(i).add(scaleMonster(allMonsters.get(randomNumber)));
-
+				
 			}
 		}
 	}
 	
-	
-	public String getWildBattle() {
-		int index = (int)(Math.random() * allMonsters.size());
-		Monster monster = allMonsters.get(index);
-		return monster.basicDescription();
+
+	public int calculatePoints(String battleType, int partySize) {
+		
+		return points;
 	}
-	
-	public String getTrainerBattle() {
-		ArrayList<Monster> trainerBattleMonsters = new ArrayList<Monster>();
-		int idx = new Random().nextInt(TrainerBattle.trainers.length);
-		String random = (TrainerBattle.trainers[idx]);
-		for (int i = 0; i < 4; i++) {
-			int index = (int)(Math.random() * allMonsters.size());
-			trainerBattleMonsters.add(allMonsters.get(index));
-		}
-		return random + " : " + "(" + trainerBattleMonsters + ")";
-	
-	}
-	
-	
-	
 
 	
+	public List<Battle> getWildBattles() {
+		return battles.subList(0, 3);
+	}
+	
+	public List<Battle> getTrainerBattles() {
+		return battles.subList(3, 5);
+	}
 	
 	public void earntGold(int earntGold) {
 		goldBalance += earntGold;
@@ -434,12 +424,5 @@ public class GameEnvironment {
         inventory.get(item.getIndex()).add((Item) item);
 	}
 	
-	
-	
-	
-
-	
 }
-
-
 
