@@ -340,25 +340,6 @@ public class CmdLineUi implements GameEnvironmentUi {
 				scanner.nextLine();
 				if (option == 0) {
 					useItem(itemID, 1);
-				} else {
-					accessInventory();
-				} 
-			} catch (Exception e) {
-				scanner.nextLine();
-			}
-		}
-	}
-	
-	private void inventoryOptions(int itemID) {
-		while (true) {
-			System.out.println("Select an option:\n"
-					+ "(0) Use " + gameEnvironment.getAllItems().get(itemID).getName() + "\n"
-					+ "\n(1) Back");
-			try {
-				int option = scanner.nextInt();
-				scanner.nextLine();
-				if (option == 0) {
-					useItem(itemID, 1);
 				} else if (option == 1) {
 					accessInventory();
 				} 
@@ -447,39 +428,6 @@ public class CmdLineUi implements GameEnvironmentUi {
 		System.out.println("\n(" + inventory.size() + ") Back" );
 	}
 	
-
-	
-
-	
-	private void itemToMonster(int itemID) {
-		final List<Monster> party = gameEnvironment.getParty();
-		final ArrayList<ArrayList<Item>> inventory = new ArrayList<>(gameEnvironment.getInventory());
-		final Item item = gameEnvironment.getAllItems().get(itemID);
-		while (true) {
-			if (party.size() == 0) {
-				showError("Party is empty!\n");
-				inventoryOptions(itemID);
-			}
-			int monsterID = chooseMonster("Select a monster to give " + item.getName() + ":", party, 1);
-			if (monsterID >= 0 && monsterID < party.size()) {
-				final int itemCount = inventory.get(item.getIndex()).size();
-				gameEnvironment.useItem(monsterID, itemID);
-				if (itemCount != inventory.get(item.getIndex()).size()) {
-					if (inventory.get(item.getIndex()).size() > 0) {
-						System.out.println("Used " + item.getName() + " on " + party.get(monsterID).getNickname() + ", " + inventory.get(itemID).size() + "x " + item.getName() + "'s left");
-					} else {
-						System.out.println("Used " + item.getName() + " on " + party.get(monsterID).getNickname() + ", no " + item.getName() + "'s left!");
-						accessInventory(); 
-					}			
-				}
-			} else  {
-				inventoryOptions(itemID);
-			}	
-		}
-	}
-	
-
-
 	private int chooseBattle(List<Battle> battles, String message) {
 		while (true) {
 			System.out.println(message);

@@ -5,10 +5,15 @@ import java.util.List;
 
 public class WildBattle extends Battle{
 
-	public WildBattle(Item reward, int gold, int points, ArrayList<Monster> battles, String trainer) {
-		super(reward, gold, points, battles, trainer);
-		// TODO Auto-generated constructor stub
+	final private Item reward;
+	
+	public WildBattle(Item reward, int points, ArrayList<Monster> monsters) {
+		super(points, monsters);
+		this.reward = reward;
 	}
 
+	public Item getReward() {
+		return reward;
+	}
 	
 }
