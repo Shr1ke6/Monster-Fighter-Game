@@ -15,5 +15,10 @@ public class TrainerBattle extends Battle {
 
 	//static String[] trainers = {"Peach Ice", "Sour Apple", "Strawberry Burst", "Fatso the Fat Boy", "Panstu Sniffer", "Coke Addict", "Poo Sniffer", "Ice Wallow Come", "Lambogini" , "Poopy pant"};
 
+	@Override
+	public String toString() {
+		String description;
+		return description;
+	}
 }
 

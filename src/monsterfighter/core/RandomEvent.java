@@ -62,7 +62,7 @@ public class RandomEvent {
 	}
 	
 	public boolean monsterJoins(ArrayList<Monster> party) {
-		double odds = 0 + (0.025 * (4 - party.size()));
+		double odds = 0 + (0.1 * (4 - party.size()));
 		boolean joins = Math.random() < odds;
 		return joins;
 	

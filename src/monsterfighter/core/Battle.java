@@ -20,5 +20,9 @@ public class Battle {
 		return monsters;
 	}
 	
-
+	@Override
+	public String toString() {
+		String description = "nigger";
+		return description;
+	}
 }

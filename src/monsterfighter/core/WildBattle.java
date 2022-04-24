@@ -16,4 +16,10 @@ public class WildBattle extends Battle{
 		return reward;
 	}
 	
+	@Override
+	public String toString() {
+		String description;
+		return description;
+	}
+	
 }

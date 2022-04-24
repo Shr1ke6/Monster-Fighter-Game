@@ -105,6 +105,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 	 * @param option The selected option to be carried out
 	 */
     private void handleOption(Option option) {
+    	
         switch (option) {
             case VIEW_PARTY:
             	accessParty();
@@ -543,12 +544,8 @@ public class CmdLineUi implements GameEnvironmentUi {
 			try {
 				int option = scanner.nextInt();
 				scanner.nextLine();
-				if (option == 0) {
-					accessWildBattle();
-					
-				} else if (option == 1) {
-					accessTrainerBattle();
-					
+				if (option == 0 || option == 1) {
+					accessBattle(option);
 				} else if (option == 2) {
 					start();
 			}} catch (Exception e) {
@@ -561,56 +558,47 @@ public class CmdLineUi implements GameEnvironmentUi {
 	
 	
 
-	private void accessWildBattle() {
+	private void accessBattle(int battleType) {
 		//ArrayList<Monster> arena = new ArrayList<Monster>();
 		while (true) {
-			System.out.println("Select an wild battle:\n"
-					+ "(0) " + gameEnvironment.getWildBattle() + "\n"
-					+ "(1) " + gameEnvironment.getWildBattle() + "\n"
-					+ "(2) Back\n");
-			try {
-				int option = scanner.nextInt();
-				scanner.nextLine();
-				if (option == 0) {
-					//arena.add(gameEnvironment.getWildBattle(0));
-					System.out.println("your fat" );
-					System.exit(0);
-				
-				} else if (option == 1) {
-					
-					
-				} else if (option == 2) {
-					accessBattle();
-			}} catch (Exception e) {
-				scanner.nextLine();
+			if (battleType == 0) {
+				printBattles("Select a wild battle:", 0);
+				try {
+					int battleID = scanner.nextInt();
+					scanner.nextLine();
+					if (battleID >= 0 && battleID < 2) {
+						accessBattle(battleID);
+					} else if (battleID == 2) {
+						break;
+					}
+				} catch (Exception e) {
+					scanner.nextLine();
+				}
+			} else {
+				printBattles("Select a trainer battle:", 1);
+				try {
+					int battleID = scanner.nextInt();
+					scanner.nextLine();
+					if (battleID >= 0 && battleID < 3) {
+						accessBattle(battleID + 2);
+					} else if (battleID == 3) {
+						break;
+					}
+				} catch (Exception e) {
+					scanner.nextLine();
+				}
 			}
-        }	
-		
+		}
 	}
 	
-	private void accessTrainerBattle() {
-		while (true) {
-			System.out.println("Select an trainer battle:\n"
-					+ "(0) " + gameEnvironment.getTrainerBattle() + "\n"
-					+ "(1) " + gameEnvironment.getTrainerBattle() + "\n"
-					+ "(2) Back\n");
-			try {
-				int option = scanner.nextInt();
-				scanner.nextLine();
-				if (option == 0) {
-					System.out.println("your fat" );
-					System.exit(0);
-					
-				} else if (option == 1) {
-					
-					
-				} else if (option == 2) {
-					accessBattle();
-			}} catch (Exception e) {
-				scanner.nextLine();
-			}
-        }	
-		
+	private void printBattles(String message, int battleType) {
+		System.out.println(message);
+		if (battleType == 0) {
+			System.out.println("Wild Battles!" );
+			
+		} else if (battleType == 1) {
+			System.out.println("Trainer Battles!" );
+		}
 	}
 	/*
 	public void chooseBattlesPartyMonster(ArrayList<Monster> party) {
@@ -652,7 +640,7 @@ public class CmdLineUi implements GameEnvironmentUi {
                 	gameEnvironment.nextDay();
                 	break;
                 } else if (input.matches("[nN]")) {
-                	start();
+                	break;
                 }
             } catch (Exception e) {
                 // Discard the unacceptable input
