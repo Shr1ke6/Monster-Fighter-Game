@@ -57,20 +57,23 @@ public class GameEnvironment {
 	// The shop
 	private ArrayList<ArrayList<Purchasable>> shop = new ArrayList<ArrayList<Purchasable>>();
 	
-	// 
+	// An ArrayList of all available battles
 	private ArrayList<Battle> battles = new ArrayList<Battle>(); 
+	
+	// Random events that occur upon resting
+	private RandomEvent randomEvents;
 	
 	// Enum that stores the difficulty options for the game 
     public enum Difficulty {
-	    EASY(100, 1.25, "Easy"),
-	    NORMAL(75, 1.0, "Medium"),
-	    HARD(50, 0.75, "Hard");
+	    EASY(100, 50, "Easy"),
+	    NORMAL(75, 25, "Medium"),
+	    HARD(50, 0, "Hard");
 
 	    private final String name;
 	    private final int startingGold;
-	    private final double battleGold;
+	    private final int battleGold;
 
-	    Difficulty(int startingGold, double battleGold, String name){
+	    Difficulty(int startingGold, int battleGold, String name){
 	        this.startingGold = startingGold;
 	        this.battleGold = battleGold;
 	        this.name = name;
@@ -78,7 +81,7 @@ public class GameEnvironment {
 	    
 	    @Override
 	    public String toString() {
-			return "Difficulty: " + name + " Starting Gold: " + startingGold + " Gold per battle multiplier: " + battleGold ;
+			return "Difficulty: " + name + " Starting Gold: " + startingGold + " Bonus gold per battle: " + battleGold ;
 		}
 	}
 
@@ -93,7 +96,7 @@ public class GameEnvironment {
 		this.ui = ui;
 		this.allMonsters = monsters;
 		for (int i = 0; i < 3; i++) {
-			this.startingMonsters.add(monsters.get(i));
+			this.startingMonsters.add(new Monster(monsters.get(i)));
 		}
 		this.allItems = items;
 		for (int i = 0; i < items.size(); i++) {
@@ -136,7 +139,7 @@ public class GameEnvironment {
 	public void onSetupFinished(String name, int totalDays, Monster startingMonster, Difficulty difficulty) {
 		this.name = name;
 		this.totalDays = totalDays;
-		this.party.add(new Monster(startingMonster));
+		this.party.add(startingMonster);
 		this.difficulty = difficulty;
 		this.goldBalance += difficulty.startingGold;
 		fillShop();
@@ -173,6 +176,10 @@ public class GameEnvironment {
 		return points;
 	}
 	
+	public RandomEvent getRandomEvent() {
+		return randomEvents;
+	}
+	
 	public List<Monster> getAllMonsters() {
 		return Collections.unmodifiableList(allMonsters);
 	}
@@ -207,7 +214,6 @@ public class GameEnvironment {
 		return Collections.unmodifiableList(inventoryUI);
 	}
 	
-
 	/**
 	 * Checks to see if user inventory is empty
 	 * @return isEmpty States whether the user's {@link inventory} is empty or not
@@ -367,15 +373,16 @@ public class GameEnvironment {
 	public void nextDay() {
 		day += 1;
 		fillShop();
-		RandomEvent randomEvents = new RandomEvent(party);
+		fillBattles();
+		randomEvents = new RandomEvent(party);
 		for (int i = 0; i < party.size(); i++) {
-			if (randomEvents.getMonsterLeaves().get(i) == true) {
+			if (randomEvents.getMonsterLeaves().get(i)) {
 				party.remove(i);
-			} else if (randomEvents.getLevelUp().get(i) == true) {
+			} else if (randomEvents.getLevelUp().get(i) && !randomEvents.getMonsterLeaves().get(i)) {
 				levelUp(party.get(i));
 			} 
 		}
-		if (randomEvents.getMonsterJoins() == true) {
+		if (randomEvents.getMonsterJoins()) {
 			int randomNumber = ThreadLocalRandom.current().nextInt(0, allMonsters.size());
 			Monster monster = allMonsters.get(randomNumber);
 			party.add(monster);
@@ -403,14 +410,14 @@ public class GameEnvironment {
 				int points = calculatePoints("Wild", monsters.size());
 				battles.add(new WildBattle(reward, points, monsters));
 			} else {
-				int randomNumber = ThreadLocalRandom.current().nextInt(0, party.size());
+				int randomNumber = ThreadLocalRandom.current().nextInt(0, party.size() + 1);
 				ArrayList<Monster> monsters = new ArrayList<>();
-				for (int j = 0; j < Math.min(randomNumber, 4); j++) {
+				for (int j = 0; j <= Math.min(randomNumber, 3); j++) {
 					Monster monster = new Monster(allMonsters.get(ThreadLocalRandom.current().nextInt(0, allMonsters.size())));
 					monsters.add(scaleMonster(monster, day - 1));
 				}
 				String trainer = trainers.get(ThreadLocalRandom.current().nextInt(0, trainers.size()));
-				int gold = calculateGold(party.size());
+				int gold = calculateGold(monsters.size());
 				int points = calculatePoints("Trainer", monsters.size());
 				battles.add(new TrainerBattle(gold, points, monsters, trainer));
 			}
@@ -427,7 +434,7 @@ public class GameEnvironment {
 	}
 	
 	public int calculateGold(int partySize) {
-		int gold = 100 * partySize;
+		int gold = 200 * partySize + difficulty.battleGold;
 		return gold;
 	}
 

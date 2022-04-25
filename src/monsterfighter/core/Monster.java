@@ -184,5 +184,4 @@ public class Monster implements Purchasable{
 		return description;
 	}
 
-
 }

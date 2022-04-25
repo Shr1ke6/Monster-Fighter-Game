@@ -19,7 +19,6 @@ public class RandomEvent {
 		return levelUp;
 	}
 	
-	
 	public List<Boolean> getMonsterLeaves() {
 		return leaves;
 	}
@@ -27,8 +26,6 @@ public class RandomEvent {
 	public boolean getMonsterJoins() {
 		return joins;
 	}
-	
-	
 	
 	public List<Boolean> monsterLevelUp(ArrayList<Monster> party) {
 		List<Boolean> levelUp = new ArrayList<>(party.size());
