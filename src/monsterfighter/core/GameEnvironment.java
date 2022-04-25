@@ -204,6 +204,14 @@ public class GameEnvironment {
 		return Collections.unmodifiableList(party);
 	}
 	
+	public List<Battle> getWildBattles() {
+		return battles.subList(0, 3);
+	}
+	
+	public List<Battle> getTrainerBattles() {
+		return battles.subList(3, 5);
+	}
+	
 	public List<ArrayList<Item>> getInventory() {
 		ArrayList<ArrayList<Item>> inventoryUI = new ArrayList<ArrayList<Item>>();;
 		for (ArrayList<Item> item : inventory) {
@@ -438,12 +446,5 @@ public class GameEnvironment {
 		return gold;
 	}
 
-	public List<Battle> getWildBattles() {
-		return battles.subList(0, 3);
-	}
-	
-	public List<Battle> getTrainerBattles() {
-		return battles.subList(3, 5);
-	}
 }
 
