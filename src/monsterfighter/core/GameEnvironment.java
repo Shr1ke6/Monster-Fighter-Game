@@ -63,6 +63,11 @@ public class GameEnvironment {
 	// Random events that occur upon resting
 	private RandomEvent randomEvents;
 	
+	// Random number generator
+	private Random rng = new Random();
+	
+	
+	
 	// Enum that stores the difficulty options for the game 
     public enum Difficulty {
 	    EASY(100, 50, "Easy"),
@@ -324,7 +329,7 @@ public class GameEnvironment {
 	}
 	
 	public void levelUp(Monster monster) {
-		int randomNumber = ThreadLocalRandom.current().nextInt(0, 2);
+		int randomNumber = rng.nextInt(2);
 		if (randomNumber == 0) {
 			monster.setMaxHealth(20);
 		} else {
@@ -344,7 +349,7 @@ public class GameEnvironment {
 					shop.get(i).add(allItems.get(i-3));
 				}
 			} else {
-				int randomNumber = ThreadLocalRandom.current().nextInt(0, allMonstersCopy.size());
+				int randomNumber = rng.nextInt(allMonstersCopy.size());
 				Monster monster = new Monster(allMonsters.get(randomNumber));
 				shop.get(i).add(scaleMonster(monster, day - 1));
 				allMonstersCopy.remove(randomNumber);
@@ -391,7 +396,7 @@ public class GameEnvironment {
 			} 
 		}
 		if (randomEvents.getMonsterJoins()) {
-			int randomNumber = ThreadLocalRandom.current().nextInt(0, allMonsters.size());
+			int randomNumber = rng.nextInt(allMonsters.size());
 			Monster monster = allMonsters.get(randomNumber);
 			party.add(monster);
 		}
@@ -409,22 +414,22 @@ public class GameEnvironment {
 		}
 		for (int i = 0; i < 5; i++) {
 			if (i < 2) {
-				int randomNumber = ThreadLocalRandom.current().nextInt(0, allItems.size());
+				int randomNumber = rng.nextInt(0, allItems.size());
 				Item reward = allItems.get(randomNumber);
 				ArrayList<Monster> monsters = new ArrayList<>();
-				randomNumber = ThreadLocalRandom.current().nextInt(0, allMonsters.size());
+				randomNumber = rng.nextInt(allMonsters.size());
 				Monster monster = new Monster(allMonsters.get(randomNumber));
 				monsters.add(scaleMonster(monster, day - 3));
 				int points = calculatePoints("Wild", monsters.size());
 				battles.add(new WildBattle(reward, points, monsters));
 			} else {
-				int randomNumber = ThreadLocalRandom.current().nextInt(0, party.size() + 1);
+				int randomNumber = rng.nextInt(party.size() + 1);
 				ArrayList<Monster> monsters = new ArrayList<>();
 				for (int j = 0; j <= Math.min(randomNumber, 3); j++) {
-					Monster monster = new Monster(allMonsters.get(ThreadLocalRandom.current().nextInt(0, allMonsters.size())));
+					Monster monster = new Monster(allMonsters.get(rng.nextInt(allMonsters.size())));
 					monsters.add(scaleMonster(monster, day - 1));
 				}
-				String trainer = trainers.get(ThreadLocalRandom.current().nextInt(0, trainers.size()));
+				String trainer = trainers.get(rng.nextInt(0, trainers.size()));
 				int gold = calculateGold(monsters.size());
 				int points = calculatePoints("Trainer", monsters.size());
 				battles.add(new TrainerBattle(gold, points, monsters, trainer));
