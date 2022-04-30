@@ -164,12 +164,20 @@ public class Monster implements Purchasable{
 		receiveHealth(heal);
 	}
 	
+	public void attack(Monster enemyMonster) {
+		enemyMonster.receiveDamage(attack);
+	}
+	
+	public String battleDescription() {
+		String description = name + " " + currentHealth + "/" + maxHealth;
+		return description;
+	}
+	
 	public String basicDescription() {
 		String description = "Monster: " + name + " Type: " + type.value + " Health: " + maxHealth + " Attack: " + attack;
 		return description;
 	}
 	
-	@Override
 	public String shopDescription() {
 		String description = "[Buy Price: " + buyPrice + " | Sell Price: " + sellPrice + "] " + basicDescription();
 		return description;

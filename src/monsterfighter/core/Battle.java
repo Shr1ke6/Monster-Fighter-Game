@@ -20,6 +20,21 @@ public class Battle {
 		return monsters;
 	}
 	
+	public int getConsciousMonsters() {
+		int conscious = monsters.size();
+		for (Monster monster: monsters ) {
+			if (monster.getStatus() == Monster.Status.FAINTED) {
+				conscious -= 1;
+			}
+		}
+		return conscious;
+	}
+		
+	public String battleStatus() {
+		Monster activeMonster = monsters.get(0);
+		return activeMonster.battleDescription();
+	}
+	
 	@Override
 	public String toString() {
 		return "Points: " + points;

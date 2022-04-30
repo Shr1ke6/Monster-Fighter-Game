@@ -538,7 +538,8 @@ public class CmdLineUi implements GameEnvironmentUi {
 	
 	
 	private void accessBattle() {
-		//final List<Battle> battles = gameEnvironment.getBattles();
+		List<Battle> wildBattles = gameEnvironment.getWildBattles();
+		List<Battle> trainerBattles = gameEnvironment.getTrainerBattles();
 		while (true) {
 			System.out.println("Select an option:\n"
 					+ "(0) Wild battles\n"
@@ -547,8 +548,18 @@ public class CmdLineUi implements GameEnvironmentUi {
 			try {
 				int option = scanner.nextInt();
 				scanner.nextLine();
-				if (option == 0 || option == 1) {
-					accessBattle(option);
+				if (option == 0) {
+					if (wildBattles.size() > 0) {
+						chooseBattle(wildBattles, option);
+					} else {
+						showError("No more wild battles! Come back tomorrow for new battles\n");
+					}
+				} else if (option == 1) {
+					if (wildBattles.size() > 0) {
+						chooseBattle(trainerBattles, option);
+					} else {
+						showError("No more trainer battles! Come back tomorrow for new battles\n");
+					}
 				} else if (option == 2) {
 					start();
 			}} catch (Exception e) {
@@ -557,30 +568,30 @@ public class CmdLineUi implements GameEnvironmentUi {
         }	
 	}
 	
-	private void accessBattle(int battleType) {
-		//ArrayList<Monster> arena = new ArrayList<Monster>();
+	private void chooseBattle(List<Battle> battles, int battleType) {
 		while (true) {
 			if (battleType == 0) {
-				printBattles("Select a wild battle:", 0);
+				printBattles("Select a wild battle:", battles);
 				try {
 					int battleID = scanner.nextInt();
 					scanner.nextLine();
-					if (battleID >= 0 && battleID < 2) {
-						accessBattle(battleID);
-					} else if (battleID == 2) {
+					if (battleID >= 0 && battleID < battles.size()) {
+						// battleType == 0 for wild battle
+						runBattle(battles, battleID);
+					} else if (battleID == battles.size()) {
 						break;
 					}
 				} catch (Exception e) {
 					scanner.nextLine();
 				}
 			} else {
-				printBattles("Select a trainer battle:", 1);
+				printBattles("Select a trainer battle:", battles);
 				try {
 					int battleID = scanner.nextInt();
 					scanner.nextLine();
-					if (battleID >= 0 && battleID < 3) {
-						accessBattle(battleID + 2);
-					} else if (battleID == 3) {
+					if (battleID >= 0 && battleID < battles.size()) {
+						runBattle(battles, battleID);
+					} else if (battleID == battles.size()) {
 						break;
 					}
 				} catch (Exception e) {
@@ -590,21 +601,51 @@ public class CmdLineUi implements GameEnvironmentUi {
 		}
 	}
 	
-	private void printBattles(String message, int battleType) {
-		List<Battle> battles = gameEnvironment.getBattles();
+	private void printBattles(String message, List<Battle> battles) {
 		System.out.println(message);
-		if (battleType == 0) {
-			for (int i = 0; i < 2; i++) {
-				System.out.println("(" + i + ") " + battles.get(i));
-			}
-			System.out.println("(2) Back");
-		} else if (battleType == 1) {
-			for (int i = 2; i < 5; i++) {
-				System.out.println("(" + (i - 2) + ") " + battles.get(i));		
-			}
-			System.out.println("(3) Back");
+		int i = 0;
+		for (Battle battle: battles) {
+			System.out.println("(" + i + ") " + battle);
+			i++;
 		}
+		System.out.println("\n(" + i + ") Back");
 	}
+	
+	private void runBattle(List<Battle> battles,  int BattleID) {
+		gameEnvironment.startBattle();
+		boolean battleRunning = gameEnvironment.getBattleRunning();
+		List<Monster> party = gameEnvironment.getParty();
+		System.out.println("FIGHT!\n");
+		do {
+			if (party.get(0).getStatus() == Monster.Status.FAINTED) {
+				System.out.println(party.get(0).getName() + " fainted");
+				
+			}
+			battleStatus(battles.get(BattleID), gameEnvironment.getParty());
+			System.out.println("(0) Attack\n"
+					+ "(1) Use Item\n"
+					+ "(2) Switch Monster");
+			try {
+				int battleOption = scanner.nextInt();
+				scanner.nextLine();
+				if (battleOption == 0) {
+					
+				} else if (battleOption == 1) {
+					
+				} else if (battleOption == 2) {
+					switchMonsters(0);
+				}
+			} catch (Exception e) {
+				scanner.nextLine();
+			}
+		} while(battleRunning);
+	}
+	
+	private void battleStatus(Battle battle, List<Monster> party) {
+		System.out.println(battle.battleStatus() + "\n");
+		System.out.println(party.get(0).battleDescription());
+	}
+	
 
 	public void accessRest() {
 		while (true) {

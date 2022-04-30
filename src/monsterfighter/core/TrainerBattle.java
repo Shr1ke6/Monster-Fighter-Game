@@ -13,8 +13,13 @@ public class TrainerBattle extends Battle {
 		this.trainer = trainer;
 	}
 
-	//static String[] trainers = {"Peach Ice", "Sour Apple", "Strawberry Burst", "Fatso the Fat Boy", "Panstu Sniffer", "Coke Addict", "Poo Sniffer", "Ice Wallow Come", "Lambogini" , "Poopy pant"};
-
+	
+	@Override
+	public String battleStatus() {
+		String description = "Trainer: " + trainer + " " + super.battleStatus() + " " + super.getConsciousMonsters() + "x M";
+		return description;
+	}
+	
 	@Override
 	public String toString() {
 		String description = "Trainer: " + trainer + " " + getMonsters().size() + "x Monsters " + super.toString() +" Gold: " + gold;
