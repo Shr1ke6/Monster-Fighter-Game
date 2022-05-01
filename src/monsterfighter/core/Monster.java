@@ -38,7 +38,7 @@ public class Monster implements Purchasable{
 	private Status status;
 	private final int buyPrice;
 	private final int sellPrice;
-	private boolean fainted = false;
+	private boolean faintedToday = false;
 	private int wins = 0;
 	
 	
@@ -113,23 +113,39 @@ public class Monster implements Purchasable{
 	}
 	
 	public boolean getFaintedToday() {
-		return fainted;
+		return faintedToday;
 	}
 	
 	public int getWins() {
 		return wins;
 	}
 	
-	public void setFaintedToday(boolean status) {
-		fainted = true;
+	/* Compares a monster with the current monster to check if they have identical values
+	 */
+	public boolean sameMonster(Monster monster) {
+		return this.name.equals(monster.name) &&
+				this.index == monster.index  &&
+				this.name.equals(monster.name) &&
+				this.nickname.equals(monster.name) &&
+				this.type.equals(monster.type) &&
+				this.maxHealth == monster.maxHealth &&
+				this.attack == monster.attack &&
+				this.currentHealth == monster.maxHealth &&
+				this.status == monster.status &&
+				this.buyPrice == monster.buyPrice;
 	}
 	
-	public void setWins(int wins) {
-		if (wins == 0) {
-			this.wins = 0;
-		} else if (wins == 1) {
-			this.wins += 1;
-		}
+	public void setFaintedToday(boolean fainted) {
+		this.faintedToday = fainted;
+	}
+	
+	
+	public void resetWins() {
+		wins = 0;
+	}
+	
+	public void addWin(int win) {
+		wins += win;
 	}
 
 	public void setNickname(String nickname) {
@@ -153,9 +169,10 @@ public class Monster implements Purchasable{
 	
 	public void receiveDamage(int damage) {
 		currentHealth -= damage;
-		if (currentHealth < 0) {
+		if (currentHealth <= 0) {
 			currentHealth = 0;
 			status = Status.FAINTED;
+			faintedToday = true;
 		}
 	}
 	

@@ -430,7 +430,7 @@ public class GameEnvironment {
 		for (Monster monster : party) {
 			monster.receiveHealth(monster.getMaxHealth());
 			monster.setFaintedToday(false);
-			monster.setWins(0);
+			monster.resetWins();
 		}
 	}
 			
@@ -512,18 +512,20 @@ public class GameEnvironment {
 		battleRunning = true;
 	}
 	
-	public void manageBattle(int option, int battleID, int battleType) {
-		Battle opponentTeam;
-		if (battleType == 0) {
-			opponentTeam = wildBattles.get(battleID);
-		} else {
-			opponentTeam = trainerBattles.get(battleID);
+	public void manageBattle(Battle opponent, int battleID) {
+		opponentTurn(opponent);
+		battleRunning = opponent.getConsciousMonsters() > 0 && !partyFainted();
+		if (!battleRunning) {
+			rewards(opponent);
+			if (opponent instanceof WildBattle) {
+				opponent = wildBattles.remove(battleID);
+			} else if (opponent instanceof TrainerBattle){
+				opponent = trainerBattles.remove(battleID);
+			}
 		}
-		opponentTurn(option, opponentTeam);
-		battleRunning = opponentTeam.getConsciousMonsters() > 0 && !partyFainted();
 	}
 	
-	public void opponentTurn(int option, Battle opponent) {
+	public void opponentTurn(Battle opponent) {
 		if (opponent.getMonsters().get(0).getStatus() == Monster.Status.FAINTED) {
 			Collections.rotate(opponent.getMonsters(), -1);
 		} else {
@@ -531,7 +533,27 @@ public class GameEnvironment {
 		}
 		
 	}
+
+	public void rewards(Battle opponent) {
+		if (partyFainted()) {
+			points += 25 * (opponent.getMonsters().size() - opponent.getConsciousMonsters());
+		} else if (opponent.getConsciousMonsters() == 0) {
+			points += opponent.getPoints();
+			if (opponent instanceof WildBattle) {
+				WildBattle wildOpponent = (WildBattle) opponent;
+				Item reward = wildOpponent.getReward();
+				addToInventory(reward);
+			} else if (opponent instanceof TrainerBattle) {
+				TrainerBattle trainerOpponent = (TrainerBattle) opponent;
+				goldBalance += trainerOpponent.getGold();
+			}
+			for (Monster monster: party) {
+				monster.addWin(1);
+			}
+		}
+	}
 }
+
 	
 
 

@@ -13,6 +13,13 @@ public class TrainerBattle extends Battle {
 		this.trainer = trainer;
 	}
 
+	public int getGold() {
+		return gold;
+	}
+	
+	public String getTrainer() {
+		return trainer;
+	}
 	
 	@Override
 	public String battleStatus() {

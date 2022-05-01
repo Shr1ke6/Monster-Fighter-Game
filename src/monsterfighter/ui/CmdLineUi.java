@@ -3,7 +3,6 @@ package monsterfighter.ui;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.concurrent.ThreadLocalRandom;
 
 import monsterfighter.core.Battle;
 import monsterfighter.core.GameEnvironment;
@@ -22,7 +21,7 @@ public class CmdLineUi implements GameEnvironmentUi {
     private GameEnvironment gameEnvironment;
 
     // Flag to indicate when this ui should finish
-    private boolean finish = false;
+    //private boolean finish = false;
 
     // An enum representing the various actions the user can perform
     private enum Option {
@@ -227,15 +226,22 @@ public class CmdLineUi implements GameEnvironmentUi {
 	 * @return The ID used to select a monster from the party
 	 */
 	private int chooseMonster(String message, List<Monster> monsters, int description) {
+		boolean battleRunning = gameEnvironment.getBattleRunning();
+		List<Monster> party = gameEnvironment.getParty();
+		// Checks whether there exists a user monster currently fighting that has fainted
+		boolean conscious = !battleRunning || party.get(0).getStatus().equals(Monster.Status.CONSCIOUS);
 		while (true) {
 			System.out.println(message);
 			printMonsters(monsters, description);
+			if (conscious && description != 0) {
+				System.out.println("\n(" + monsters.size() + ") Back" );
+			}
 			try {
 				int monsterID = scanner.nextInt();
 				scanner.nextLine();
 				if (monsterID >= 0 && monsterID < monsters.size()) {
 					return monsterID;
-				} else if (description == 1 && monsterID == monsters.size()) {
+				} else if (description == 1 && monsterID == monsters.size() && conscious) {
 					return monsterID;
 				}
 			} catch (Exception e) {
@@ -255,7 +261,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 			for(Monster monster : monsters) {
 				System.out.println("(" + i + ") [Slot: " + (i+1) + "] " + monster);
 				i++;
-			} System.out.println("\n(" + monsters.size() + ") Back" );
+			} 
 		}
 	}
 
@@ -292,7 +298,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 			if (party.size() > 0) {
 				int monsterID = chooseMonster("Party:\n" + "-".repeat(7), party, 1);
 				if (monsterID >= 0 && monsterID < party.size()) {
-					partyOptions(monsterID);
+					partyOptions(monsterID, party);
 				} else {
 					start();
 				}
@@ -302,15 +308,15 @@ public class CmdLineUi implements GameEnvironmentUi {
 		}
 	}
 	
-	private void switchMonsters(int monsterID) {
-		final List<Monster> party = gameEnvironment.getParty();
-		int monsterID2 = chooseMonster("Select a monster to switch " + party.get(monsterID).getNickname() + " with:", party, 1);
+	private void switchMonsters(int monsterID, String message) {
+		List<Monster> party = gameEnvironment.getParty();
+		int monsterID2 = chooseMonster(message, party, 1);
 		if (monsterID2 >= 0 && monsterID2 < party.size()) {
 				gameEnvironment.switchMonsters(monsterID, monsterID2);
 		}
 	}
 
-	private void partyOptions(int monsterID) {
+	private void partyOptions(int monsterID, List<Monster> party) {
 		while (true) {
 			System.out.println("Select an option:\n"
 					+ "(0) Use Item\n"
@@ -323,7 +329,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 				if (option == 0) {
 					useItem(monsterID, 0);
 				} else if (option == 1) {
-					switchMonsters(monsterID);
+					switchMonsters(monsterID, "Select a monster to switch " + party.get(monsterID).getNickname() + " with:");
 				} else if (option == 2) {
 					setMonsterNickname(gameEnvironment.getParty().get(monsterID));
 				} else if (option == 3) {
@@ -355,10 +361,10 @@ public class CmdLineUi implements GameEnvironmentUi {
 	}
 	
 	private void useItem(int objectID, int objectType){
+		List<Monster> party = gameEnvironment.getParty();
+		List<ArrayList<Item>> inventory = gameEnvironment.getInventory();
+		boolean battleRunning = gameEnvironment.getBattleRunning();
 		while (true) {
-			final List<Monster> party = gameEnvironment.getParty();
-			final List<ArrayList<Item>> inventory = gameEnvironment.getInventory();
-			System.out.println(inventory.size());
 			if (objectType == 0) {
 				if (gameEnvironment.inventoryIsEmpty()) {
 					showError("Inventory is empty!\n");
@@ -374,6 +380,9 @@ public class CmdLineUi implements GameEnvironmentUi {
 				Item item = gameEnvironment.getAllItems().get(itemID);
 				gameEnvironment.useItem(monsterID, itemID);
 				if (itemTotal != inventory.get(inventoryID).size()) {
+					if (battleRunning) {
+						break;
+					}
 					if (inventory.get(inventoryID).size() > 0) {
 						System.out.println("Used " + item.getName() + " on " + party.get(monsterID).getNickname() + ", " + inventory.get(inventoryID).size() + "x " + item.getName() + "'s left");
 					} else {
@@ -428,6 +437,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 		while (true) {
 			System.out.println(message);
 			printInventory(inventory);
+			System.out.println("\n(" + inventory.size() + ") Back" );
 			try {
 				int inventoryID = scanner.nextInt();
 				scanner.nextLine();
@@ -446,7 +456,6 @@ public class CmdLineUi implements GameEnvironmentUi {
 			System.out.println("(" + i + ") " + items.size() + "x " + items.get(0));
 		        i++;
 	    }
-		System.out.println("\n(" + inventory.size() + ") Back" );
 	}
 	
 	private void accessShop() {
@@ -535,8 +544,6 @@ public class CmdLineUi implements GameEnvironmentUi {
 		System.out.println("\n(" + shop.size() + ") Back" );
 	}
 	
-	
-	
 	private void accessBattle() {
 		List<Battle> wildBattles = gameEnvironment.getWildBattles();
 		List<Battle> trainerBattles = gameEnvironment.getTrainerBattles();
@@ -544,7 +551,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 			System.out.println("Select an option:\n"
 					+ "(0) Wild battles\n"
 					+ "(1) Trainer battles\n"
-					+ "(2) Back\n");
+					+ "\n(2) Back");
 			try {
 				int option = scanner.nextInt();
 				scanner.nextLine();
@@ -562,7 +569,8 @@ public class CmdLineUi implements GameEnvironmentUi {
 					}
 				} else if (option == 2) {
 					start();
-			}} catch (Exception e) {
+				}
+			} catch (Exception e) {
 				scanner.nextLine();
 			}
         }	
@@ -572,12 +580,17 @@ public class CmdLineUi implements GameEnvironmentUi {
 		while (true) {
 			if (battleType == 0) {
 				printBattles("Select a wild battle:", battles);
+				System.out.println("\n(" + battles.size() + ") Back");
 				try {
 					int battleID = scanner.nextInt();
 					scanner.nextLine();
+					if (gameEnvironment.partyFainted()) {
+						showError("All your monster hae fainted and thus are unable to battle!\n");
+						break;
+					}
 					if (battleID >= 0 && battleID < battles.size()) {
 						// battleType == 0 for wild battle
-						runBattle(battles, battleID);
+						startBattle(battles.get(battleID), battleID);
 					} else if (battleID == battles.size()) {
 						break;
 					}
@@ -586,11 +599,16 @@ public class CmdLineUi implements GameEnvironmentUi {
 				}
 			} else {
 				printBattles("Select a trainer battle:", battles);
+				System.out.println("\n(" + battles.size() + ") Back");
 				try {
 					int battleID = scanner.nextInt();
 					scanner.nextLine();
+					if (gameEnvironment.partyFainted()) {
+						showError("All your monster hvae fainted and thus are unable to battle!\n");
+						break;
+					}
 					if (battleID >= 0 && battleID < battles.size()) {
-						runBattle(battles, battleID);
+						startBattle(battles.get(battleID), battleID);
 					} else if (battleID == battles.size()) {
 						break;
 					}
@@ -608,44 +626,90 @@ public class CmdLineUi implements GameEnvironmentUi {
 			System.out.println("(" + i + ") " + battle);
 			i++;
 		}
-		System.out.println("\n(" + i + ") Back");
 	}
 	
-	private void runBattle(List<Battle> battles,  int BattleID) {
+	private void startBattle(Battle battle, int battleID) {
 		gameEnvironment.startBattle();
-		boolean battleRunning = gameEnvironment.getBattleRunning();
 		List<Monster> party = gameEnvironment.getParty();
-		System.out.println("FIGHT!\n");
+		List<ArrayList<Item>> inventory = gameEnvironment.getInventory();
+		boolean battleRunning = gameEnvironment.getBattleRunning();
 		do {
-			if (party.get(0).getStatus() == Monster.Status.FAINTED) {
-				System.out.println(party.get(0).getName() + " fainted");
-				
+			if (party.get(0).getStatus().equals(Monster.Status.FAINTED)) {
+				switchMonsters(0, "Select a monster to send into battle");
+			} else {
+				 runBattle(battle, battleID, party, inventory, battleRunning);
 			}
-			battleStatus(battles.get(BattleID), gameEnvironment.getParty());
-			System.out.println("(0) Attack\n"
-					+ "(1) Use Item\n"
-					+ "(2) Switch Monster");
+		} while(battleRunning);
+		
+	}
+	
+	private void runBattle(Battle battle, int battleID, List<Monster> party, List<ArrayList<Item>> inventory, boolean battleRunning) {
+	System.out.println("Go " + party.get(0).getNickname() + "!\n");
+		do {
+			while (party.get(0).getStatus().equals(Monster.Status.FAINTED)) {
+				Monster monster = new Monster(party.get(0));
+				System.out.println(party.get(0).getName() + " fainted!");
+				switchMonsters(0, "Select a monster to switch into battle");
+				if (!monster.equals(party.get(0))) {
+					System.out.println("Go get 'em " + monster.getNickname());
+				}
+			}
+			takeTurn(battle, party, inventory);
+			gameEnvironment.manageBattle(battle, battleID);
+			battleRunning = gameEnvironment.getBattleRunning();
+		} while(battleRunning);
+		battleFinish(battle, party, inventory);
+	}
+	
+	private void takeTurn(Battle battle, List<Monster> party, List<ArrayList<Item>> inventory) {
+		Monster activeMonster = party.get(0);
+		Monster opponent = battle.getMonsters().get(0);
+		Monster activeMonsterCopy = new Monster(party.get(0));
+		while (true) {
 			try {
+				battleStatus(battle, gameEnvironment.getParty());
+				System.out.println("(0) Attack\n"
+						+ "(1) Use Item\n"
+						+ "(2) Switch Monster");
+			
 				int battleOption = scanner.nextInt();
 				scanner.nextLine();
 				if (battleOption == 0) {
-					
+					int health = opponent.getCurrentHealth();
+					party.get(0).attack(battle.getMonsters().get(0));
+					System.out.println(activeMonster.getNickname() + " did " + (health - opponent.getCurrentHealth()) + " damage to opponent's" + opponent.getNickname());
+					if (opponent.getStatus().equals(Monster.Status.FAINTED)) {
+						System.out.println("Opponent's " + opponent.getNickname() + " fainted!");
+					}
+					System.out.print("\n");
+					break;
 				} else if (battleOption == 1) {
-					
+					useItem(0,0);
+					if (!activeMonsterCopy.sameMonster(activeMonster)) {
+						break;
+					}
 				} else if (battleOption == 2) {
-					switchMonsters(0);
+					switchMonsters(0, "Select a monster to switch " + party.get(0).getNickname() + " with:");
+					if (!activeMonsterCopy.sameMonster(activeMonster)) {
+						System.out.println("Switched " + activeMonsterCopy.getNickname() + " with " + activeMonster.getNickname());
+						break;
+					}
 				}
 			} catch (Exception e) {
 				scanner.nextLine();
 			}
-		} while(battleRunning);
+		}
 	}
 	
 	private void battleStatus(Battle battle, List<Monster> party) {
 		System.out.println(battle.battleStatus() + "\n");
-		System.out.println(party.get(0).battleDescription());
+		System.out.println(party.get(0).battleDescription() + "\n");
 	}
 	
+	private void battleFinish(Battle battle, List<Monster> party, List<ArrayList<Item>> inventory) {
+		System.out.println("Almost there!");
+		accessBattle();
+	}
 
 	public void accessRest() {
 		while (true) {
