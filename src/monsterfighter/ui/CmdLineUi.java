@@ -585,7 +585,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 					int battleID = scanner.nextInt();
 					scanner.nextLine();
 					if (gameEnvironment.partyFainted()) {
-						showError("All your monster hae fainted and thus are unable to battle!\n");
+						showError("All your monsters have fainted and thus are unable to battle!\n");
 						break;
 					}
 					if (battleID >= 0 && battleID < battles.size()) {
@@ -604,7 +604,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 					int battleID = scanner.nextInt();
 					scanner.nextLine();
 					if (gameEnvironment.partyFainted()) {
-						showError("All your monster hvae fainted and thus are unable to battle!\n");
+						showError("All your monsters have fainted and thus are unable to battle!\n");
 						break;
 					}
 					if (battleID >= 0 && battleID < battles.size()) {
@@ -655,7 +655,12 @@ public class CmdLineUi implements GameEnvironmentUi {
 				}
 			}
 			takeTurn(battle, party, inventory);
+			int health = party.get(0).getCurrentHealth();
+			Monster opponentsMonsterCopy = new Monster(battle.getMonsters().get(0));
 			gameEnvironment.manageBattle(battle, battleID);
+			if (opponentsMonsterCopy.getStatus().equals(Monster.Status.CONSCIOUS)) {
+				System.out.println("Opponent's " + opponentsMonsterCopy.getNickname() + " did " + (health - party.get(0).getCurrentHealth()) + " damage to " + party.get(0).getNickname() + "\n");
+			}
 			battleRunning = gameEnvironment.getBattleRunning();
 		} while(battleRunning);
 		battleFinish(battle, party, inventory);
@@ -677,15 +682,16 @@ public class CmdLineUi implements GameEnvironmentUi {
 				if (battleOption == 0) {
 					int health = opponent.getCurrentHealth();
 					party.get(0).attack(battle.getMonsters().get(0));
-					System.out.println(activeMonster.getNickname() + " did " + (health - opponent.getCurrentHealth()) + " damage to opponent's" + opponent.getNickname());
+					System.out.println(activeMonster.getNickname() + " did " + (health - opponent.getCurrentHealth()) + " damage to opponent's " + opponent.getNickname());
 					if (opponent.getStatus().equals(Monster.Status.FAINTED)) {
 						System.out.println("Opponent's " + opponent.getNickname() + " fainted!");
 					}
 					System.out.print("\n");
 					break;
 				} else if (battleOption == 1) {
+					int inventorySize = gameEnvironment.inventorySize();
 					useItem(0,0);
-					if (!activeMonsterCopy.sameMonster(activeMonster)) {
+					if (inventorySize != gameEnvironment.inventorySize()) {
 						break;
 					}
 				} else if (battleOption == 2) {

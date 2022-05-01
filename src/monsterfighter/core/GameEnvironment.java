@@ -260,6 +260,13 @@ public class GameEnvironment {
 		return isEmpty;
 	}
 	
+	public int inventorySize() {
+		int inventorySize = 0;
+			for (ArrayList<Item> items: inventory)
+				inventorySize += items.size();
+		return inventorySize;
+	}
+	
 	public void switchMonsters(int option1, int option2) {
 		try {
 			if (battleRunning && party.get(option2).getStatus() == Monster.Status.FAINTED) {
@@ -359,6 +366,7 @@ public class GameEnvironment {
 		int randomNumber = rng.nextInt(2);
 		if (randomNumber == 0) {
 			monster.setMaxHealth(20);
+			monster.receiveHealth(20);
 		} else {
 			monster.setAttack(10);
 		}

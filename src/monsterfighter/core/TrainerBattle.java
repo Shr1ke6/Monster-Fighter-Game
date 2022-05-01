@@ -23,7 +23,7 @@ public class TrainerBattle extends Battle {
 	
 	@Override
 	public String battleStatus() {
-		String description = "Trainer: " + trainer + " " + super.battleStatus() + " " + super.getConsciousMonsters() + "x M";
+		String description = "Trainer: " + trainer + " " + super.getConsciousMonsters() + "x M\n" + super.battleStatus() + " " ;
 		return description;
 	}
 	
