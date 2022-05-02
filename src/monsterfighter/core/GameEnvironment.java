@@ -71,23 +71,26 @@ public class GameEnvironment {
 	
 	// Enum that stores the difficulty options for the game 
     public enum Difficulty {
-	    EASY(100, 50, "Easy"),
-	    NORMAL(75, 25, "Medium"),
-	    HARD(50, 0, "Hard");
+	    EASY(100, 50, 0,"Easy"),
+	    MEDIUM(75, 25, 50, "Medium"),
+	    HARD(50, 0, 100, "Hard");
 
 	    private final String name;
 	    private final int startingGold;
 	    private final int battleGold;
+	    private final int battlePoints;
 
-	    Difficulty(int startingGold, int battleGold, String name){
+	    Difficulty(int startingGold, int battleGold, int battlePoints, String name){
 	        this.startingGold = startingGold;
 	        this.battleGold = battleGold;
+	        this.battlePoints = battlePoints;
 	        this.name = name;
 	    }
 	    
 	    @Override
 	    public String toString() {
-			return "Difficulty: " + name + " Starting Gold: " + startingGold + " Bonus gold per battle: " + battleGold ;
+			return name + ": Starting Gold: " + startingGold + " Bonus gold: " 
+	    + battleGold + " Bonus points: " + battlePoints;
 		}
 	}
 
@@ -126,22 +129,13 @@ public class GameEnvironment {
 	
 
 	
-	/**
-	 * Starts this game. Must be called from the event dispatch thread (EDT) if the user interface is a Swing gui.
-	 * This method calls {@link GameEnvironmentUi#setup(GameEnvironment)} to initiate setup of the user interface.
-	 */
+
 	public void start() {
 		ui.setup(this);
 	}
 	
 	
-	/**
-	 * This method should be called by the user interface when {@link GameEnvironmentUi#setup(RocketManager)}
-	 * has been completed. This method calls {@link GameEnvironmentUiUi#start()} to tell the user interface to start.
-	 *
-	 * @param name The name of the user that is playing the game.
-	 * @param party The party of the player after they selected their starting monster.
-	 */
+
 	public void onSetupFinished(String name, int totalDays, Monster startingMonster, Difficulty difficulty) {
 		this.name = name;
 		this.totalDays = totalDays;
@@ -185,14 +179,6 @@ public class GameEnvironment {
 	public boolean getBattleRunning() {
 		return battleRunning;
 	}
-	
-	//public Monster getBattlingMonster(ArrayList<Monster> party) {
-	/*battling monster is the first monster in the party
-	 * if battling monster faints the player should be prompted to switch the monster with another in the party
-	 * the opponent should automatically switch to the next monster in the party
-	 */
-	//}
-	
 	
 	public List<Monster> getAllMonsters() {
 		return Collections.unmodifiableList(allMonsters);
@@ -503,11 +489,10 @@ public class GameEnvironment {
 	
 	
 	public int calculatePoints(String battleType, int partySize) {
-		int points = 50 * partySize;
+		int points = 50 * partySize + difficulty.battlePoints;
 		if (battleType != "Wild") {
 			points += 100;
 		}
-		points *= ((day/totalDays) + 1);
 		return points;
 	}
 	

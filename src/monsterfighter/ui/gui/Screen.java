@@ -1,43 +1,123 @@
 package monsterfighter.ui.gui;
 
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.EventQueue;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
-public class Screen {
+import monsterfighter.core.GameEnvironment;
 
-	private JFrame frame;
+public abstract class Screen {
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Screen window = new Screen();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+    // The frame for this screen
+    private JFrame frame;
 
-	/**
-	 * Create the application.
-	 */
-	public Screen() {
-		initialize();
-	}
+    private final GameEnvironment gameEnvironment;
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}
+    /**
+     * Creates this screen.
+     *
+     * @param title The title for the screen
+     * @param manager The {@link GameEnvironment} that this screen interacts with
+     */
+    protected Screen(final String title, final GameEnvironment gameEnvironment) {
+        this.gameEnvironment = gameEnvironment;
+        initialise(title);
+    }
 
+    /**
+     * Initialises this screen's UI.
+     */
+    private void initialise(final String title) {
+        frame = new JFrame();
+        frame.setTitle(title);
+
+        // Prevent the frame from closing immediately when the user clicks the close button.
+        // Instead we add a WindowListener so we can tell our rocket manager that the user
+        // has requested to quit. This allows the rocket manager to perform actions that may
+        // be required before quitting E.g. Confirming the user really wants to quit,
+        // saving state etc.
+        /*
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                gameEnvironment.onFinish();
+            }
+        });
+
+        initialise(frame);
+
+        // Size our frame
+        frame.pack();
+
+        // We set the location of our frame relative to null. This causes the frame to be placed
+        // in the centre of the screen.
+        frame.setLocationRelativeTo(null);
+        */
+    }
+
+    /**
+     * Creates and adds the required graphical components to the given container.
+     *
+     * @param container The container to add content to
+     */
+    protected abstract void initialise(Container container);
+
+    /**
+     * Gets the top level component of this screen.
+     *
+     * @return The top level component
+     */
+    protected Component getParentComponent() {
+        return frame;
+    }
+
+    /**
+     * Gets the {@link GameEnvironment} that this screen supports.
+     *
+     * @return The game environment for this screen
+     */
+    protected GameEnvironment getGameEnvironment() {
+        return gameEnvironment;
+    }
+
+    /**
+     * Shows this screen by making it visible.
+     */
+    protected void show() {
+        frame.setVisible(true);
+    }
+
+    /**
+     * Confirms if the user wants to quit this screen.
+     *
+     * @return true to quit, false otherwise
+     */
+    protected boolean confirmQuit() {
+        int selection = JOptionPane.showConfirmDialog(frame, "Are you sure you want to quit?",
+                "Quit?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+        return selection == JOptionPane.YES_OPTION;
+    }
+
+    /**
+     * Quits this screen. This should dispose of the screen as necessary.
+     */
+    void quit() {
+        frame.dispose();
+    }
+
+    /**
+     * Reports the given error to the user.
+     *
+     * @param error The error to report
+     */
+    void showError(String error) {
+        JOptionPane.showMessageDialog(frame, error, "Error", JOptionPane.ERROR_MESSAGE);
+    }
 }
+

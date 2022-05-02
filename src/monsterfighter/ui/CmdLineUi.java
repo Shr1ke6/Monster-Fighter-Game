@@ -11,6 +11,8 @@ import monsterfighter.core.Item;
 import monsterfighter.core.Monster;
 import monsterfighter.core.Purchasable;
 import monsterfighter.core.RandomEvent;
+import monsterfighter.core.TrainerBattle;
+import monsterfighter.core.WildBattle;
 
 public class CmdLineUi implements GameEnvironmentUi {
 	
@@ -450,6 +452,11 @@ public class CmdLineUi implements GameEnvironmentUi {
 		}
 	}
 	
+	/*
+	 * Outputs the given user inventory
+	 * 
+	 * @param inventory 
+	 */
 	private void printInventory(List<ArrayList<Item>> inventory) {
 		int i = 0;
 		for (ArrayList<Item> items : inventory) {
@@ -543,7 +550,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 		}
 		System.out.println("\n(" + shop.size() + ") Back" );
 	}
-	
+
 	private void accessBattle() {
 		List<Battle> wildBattles = gameEnvironment.getWildBattles();
 		List<Battle> trainerBattles = gameEnvironment.getTrainerBattles();
@@ -713,7 +720,22 @@ public class CmdLineUi implements GameEnvironmentUi {
 	}
 	
 	private void battleFinish(Battle battle, List<Monster> party, List<ArrayList<Item>> inventory) {
-		System.out.println("Almost there!");
+		if (!gameEnvironment.partyFainted()) {
+			System.out.println("You Won!\n"
+					+ "Received:\nPoints: " + battle.getPoints());
+			if (battle instanceof WildBattle) {
+				WildBattle wildOpponent = (WildBattle)  battle;
+				System.out.println("Item: " + wildOpponent.getReward().getName());
+			} else if (battle instanceof TrainerBattle) {
+				TrainerBattle trainerOpponent = (TrainerBattle) battle;
+				System.out.println("Gold: " + trainerOpponent.getGold());
+			}
+		} else {
+			System.out.println("You lost...\n"
+					+ "Received:\nPoints: " + (25 * (battle.getMonsters().size() - battle.getConsciousMonsters())));
+			
+		}
+		System.out.print("\n");
 		accessBattle();
 	}
 

@@ -10,6 +10,7 @@ import monsterfighter.core.Item;
 import monsterfighter.core.Monster;
 import monsterfighter.ui.CmdLineUi;
 import monsterfighter.ui.GameEnvironmentUi;
+import monsterfighter.ui.gui.Gui;
 
 
 
@@ -21,7 +22,7 @@ public class Main {
 		
 		monsters.add(new Monster(0, "Fireboy", Monster.Type.FIRE, 50, 20, 200));
 		monsters.add(new Monster(1, "Watergirl", Monster.Type.WATER, 60, 15, 200));
-		monsters.add(new Monster(2, "Dirt Monster", Monster.Type.GRASS, 70, 10, 200));
+		monsters.add(new Monster(2, "Dirt", Monster.Type.GRASS, 70, 10, 200));
 		monsters.add(new Monster(3, "BrightStar", Monster.Type.LIGHT, 70, 10, 200));
 		monsters.add(new Monster(4, "DarkStar", Monster.Type.DARK, 50, 20, 200));
 		monsters.add(new Monster(5, "Normie", Monster.Type.NORMAL, 65, 14, 200));
@@ -37,21 +38,18 @@ public class Main {
 		
 		GameEnvironmentUi ui;
 
-       // if (args.length > 0 && (args[0].equals("cmd"))) {
-    	   
         ui = new CmdLineUi();
         GameEnvironment environment = new GameEnvironment(ui, monsters, items);
         environment.start();
-        /*
-        } else {
-        	
-            ui = new Gui();
-            RocketManager manager = new RocketManager(ui, rockets);
+       if (args.length > 0 && (args[0].equals("cmd"))) {
 
-            // Ensure the RocketManager is started on the Swing event dispatch thread (EDT). To be thread safe,
-            // all swing code should run on this thread unless explicitly stated as being thread safe.
-            SwingUtilities.invokeLater(() -> manager.start());
+        } else {
+	        ui = new Gui();
+	        GameEnvironment gameEnvironment = new GameEnvironment(ui, monsters, items);
+	
+	        // Ensure the RocketManager is started on the Swing event dispatch thread (EDT). To be thread safe,
+	        // all swing code should run on this thread unless explicitly stated as being thread safe.
+	        SwingUtilities.invokeLater(() -> gameEnvironment.start());
         }
-        */
     }
 }

@@ -5,17 +5,13 @@ package monsterfighter.ui;
 
 	import monsterfighter.core.GameEnvironment;
 
-	/**import seng201.rocketmanager.core.Rocket;
-	import seng201.rocketmanager.core.RocketManager;
-
-	*/
 
 public interface GameEnvironmentUi {
 
     /**
      * A description of the naming convention for the users name
      */
-    String NAME_REQUIREMENTS = "Name must contain only letters, must not be empty and have a max of 12 characters";
+    String NAME_REQUIREMENTS = "Name must contain only letters and may be from 1-12 characters";
     
     /**
      * A description of the naming convention for a monsters nickname

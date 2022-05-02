@@ -120,8 +120,13 @@ public class Monster implements Purchasable{
 		return wins;
 	}
 	
-	/* Compares a monster with the current monster to check if they have identical values
+	/**
+	 * 
+	 * 
+	 * @param monster Monster object that is compared against
+	 * @return Boolean 
 	 */
+
 	public boolean sameMonster(Monster monster) {
 		return this.name.equals(monster.name) &&
 				this.index == monster.index  &&
