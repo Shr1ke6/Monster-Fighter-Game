@@ -67,7 +67,7 @@ public class MainScreen extends Screen{
 		JButton btnViewParty = new JButton("View Party");
 		btnViewParty.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnViewParty.setBounds(165, 295, 143, 73);
-		btnViewParty.addActionListener(e -> getGameEnvironment().transitionScreen("VIEW_PARTY"));
+		btnViewParty.addActionListener(e -> getGameEnvironment().transitionScreen("PARTY"));
 		container.add(btnViewParty);
 
 		JButton btnInventory = new JButton("Inventory");

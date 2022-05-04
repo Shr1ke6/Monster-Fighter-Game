@@ -69,7 +69,7 @@ public class InventoryScreen extends Screen{
 		difficultyListModel.addAll(getGameEnvironment().getInventory());
 		
 		listInventory = new JList<ArrayList<Item>>(difficultyListModel);
-		listInventory.setCellRenderer(null);
+		listInventory.setCellRenderer(new InventoryRenderer());
 		listInventory.setVisibleRowCount(-1);
 		listInventory.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listInventory.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
