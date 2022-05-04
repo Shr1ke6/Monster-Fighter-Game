@@ -2,7 +2,7 @@ package monsterfighter.core;
 
 import java.util.List;
 
-public class Battle {
+public abstract class Battle {
 	
 	final private int points;
 	final private List<Monster> monsters;

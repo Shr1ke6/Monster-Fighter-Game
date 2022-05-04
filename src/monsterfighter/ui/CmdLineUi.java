@@ -21,6 +21,9 @@ public class CmdLineUi implements GameEnvironmentUi {
 
     // The game environment this ui interacts with 
     private GameEnvironment gameEnvironment;
+    
+    // Flag to indicate when this ui should finish
+    private boolean finish = false;
 
     // Flag to indicate when this ui should finish
     //private boolean finish = false;
@@ -55,16 +58,17 @@ public class CmdLineUi implements GameEnvironmentUi {
         final String name = getName();
         final int days = getDays();
         final Monster startingMonster = getStartingMonster();
+        final String nickname =	getMonsterNickname();
         final Difficulty difficulty = getDifficulty();
-	    gameEnvironment.onSetupFinished(name, days, startingMonster, difficulty);
+	    gameEnvironment.onSetupFinished(name, days, startingMonster, nickname, difficulty);
 	    
 	       
 	}
 
 	@Override
 	public void start() {
-		while (true) {
-			System.out.println("Day: " + gameEnvironment.getDays() + " out of " + gameEnvironment.getTotalDays() + " | Score: " + 10 );
+		while (!finish) {
+			System.out.println("Day: " + gameEnvironment.getDay() + " out of " + gameEnvironment.getTotalDays() + " | Score: " + 10 );
 			printOptions();
 			try {
 				int option = scanner.nextInt();
@@ -72,14 +76,13 @@ public class CmdLineUi implements GameEnvironmentUi {
 					handleOption(Option.values()[option]);
 				}
 			} catch (Exception e) {
-				scanner.reset();
-				scanner.next();
+				scanner.nextLine();
 			}
 		}
 	}
-		
+
 	@Override
-	public void quit() {
+	public boolean confirmQuit() {
 		while (true) {
             System.out.println("Do you really want to quit this fun game? (y/n) ");
             try {
@@ -95,6 +98,11 @@ public class CmdLineUi implements GameEnvironmentUi {
                 scanner.next();
             }
         }
+	}
+	
+	@Override
+	public void quit() {
+		finish = true;
 	}
 
 	@Override
@@ -126,7 +134,7 @@ public class CmdLineUi implements GameEnvironmentUi {
             	accessRest();
                 break;
             case QUIT:
-            	quit();
+            	gameEnvironment.onFinish();
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + option);
@@ -164,7 +172,7 @@ public class CmdLineUi implements GameEnvironmentUi {
             System.out.println("Pick how many days you would like. From 5 to 15");
             try {
             	int days = scanner.nextInt();
-            	if (days <= MAX_DAYS && days >= MIN_DAYS) {
+            	if (days <= GameEnvironment.MAX_DAYS && days >= GameEnvironment.MIN_DAYS) {
             		return days;
             	}
             } catch (Exception e) {
@@ -215,7 +223,6 @@ public class CmdLineUi implements GameEnvironmentUi {
 		System.out.println("Select an option by inputting the corresponding number");
 		int monsterID = chooseMonster("Pick a starter:", gameEnvironment.getStartingMonsters(), 0);
 		Monster startingMonster = gameEnvironment.getStartingMonsters().get(monsterID);
-        setMonsterNickname(startingMonster);
 		return startingMonster;
 	}
 	
@@ -267,16 +274,13 @@ public class CmdLineUi implements GameEnvironmentUi {
 		}
 	}
 
-	private void setMonsterNickname(Monster monster) {
+	private String getMonsterNickname() {
         while (true) {
-            System.out.println("Enter a nickname for " + monster.getName() + " or leave blank to skip");
+            System.out.println("Enter a nickname for your monster or leave blank to skip");
             try {
                 String name = scanner.nextLine();
-                if (name.matches(NAME_REGEX)) {
-                    monster.setNickname(name);
-                    break;
-                } else if (name == "") {
-                	break;
+                if (name.matches(NAME_REGEX) || name == "") {
+                   return name;
                 }
                 System.out.println(MONSTER_NAME_REQUIREMENTS);
             } catch (Exception e) {
@@ -333,7 +337,8 @@ public class CmdLineUi implements GameEnvironmentUi {
 				} else if (option == 1) {
 					switchMonsters(monsterID, "Select a monster to switch " + party.get(monsterID).getNickname() + " with:");
 				} else if (option == 2) {
-					setMonsterNickname(gameEnvironment.getParty().get(monsterID));
+					String nickname = getMonsterNickname();
+					gameEnvironment.getParty().get(monsterID).setNickname(nickname);
 				} else if (option == 3) {
 					break;
 				}
@@ -783,8 +788,8 @@ public class CmdLineUi implements GameEnvironmentUi {
 		}
 		
 	}
-		
-	
+
+
 	
 }
 	

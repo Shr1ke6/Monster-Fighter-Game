@@ -1,202 +1,244 @@
 package monsterfighter.ui.gui;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 
 import monsterfighter.core.GameEnvironment;
-import monsterfighter.core.GameEnvironment.Difficulty;
 import monsterfighter.core.Monster;
 import monsterfighter.ui.GameEnvironmentUi;
 
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.awt.event.ActionEvent;
-import javax.swing.JPanel;
+
+import java.util.Arrays;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+
 import java.awt.Color;
 import java.awt.Container;
 
-import javax.swing.JSpinner;
 import javax.swing.JList;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
-import javax.swing.JSlider;
-import javax.swing.UIManager;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EtchedBorder;
-import javax.swing.ListModel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
-public class SetupScreen{
+public class SetupScreen extends Screen{
+	
+	private JTextField fieldName;
+	private JTextField fieldMonsterNickname;
+	private JButton btnAccept;
+	private JComboBox<Integer> comboBoxDay;
+	private JList<GameEnvironment.Difficulty> listDifficulty;
+	private JList<Monster> listStartingMonster;
+	private JLabel lblNameReq;
+	private JLabel lblNicknameReq;
+	
+	public SetupScreen(GameEnvironment incomingGameEnvironment) {
+		super("Monster Fighter Set Up Screen", incomingGameEnvironment);
+	}
 
-	private JFrame frame;
-	// The input field for the name of the player
-	private JTextField textField;
-	
-	private ArrayList<GameEnvironment.Difficulty> difficulties = new ArrayList<>();
-	
-	private ArrayList<Monster> startingMonsters = new ArrayList<>();
-	
-	private GameEnvironment gameEnvironment;
-	
-	private JTextField textField_1;
-	private JTextField textField_2;
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					SetupScreen window = new SetupScreen();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+	private void setupComplete() {
+		getGameEnvironment().onSetupFinished(fieldName.getText(), comboBoxDay.getSelectedIndex() + 5, 
+				listStartingMonster.getSelectedValue(), fieldMonsterNickname.getText(), listDifficulty.getSelectedValue());
 	}
 	
-	/*
 	@Override
 	protected void initialise(Container container) {
-		// TODO Auto-generated method stub
+        
+		container.setSize(490, 675);
+        
+		addLabels(container);
+		addFieldName(container);
+		addFieldMonsterNickname(container);
+		addListDifficulty(container);
+		addComboBoxDay(container);
+		addListStartingMonsters(container);
+		addAcceptButton(container);
 		
 	}
-	*/
-
-	/**
-	 * Create the application.
-	 */
-	public SetupScreen() {
-		for (Difficulty difficulty : Difficulty.values()) {
-			difficulties.add(difficulty);
-		}
-		/*
-		for (Monster monster : gameEnvironment.getStartingMonsters()) {
-			startingMonsters.add(monster);
-		}
-		*/
-		initialize();
+	
+	private void addLabels(Container container) {
+		JLabel lblTitle = new JLabel("Welcome to Monster Fighter!");
+		lblTitle.setFont(new Font("Tahoma", Font.BOLD, 18));
+		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTitle.setBounds(99, 11, 276, 50);
+		container.add(lblTitle);
+		
+		JLabel lblAuthors = new JLabel("By sco161 & qzh78");
+		lblAuthors.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblAuthors.setBounds(184, 72, 105, 14);
+		container.add(lblAuthors);
+		
+		JLabel lblNamePrompt = new JLabel("What is your name?");
+		lblNamePrompt.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblNamePrompt.setBounds(10, 120, 109, 27);
+		container.add(lblNamePrompt);
+		
+		JLabel lblSelectDays = new JLabel("Select no. of days");
+		lblSelectDays.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblSelectDays.setBounds(10, 192, 109, 27);
+		container.add(lblSelectDays);
+		
+		lblNameReq = new JLabel(GameEnvironmentUi.NAME_REQUIREMENTS);
+		lblNameReq.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		lblNameReq.setForeground(Color.RED);
+		lblNameReq.setBounds(135, 155, 316, 14);
+		container.add(lblNameReq);
+		
+		JLabel lblDifficulty = new JLabel("Select difficulty");
+		lblDifficulty.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblDifficulty.setBounds(10, 247, 109, 27);
+		container.add(lblDifficulty);
+		
+		JLabel lblNicknamePrompt = new JLabel("Give your monster a nickname or leave blank for default name");
+		lblNicknamePrompt.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblNicknamePrompt.setBounds(10, 448, 454, 34);
+		container.add(lblNicknamePrompt);
+		
+		JLabel lblStartingMonster = new JLabel("Select starting monster");
+		lblStartingMonster.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblStartingMonster.setBounds(10, 337, 156, 27);
+		container.add(lblStartingMonster);
+		
+		lblNicknameReq = new JLabel("");
+		lblNicknameReq.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		lblNicknameReq.setForeground(Color.RED);
+		lblNicknameReq.setBounds(67, 524, 339, 14);
+		container.add(lblNicknameReq);
+		
 	}
+	
+	private void addFieldName(Container container) {
+		fieldName = new JTextField();
+		fieldName.setBounds(125, 124, 339, 20);
+		container.add(fieldName);
+		fieldName.setColumns(10);
+		
+		fieldName.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				checkCanContinue();
+			}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
-		frame = new JFrame();
-		frame.setTitle("MF Setup Screen");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(490, 675);
-		frame.setVisible(true);
-		frame.setResizable(false);
-		frame.setLocationRelativeTo(null);
-		frame.getContentPane().setLayout(null);
-		
-		JLabel titleLabel = new JLabel("Welcome to Monster Fighter!");
-		titleLabel.setFont(new Font("Tahoma", Font.BOLD, 18));
-		titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		titleLabel.setBounds(99, 11, 276, 50);
-		frame.getContentPane().add(titleLabel);
-		
-		JLabel authorsLabel = new JLabel("By sco161 & qzh78");
-		authorsLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		authorsLabel.setBounds(184, 72, 105, 14);
-		frame.getContentPane().add(authorsLabel);
-		
-		JLabel lblNewLabel_2 = new JLabel("What is your name?");
-		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblNewLabel_2.setBounds(10, 120, 109, 27);
-		frame.getContentPane().add(lblNewLabel_2);
-		
-		textField_1 = new JTextField();
-		textField_1.setBounds(125, 124, 339, 20);
-		frame.getContentPane().add(textField_1);
-		textField_1.setColumns(10);
-		
-		JLabel nameReqLabel = new JLabel(GameEnvironmentUi.NAME_REQUIREMENTS);
-		nameReqLabel.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		nameReqLabel.setForeground(Color.RED);
-		nameReqLabel.setBounds(135, 155, 316, 14);
-		frame.getContentPane().add(nameReqLabel);
-		
-		JButton btnNewButton = new JButton("Accept");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				checkCanContinue();
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				checkCanContinue();
 			}
 		});
-		btnNewButton.setBounds(359, 583, 105, 42);
-		frame.getContentPane().add(btnNewButton);
+	}
+	
+	private void addFieldMonsterNickname(Container container) {
+		fieldMonsterNickname = new JTextField();
+		fieldMonsterNickname.setBounds(10, 493, 441, 20);
+		container.add(fieldMonsterNickname);
+		fieldMonsterNickname.setColumns(10);
 		
-		JLabel lblNewLabel_2_1 = new JLabel("Select no. of days");
-		lblNewLabel_2_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblNewLabel_2_1.setBounds(10, 192, 109, 27);
-		frame.getContentPane().add(lblNewLabel_2_1);
+		fieldMonsterNickname.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				checkCanContinue();
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				checkCanContinue();
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				checkCanContinue();
+			}
+		});
+	}
+	
+	private void addComboBoxDay(Container container) {
+		comboBoxDay = new JComboBox<Integer>();
+		comboBoxDay.setMaximumRowCount(10);
+		comboBoxDay.setModel(new DefaultComboBoxModel<Integer>(new Integer[] {5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}));
+		comboBoxDay.setSelectedIndex(0);
 		
-		JComboBox<String> comboBox = new JComboBox<String>();
-		comboBox.setMaximumRowCount(10);
-		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"}));
-		comboBox.setSelectedIndex(0);
-		comboBox.setBounds(117, 195, 49, 22);
-		frame.getContentPane().add(comboBox);
+		comboBoxDay.setBounds(117, 195, 49, 22);
+		container.add(comboBoxDay);
+	}
+	
+	private void addAcceptButton(Container container) {
+		btnAccept = new JButton("Accept");
+		btnAccept.setEnabled(false);
+		btnAccept.addActionListener(e -> setupComplete());
 		
-		JLabel difficultyLabel = new JLabel("Select difficulty");
-		difficultyLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		difficultyLabel.setBounds(10, 247, 109, 27);
-		frame.getContentPane().add(difficultyLabel);
+		btnAccept.setBounds(359, 583, 105, 42);
+		container.add(btnAccept);
+	}
+	
+	private void addListDifficulty(Container container) {
 		
 		// Create a ListModel to store the items in the JList
 		DefaultListModel<GameEnvironment.Difficulty> difficultyListModel = new DefaultListModel<GameEnvironment.Difficulty>();
 		// Add the existing difficulties to the ListModel
-		difficultyListModel.addAll(difficulties);
+		difficultyListModel.addAll(Arrays.asList(GameEnvironment.Difficulty.values()));
 		
-		JList<GameEnvironment.Difficulty> difficultyList = new JList<GameEnvironment.Difficulty>(difficultyListModel);
-		difficultyList.setBackground(Color.WHITE);
-		difficultyList.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		difficultyList .setVisibleRowCount(-1);
-		difficultyList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		difficultyList.setBounds(99, 251, 365, 62);
-		frame.getContentPane().add(difficultyList);
+		listDifficulty = new JList<GameEnvironment.Difficulty>(difficultyListModel);
+		listDifficulty.setBackground(Color.WHITE);
+		listDifficulty.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		listDifficulty.setVisibleRowCount(-1);
+		listDifficulty.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
-		JLabel startingMonsterLabel = new JLabel("Select starting monster");
-		startingMonsterLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		startingMonsterLabel.setBounds(10, 337, 156, 27);
-		frame.getContentPane().add(startingMonsterLabel);
+		listDifficulty.addListSelectionListener(new ListSelectionListener() {
+			
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				checkCanContinue();
+			}
+		});
+		listDifficulty.setBounds(99, 251, 365, 62);
+		container.add(listDifficulty);
 		
-		/*
+	}
+	
+	private void addListStartingMonsters(Container container) {
+		
 		DefaultListModel<Monster> startingMonsterListModel = new DefaultListModel<Monster>();
-		// Add the existing difficulties to the ListModel
-		startingMonsterListModel.addAll(startingMonsters);
-		*/
+		// Add the existing startingMonsters to the ListModel
+		startingMonsterListModel.addAll(getGameEnvironment().getStartingMonsters());
 		
-		JList<Monster> startingMonsterList = new JList<Monster>();
-		startingMonsterList.setVisibleRowCount(-1);
-		startingMonsterList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		startingMonsterList.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		startingMonsterList.setBackground(Color.WHITE);
-		startingMonsterList.setBounds(10, 375, 454, 62);
-		frame.getContentPane().add(startingMonsterList);
+		listStartingMonster = new JList<Monster>(startingMonsterListModel);
+		listStartingMonster.setVisibleRowCount(-1);
+		listStartingMonster.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		listStartingMonster.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		listStartingMonster.setBackground(Color.WHITE);
 		
-		JLabel lblNewLabel = new JLabel("Give your monster a nickname or leave blank for default name");
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblNewLabel.setBounds(10, 448, 454, 34);
-		frame.getContentPane().add(lblNewLabel);
+		listStartingMonster.addListSelectionListener(new ListSelectionListener() {
+			
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				checkCanContinue();
+			}
+		});
 		
-		textField_2 = new JTextField();
-		textField_2.setBounds(10, 493, 441, 20);
-		frame.getContentPane().add(textField_2);
-		textField_2.setColumns(10);
+		listStartingMonster.setBounds(10, 375, 454, 62);
+		container.add(listStartingMonster);
+	}
+	
+	private void checkCanContinue() {
+		boolean validName = fieldName.getText().matches(GameEnvironmentUi.NAME_REGEX);
+		boolean validMonsterNickname = fieldMonsterNickname.getText().matches(GameEnvironmentUi.NAME_REGEX) || fieldMonsterNickname.getText().isEmpty();
+
+		// Hide the name requirements text if the input is valid
+		lblNameReq.setText(validName ? null : GameEnvironmentUi.NAME_REQUIREMENTS);
 		
-		JLabel nicknameReqLabel = new JLabel(GameEnvironmentUi.MONSTER_NAME_REQUIREMENTS);
-		nicknameReqLabel.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		nicknameReqLabel.setForeground(Color.RED);
-		nicknameReqLabel.setBounds(67, 524, 339, 14);
-		frame.getContentPane().add(nicknameReqLabel);
+		lblNicknameReq.setText(validMonsterNickname ? null : GameEnvironmentUi.MONSTER_NAME_REQUIREMENTS);
+
+		btnAccept.setEnabled(validName && !listDifficulty.isSelectionEmpty() && !listStartingMonster.isSelectionEmpty());
 	}
 
 

@@ -6,12 +6,27 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import monsterfighter.ui.gui.Gui;
+import monsterfighter.ui.gui.MainScreen;
+import monsterfighter.ui.gui.SetupScreen;
+
+
 import monsterfighter.ui.GameEnvironmentUi;
 
 public class GameEnvironment {
 
     // The user interface to be used by this manager
 	private final GameEnvironmentUi ui;
+	
+	/**
+	 * The maximum number of days that a game can last.
+	 */
+	public static final int MAX_DAYS = 15;
+   
+   /**
+	* The minimum number of days that a game can last.
+	*/
+   	public static final int MIN_DAYS = 5;
 	
 	// The list of all {@link Monster}s
 	private final List<Monster> allMonsters;
@@ -45,7 +60,10 @@ public class GameEnvironment {
 	private Difficulty difficulty;
 	
 	// The users gold
-	private int goldBalance = 1000;
+	private int goldBalance = 0;
+	
+	// The total gold the user earned over the course of the game
+	private int totalGold = 0;
 	
 	// The users points
 	private int points = 0;
@@ -71,8 +89,8 @@ public class GameEnvironment {
 	
 	// Enum that stores the difficulty options for the game 
     public enum Difficulty {
-	    EASY(100, 50, 0,"Easy"),
-	    MEDIUM(75, 25, 50, "Medium"),
+	    EASY(200, 50, 0,"Easy"),
+	    MEDIUM(100, 25, 50, "Medium"),
 	    HARD(50, 0, 100, "Hard");
 
 	    private final String name;
@@ -94,13 +112,7 @@ public class GameEnvironment {
 		}
 	}
 
-	/**
-	 * Creates a RocketManager with the given user interface and rockets.
-	 *
-	 * @param ui The user interface that this manager should use
-	 * @param rockets The list of available rockets that the user can choose from when
-	 *                configuring this manager
-	 */
+    //rm
 	public GameEnvironment(GameEnvironmentUi ui, List<Monster> monsters, List<Item> items) {
 		this.ui = ui;
 		this.allMonsters = monsters;
@@ -129,23 +141,38 @@ public class GameEnvironment {
 	
 
 	
-
+	//rm
 	public void start() {
 		ui.setup(this);
 	}
 	
-	
-
-	public void onSetupFinished(String name, int totalDays, Monster startingMonster, Difficulty difficulty) {
+	//rm
+	public void onSetupFinished(String name, int totalDays, Monster startingMonster, String nickname, Difficulty difficulty) {
 		this.name = name;
 		this.totalDays = totalDays;
 		this.party.add(startingMonster);
+		startingMonster.setNickname(nickname);
 		this.difficulty = difficulty;
-		this.goldBalance += difficulty.startingGold;
+		goldBalance += difficulty.startingGold;
+		this.totalGold += goldBalance;
 		fillShop();
 		fillBattles();
 		ui.start();
 	}
+	
+	public void transitionScreen(String option) {
+		if (ui instanceof Gui) {
+			((Gui) ui).transitionScreen(option);
+		}
+	}
+	
+	//rm
+	public void onFinish() {
+		if (ui.confirmQuit()) {
+			ui.quit();
+		}
+	}
+		
 	
 
 	public String getName() {
@@ -156,7 +183,7 @@ public class GameEnvironment {
 		return totalDays;
 	}
 	
-	public int getDays() {
+	public int getDay() {
 		return day;
 	}
 	
@@ -166,6 +193,10 @@ public class GameEnvironment {
 
 	public int getGoldBalance() {
 		return goldBalance;
+	}
+	
+	public int getTotalGold() {
+		return totalGold;
 	}
 	
 	public int getPoints() {
@@ -323,6 +354,7 @@ public class GameEnvironment {
 	public void sellItem(int itemID) {
 		Item item = inventory.get(itemID).get(0);
 		goldBalance += item.getSellPrice();
+		totalGold += item.getSellPrice();
 		inventory.get(itemID).remove(0);
 	}
 	
@@ -334,6 +366,7 @@ public class GameEnvironment {
 	public void sellMonster(int monsterID) {
 		Monster monster = party.get(monsterID);
 		goldBalance += monster.getSellPrice();
+		totalGold += monster.getSellPrice();
 		party.remove(monsterID);
 	}
 
@@ -539,12 +572,14 @@ public class GameEnvironment {
 			} else if (opponent instanceof TrainerBattle) {
 				TrainerBattle trainerOpponent = (TrainerBattle) opponent;
 				goldBalance += trainerOpponent.getGold();
+				totalGold += trainerOpponent.getGold();
 			}
 			for (Monster monster: party) {
 				monster.addWin(1);
 			}
 		}
 	}
+	
 }
 
 	

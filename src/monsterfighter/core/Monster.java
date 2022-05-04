@@ -154,7 +154,9 @@ public class Monster implements Purchasable{
 	}
 
 	public void setNickname(String nickname) {
-		this.nickname = nickname;
+		if (nickname != "") {
+			this.nickname = nickname;
+		}
 	}
 	
 	public void setMaxHealth(int healthBuff) {
