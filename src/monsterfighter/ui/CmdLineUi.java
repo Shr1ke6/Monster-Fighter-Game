@@ -755,6 +755,7 @@ public class CmdLineUi implements GameEnvironmentUi {
                 		partyCopy.add(new Monster(monster));
                 	}
                 	gameEnvironment.nextDay();
+                	endOfTheWorld();
                 	printChanges(partyCopy);
                 	break;
                 } else if (input.matches("[nN]")) {
@@ -789,6 +790,16 @@ public class CmdLineUi implements GameEnvironmentUi {
 		
 	}
 
+	
+	public void endOfTheWorld() {
+		gameEnvironment.getDay();
+		gameEnvironment.getTotalDays();
+		if (gameEnvironment.getDay() == gameEnvironment.getTotalDays()) {
+			System.out.print("You reach the max amount of days therefore the game ends, during that time you, " + gameEnvironment.getName() + " has achieved:" + gameEnvironment.getPoints() + " points.");
+			System.exit(0);
+		}
+	}
+   
 
 	
 }
