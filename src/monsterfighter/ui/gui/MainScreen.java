@@ -1,8 +1,6 @@
 package monsterfighter.ui.gui;
 
 
-
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 
@@ -13,6 +11,8 @@ import javax.swing.JButton;
 
 import java.awt.Container;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class MainScreen extends Screen{
 	
@@ -55,32 +55,37 @@ public class MainScreen extends Screen{
 		JButton btnBattle = new JButton("Battle");
 		btnBattle.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnBattle.setBounds(165, 128, 143, 73);
-		btnBattle.addActionListener(e -> getGameEnvironment().transitionScreen("BATTLE_SELECT"));
+		btnBattle.addActionListener(e -> getGameEnvironment().transitionScreen("BATTLE_SELECT", "MAIN_MENU"));
 		container.add(btnBattle);
 
 		JButton btnShop = new JButton("Shop");
 		btnShop.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnShop.setBounds(165, 212, 143, 73);
-		btnShop.addActionListener(e -> getGameEnvironment().transitionScreen("SHOP"));
+		btnShop.addActionListener(e -> getGameEnvironment().transitionScreen("SHOP", "MAIN_MENU"));
 		container.add(btnShop);
 
 		JButton btnViewParty = new JButton("View Party");
 		btnViewParty.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnViewParty.setBounds(165, 295, 143, 73);
-		btnViewParty.addActionListener(e -> getGameEnvironment().transitionScreen("PARTY"));
+		btnViewParty.addActionListener(e -> getGameEnvironment().transitionScreen("PARTY", "MAIN_MENU"));
 		container.add(btnViewParty);
 
 		JButton btnInventory = new JButton("Inventory");
 		btnInventory.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnInventory.setBounds(165, 378, 143, 73);
-		btnInventory.addActionListener(e -> getGameEnvironment().transitionScreen("INVENTORY"));
+		btnInventory.addActionListener(e -> getGameEnvironment().transitionScreen("INVENTORY", "MAIN_MENU"));
 		container.add(btnInventory);
 
 		JButton btnRest = new JButton("Rest");
 		btnRest.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnRest.setBounds(165, 462, 143, 73);
-		btnRest.addActionListener(e -> getGameEnvironment().nextDay());
-		btnRest.addActionListener(e -> lblDay.setText("Day: " + getGameEnvironment().getDay() + "/" + getGameEnvironment().getTotalDays()));
+		btnRest.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e){
+				getGameEnvironment().nextDay();
+				lblDay.setText("Day: " + getGameEnvironment().getDay() + " / " + getGameEnvironment().getTotalDays());
+			}
+		});
 		container.add(btnRest);
 
 		JButton btnQuit = new JButton("Quit");

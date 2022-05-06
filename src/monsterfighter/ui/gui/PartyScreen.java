@@ -7,96 +7,131 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.ListSelectionModel;
-import javax.swing.border.EtchedBorder;
+import javax.swing.JToggleButton;
 
 import monsterfighter.core.GameEnvironment;
 import monsterfighter.core.Monster;
 
 public class PartyScreen extends Screen{
-
-
-	protected PartyScreen(GameEnvironment gameEnvironment) {
+	
+	private String backButtonRoute;
+	private String txtMonsterOne = "";
+	private String txtMonsterTwo = "";
+	private String txtMonsterThree = "";
+	private String txtMonsterFour = "";
+	private ButtonGroup buttonsMonsterOptions;
+	
+	protected PartyScreen(GameEnvironment gameEnvironment, String back) {
 		super("Monster Fighter Party", gameEnvironment);
-		// TODO Auto-generated constructor stub
+		backButtonRoute = back;
 	}
 	
 	@Override
 	protected void initialise(Container container) {
-		// TODO Auto-generated method stub
-		initialize(container);
+		container.setSize(550, 450);
+		
+		addlabels(container);
+		addMonsterBtns(container);
+		addOptionBtns(container);
 	}
 
-	/**
-	 * Initialize the contents of the container.
-	 */
-	private void initialize(Container container) {
-		container.setSize(550, 450);
-
+	private void addlabels(Container container) {
+		
 		JLabel partyLabel = new JLabel("Party");
 		partyLabel.setFont(new Font("Tahoma", Font.BOLD, 18));
 		partyLabel.setBounds(21, 11, 168, 43);
 		container.add(partyLabel);
+			
+		JLabel lblSlotFourOne = new JLabel("Slot 1");
+		lblSlotFourOne.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblSlotFourOne.setBounds(79, 58, 46, 14);
+		container.add(lblSlotFourOne);
 		
-		JButton btnBack = new JButton("Back");
-		btnBack.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnBack.setBounds(10, 358, 105, 42);
-		container.add(btnBack);
+		JLabel lblSlotFourTwo = new JLabel("Slot 2");
+		lblSlotFourTwo.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblSlotFourTwo.setBounds(296, 58, 46, 14);
+		container.add(lblSlotFourTwo);
 		
-		JButton btnUseItem = new JButton("Nickname");
-		btnUseItem.setBounds(419, 358, 105, 42);
-		container.add(btnUseItem);
+		JLabel lblSlotFourThree = new JLabel("Slot 3");
+		lblSlotFourThree.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblSlotFourThree.setBounds(79, 204, 46, 14);
+		container.add(lblSlotFourThree);
 		
-		JButton btnMonsterOne = new JButton("Monster1");
+		JLabel lblSlotFour = new JLabel("Slot 4");
+		lblSlotFour.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblSlotFour.setBounds(296, 204, 46, 14);
+		container.add(lblSlotFour);
+	}
+	
+
+	private void addMonsterBtns(Container container) {
+
+		if (getGameEnvironment().getParty().size()>=1) {
+			txtMonsterOne = getGameEnvironment().getParty().get(0).getNickname();
+		}
+		JToggleButton btnMonsterOne = new JToggleButton(txtMonsterOne);
+		if (txtMonsterOne==null) {
+			btnMonsterOne.setEnabled(false);
+		}
 		btnMonsterOne.setBounds(69, 83, 182, 106);
 		container.add(btnMonsterOne);
 		
-		JButton btnMonsterTwo = new JButton("Monster2");
+		if (getGameEnvironment().getParty().size()>=2) {
+			txtMonsterTwo = getGameEnvironment().getParty().get(1).getNickname();
+		}
+		JToggleButton btnMonsterTwo = new JToggleButton(txtMonsterTwo);
+		if (txtMonsterTwo==null) {
+			btnMonsterTwo.setEnabled(false);
+		}
 		btnMonsterTwo.setBounds(282, 83, 182, 106);
 		container.add(btnMonsterTwo);
 		
-		JButton btnMonsterThree = new JButton("Monster3");
-		btnMonsterThree.setBounds(282, 229, 182, 106);
+		if (getGameEnvironment().getParty().size()>=3) {
+			txtMonsterThree = getGameEnvironment().getParty().get(2).getNickname();
+		}
+		JToggleButton btnMonsterThree = new JToggleButton(txtMonsterThree);
+		if (txtMonsterThree==null) {
+			btnMonsterThree.setEnabled(false);
+		}
+		btnMonsterThree.setBounds(69, 229, 182, 106);
 		container.add(btnMonsterThree);
 		
-		JButton btnMonsterFour = new JButton("Monster4");
-		btnMonsterFour.setBounds(69, 229, 182, 106);
+		if (getGameEnvironment().getParty().size()==4) {
+			txtMonsterFour = getGameEnvironment().getParty().get(3).getNickname();
+		}
+		JToggleButton btnMonsterFour = new JToggleButton(txtMonsterFour);
+		if (txtMonsterFour==null) {
+			btnMonsterFour.setEnabled(false);
+		}
+		btnMonsterFour.setBounds(282, 229, 182, 106);
 		container.add(btnMonsterFour);
+	}
+	
+	private void addOptionBtns(Container container) {
 		
-		JLabel slot1Label = new JLabel("Slot 1");
-		slot1Label.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		slot1Label.setBounds(79, 58, 46, 14);
-		container.add(slot1Label);
+		JButton btnBack = new JButton("Back");
+		btnBack.addActionListener(e -> getGameEnvironment().transitionScreen(backButtonRoute, "PARTY_SCREEN"));
+		btnBack.setBounds(10, 358, 105, 42);
+		container.add(btnBack);
 		
-		JLabel lblSlot_1 = new JLabel("Slot 2");
-		lblSlot_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblSlot_1.setBounds(296, 58, 46, 14);
-		container.add(lblSlot_1);
+		JButton btnNickname = new JButton("Nickname");
+		btnNickname.setBounds(304, 358, 105, 42);
+		container.add(btnNickname);
 		
-		JLabel slot2Label = new JLabel("Slot 3");
-		slot2Label.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		slot2Label.setBounds(79, 204, 46, 14);
-		container.add(slot2Label);
-		
-		JLabel lblSlot = new JLabel("Slot 4");
-		lblSlot.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblSlot.setBounds(296, 204, 46, 14);
-		container.add(lblSlot);
-		
-		JButton btnUseItem_1 = new JButton("Use Item");
-		btnUseItem_1.setBounds(304, 358, 105, 42);
-		container.add(btnUseItem_1);
+		JButton btnUseItem = new JButton("Use Item");
+		btnUseItem.setBounds(189, 358, 105, 42);
+		container.add(btnUseItem);
 		
 		JButton btnSwitchMonsters = new JButton("Switch ");
-		btnSwitchMonsters.setBounds(189, 358, 105, 42);
+		btnSwitchMonsters.setBounds(419, 358, 105, 42);
 		container.add(btnSwitchMonsters);
 	}
+	
+	private void buttonEnable() {
 
+	}
 
 }

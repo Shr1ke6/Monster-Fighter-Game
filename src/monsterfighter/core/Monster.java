@@ -154,7 +154,7 @@ public class Monster implements Purchasable{
 	}
 
 	public void setNickname(String nickname) {
-		if (nickname != "") {
+		if (nickname.length() > 0) {
 			this.nickname = nickname;
 		}
 	}
@@ -208,6 +208,18 @@ public class Monster implements Purchasable{
 	}
 	
 	@Override
+	public String buyDescription() {
+		String description = "[Buy Price: " + buyPrice + "] " + basicDescription();
+		return description;
+	}
+
+	@Override
+	public String sellDescription() {
+		String description = "[Sell Price: " + sellPrice + "] " + basicDescription();
+		return description;
+	}
+	
+	@Override
 	public String toString() {
 		String description = "Nickname: " + nickname + " Monster: " + name + " Type: " + type.value + " Health: " + currentHealth + "/" + maxHealth + " Attack: " + attack;
 		if (status.name == "Fainted") {
@@ -215,5 +227,7 @@ public class Monster implements Purchasable{
 		}
 		return description;
 	}
+
+
 
 }

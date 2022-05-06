@@ -54,27 +54,27 @@ public class Gui implements GameEnvironmentUi{
         screen.quit();
     }
     
-    public void transitionScreen(String name) {
+    public void transitionScreen(String name, String back) {
     	Option option = Option.valueOf(name);
     	screen.quit();
     	 switch (option) {
-	         case MAIN_MENU:
-	        	 screen = new MainScreen(gameEnvironment);
-	             break;
+    	 	 case MAIN_MENU:
+    	 		 screen = new MainScreen(gameEnvironment);
+    	 		 break;
 	         case SHOP:
-	        	 screen = new ShopScreen(gameEnvironment);
+	        	 screen = new ShopScreen(gameEnvironment, back);
 	             break;
 	         case INVENTORY:
-	        	 screen = new InventoryScreen(gameEnvironment);
+	        	 screen = new InventoryScreen(gameEnvironment, back);
 	             break;
 	         case PARTY:
-		         screen = new PartyScreen(gameEnvironment);
+		         screen = new PartyScreen(gameEnvironment, back);
 		         break;
 	         case BATTLE:
-	        	 screen = new BattleScreen(gameEnvironment);
+	        	 screen = new BattleScreen(gameEnvironment, back);
 		         break;
 	         case BATTLE_SELECT:
-	        	 screen = new BattleSelectionScreen(gameEnvironment);
+	        	 screen = new BattleSelectionScreen(gameEnvironment, back);
 		         break;
 	         case GAME_OVER:
 	        	 screen = new GameOverScreen(gameEnvironment);

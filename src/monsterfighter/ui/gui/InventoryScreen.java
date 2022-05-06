@@ -22,9 +22,11 @@ import javax.swing.ListSelectionModel;
 public class InventoryScreen extends Screen{
 
 	private JList<ArrayList<Item>> listInventory;
+	private String backButtonRoute;
 
-	protected InventoryScreen(GameEnvironment gameEnvironment) {
+	protected InventoryScreen(GameEnvironment gameEnvironment, String back) {
 		super("Monster Fighter Inventory", gameEnvironment);
+		backButtonRoute = back;
 	}
 	
 	@Override
@@ -57,7 +59,7 @@ public class InventoryScreen extends Screen{
 		container.add(btnUseItem);
 		
 		JButton btnBack = new JButton("Back");
-		btnBack.addActionListener(e -> getGameEnvironment().transitionScreen("MAIN_MENU"));
+		btnBack.addActionListener(e -> getGameEnvironment().transitionScreen(backButtonRoute, "INVENTORY"));
 		btnBack.setBounds(10, 358, 105, 42);
 		container.add(btnBack);
 	}

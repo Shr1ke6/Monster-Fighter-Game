@@ -87,12 +87,7 @@ public class CmdLineUi implements GameEnvironmentUi {
             System.out.println("Do you really want to quit this fun game? (y/n) ");
             try {
                 String input = scanner.next();
-                if (input.matches("[yY]")) {
-                	System.exit(0);
-                } else if (input.matches("[nN]")) {
-                	start();
-                }
-          
+                return input.equalsIgnoreCase("y");
             } catch (Exception e) {
                 // Discard the unacceptable input
                 scanner.next();
@@ -551,7 +546,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 	public void printShopInventory(String message, List<ArrayList<Purchasable>> shop) {
 		System.out.println(message);
 		for (int i = 0; i < shop.size(); i++) {
-			System.out.println("(" + i + ") " + shop.get(i).size() + "x " + shop.get(i).get(0).shopDescription());
+			System.out.println("(" + i + ") " + shop.get(i).size() + "x " + shop.get(i).get(0).buyDescription());
 		}
 		System.out.println("\n(" + shop.size() + ") Back" );
 	}
@@ -574,7 +569,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 						showError("No more wild battles! Come back tomorrow for new battles\n");
 					}
 				} else if (option == 1) {
-					if (wildBattles.size() > 0) {
+					if (trainerBattles.size() > 0) {
 						chooseBattle(trainerBattles, option);
 					} else {
 						showError("No more trainer battles! Come back tomorrow for new battles\n");
@@ -596,10 +591,6 @@ public class CmdLineUi implements GameEnvironmentUi {
 				try {
 					int battleID = scanner.nextInt();
 					scanner.nextLine();
-					if (gameEnvironment.partyFainted()) {
-						showError("All your monsters have fainted and thus are unable to battle!\n");
-						break;
-					}
 					if (battleID >= 0 && battleID < battles.size()) {
 						// battleType == 0 for wild battle
 						startBattle(battles.get(battleID), battleID);
@@ -615,10 +606,6 @@ public class CmdLineUi implements GameEnvironmentUi {
 				try {
 					int battleID = scanner.nextInt();
 					scanner.nextLine();
-					if (gameEnvironment.partyFainted()) {
-						showError("All your monsters have fainted and thus are unable to battle!\n");
-						break;
-					}
 					if (battleID >= 0 && battleID < battles.size()) {
 						startBattle(battles.get(battleID), battleID);
 					} else if (battleID == battles.size()) {
@@ -645,24 +632,21 @@ public class CmdLineUi implements GameEnvironmentUi {
 		List<Monster> party = gameEnvironment.getParty();
 		List<ArrayList<Item>> inventory = gameEnvironment.getInventory();
 		boolean battleRunning = gameEnvironment.getBattleRunning();
-		do {
-			if (party.get(0).getStatus().equals(Monster.Status.FAINTED)) {
-				switchMonsters(0, "Select a monster to send into battle");
-			} else {
-				 runBattle(battle, battleID, party, inventory, battleRunning);
-			}
-		} while(battleRunning);
-		
+		if (battleRunning) {
+			runBattle(battle, battleID, party, inventory, battleRunning);
+		}
 	}
 	
 	private void runBattle(Battle battle, int battleID, List<Monster> party, List<ArrayList<Item>> inventory, boolean battleRunning) {
 	System.out.println("Go " + party.get(0).getNickname() + "!\n");
 		do {
+			if (party.get(0).getStatus().equals(Monster.Status.FAINTED)) {
+				System.out.println(party.get(0).getName() + " fainted!");
+			}
 			while (party.get(0).getStatus().equals(Monster.Status.FAINTED)) {
 				Monster monster = new Monster(party.get(0));
-				System.out.println(party.get(0).getName() + " fainted!");
 				switchMonsters(0, "Select a monster to switch into battle");
-				if (!monster.equals(party.get(0))) {
+				if (!monster.sameMonster(party.get(0))) {
 					System.out.println("Go get 'em " + monster.getNickname());
 				}
 			}
@@ -796,7 +780,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 		gameEnvironment.getTotalDays();
 		if (gameEnvironment.getDay() == gameEnvironment.getTotalDays()) {
 			System.out.print("You reach the max amount of days therefore the game ends, during that time you, " + gameEnvironment.getName() + " has achieved:" + gameEnvironment.getPoints() + " points.");
-			System.exit(0);
+			quit();
 		}
 	}
    

@@ -17,7 +17,7 @@ public class BattleScreen extends Screen{
 
 
 
-	protected BattleScreen(GameEnvironment gameEnvironment) {
+	protected BattleScreen(GameEnvironment gameEnvironment, String back) {
 		super("Monster Fighter Battle", gameEnvironment);
 	}
 	

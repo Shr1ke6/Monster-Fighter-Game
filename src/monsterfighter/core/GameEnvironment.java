@@ -160,9 +160,9 @@ public class GameEnvironment {
 		ui.start();
 	}
 	
-	public void transitionScreen(String option) {
+	public void transitionScreen(String option, String back) {
 		if (ui instanceof Gui) {
-			((Gui) ui).transitionScreen(option);
+			((Gui) ui).transitionScreen(option, back);
 		}
 	}
 	
@@ -404,7 +404,7 @@ public class GameEnvironment {
 				}
 			} else {
 				int randomNumber = rng.nextInt(allMonstersCopy.size());
-				Monster monster = new Monster(allMonsters.get(randomNumber));
+				Monster monster = new Monster(allMonstersCopy.get(randomNumber));
 				shop.get(i).add(scaleMonster(monster, day - 1));
 				allMonstersCopy.remove(randomNumber);
 			}
@@ -535,7 +535,22 @@ public class GameEnvironment {
 	}
 	
 	public void startBattle() {
-		battleRunning = true;
+		try {
+			if (party.size() == 0 || partyFainted()) {
+				throw new IllegalStateException("No available monsters to battle");
+			}
+			int i = 0;
+			for (Monster monster: party) {
+				if (monster.getStatus().equals(Monster.Status.CONSCIOUS)) {
+					Collections.swap(party, 0, i);
+					i++;
+					break;
+				}
+			}
+			battleRunning = true;
+		} catch (IllegalStateException e) {
+			ui.showError(e.getMessage());
+		}
 	}
 	
 	public void manageBattle(Battle opponent, int battleID) {
