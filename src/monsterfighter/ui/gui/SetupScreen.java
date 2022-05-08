@@ -39,7 +39,7 @@ public class SetupScreen extends Screen{
 	private JLabel lblNicknameReq;
 	
 	public SetupScreen(GameEnvironment incomingGameEnvironment) {
-		super("Monster Fighter Set Up Screen", incomingGameEnvironment);
+		super("Monster Fighter Set Up Screen", incomingGameEnvironment, null);
 	}
 
 	private void setupComplete() {

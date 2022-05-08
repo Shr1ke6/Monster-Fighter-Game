@@ -16,7 +16,7 @@ public class GameOverScreen extends Screen{
 	 * Create the application.
 	 */
 	public GameOverScreen(GameEnvironment gameEnvironment) {
-		super("Game Over Screen", gameEnvironment);
+		super("Game Over Screen", gameEnvironment, null);
 	}
 	
 	@Override

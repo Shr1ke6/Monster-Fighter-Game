@@ -9,6 +9,8 @@ public class Gui implements GameEnvironmentUi{
 	
 	private Screen screen;
 	
+	private Screen prevScreen;
+	
     private enum Option {
     	MAIN_MENU("Main Menu"),
         SHOP("Shop"),
@@ -54,35 +56,45 @@ public class Gui implements GameEnvironmentUi{
         screen.quit();
     }
     
-    public void transitionScreen(String name, String back) {
+    public void transitionScreen(String name, String back, boolean screenClose) {
     	Option option = Option.valueOf(name);
     	screen.quit();
-    	 switch (option) {
-    	 	 case MAIN_MENU:
-    	 		 screen = new MainScreen(gameEnvironment);
-    	 		 break;
-	         case SHOP:
-	        	 screen = new ShopScreen(gameEnvironment, back);
-	             break;
-	         case INVENTORY:
-	        	 screen = new InventoryScreen(gameEnvironment, back);
-	             break;
-	         case PARTY:
-		         screen = new PartyScreen(gameEnvironment, back);
-		         break;
-	         case BATTLE:
-	        	 screen = new BattleScreen(gameEnvironment, back);
-		         break;
-	         case BATTLE_SELECT:
-	        	 screen = new BattleSelectionScreen(gameEnvironment, back);
-		         break;
-	         case GAME_OVER:
-	        	 screen = new GameOverScreen(gameEnvironment);
-		         break;  
-	         default:
-	        	 throw new IllegalStateException("Unexpected value: " + option);
-    	 }
-    	 screen.show();
+    	switch (option) {
+    	 	case MAIN_MENU:
+    	 		screen = new MainScreen(gameEnvironment);
+    	 		break;
+	        case SHOP:
+	        	screen = new ShopScreen(gameEnvironment, back);
+	            break;
+	        case INVENTORY:
+	        	screen = new InventoryScreen(gameEnvironment, back);
+	            break;
+	        case PARTY:
+	        	screen = new PartyScreen(gameEnvironment, back);
+		        break;
+	        case BATTLE:
+	        	screen = new BattleScreen(gameEnvironment, back);
+		        break;
+	        case BATTLE_SELECT:
+	        	screen = new BattleSelectionScreen(gameEnvironment, back);
+		        break;
+	        case GAME_OVER:
+	        	screen = new GameOverScreen(gameEnvironment);
+		        break;  
+	        default:
+	        	throw new IllegalStateException("Unexpected value: " + option);
+    	}
+    	screen.show(); 
     }
-
+    /*
+	if (screenClose) {
+		screen.quit();
+	} else {
+		prevScreen = screen;
+	}
+	if (prevScreen!=null && screenClose) {
+		screen = prevScreen;
+		prevScreen=null;
+	} else {
+	*/
 }

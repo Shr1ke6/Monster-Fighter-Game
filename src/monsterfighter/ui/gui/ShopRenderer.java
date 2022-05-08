@@ -22,7 +22,8 @@ public class ShopRenderer implements ListCellRenderer<ArrayList<Purchasable>>{
 	@Override
 	public Component getListCellRendererComponent(JList<? extends ArrayList<Purchasable>> list,
 			ArrayList<Purchasable> value, int index, boolean isSelected, boolean cellHasFocus) {
-        label.setText("[" + value.size() + "] " + value.get(0).buyDescription());
+		
+		label.setText("[" + value.size() + "] " + value.get(0).buyDescription());
 
         if (isSelected) {
             label.setBackground(list.getSelectionBackground());

@@ -32,16 +32,16 @@ import javax.swing.JComboBox;
 
 public class ShopScreen extends Screen{
 
-	private String backButtonRoute;
 	private JComboBox<Integer> comboBoxNumItems;
 	private JList<ArrayList<Purchasable>> listShop;
 	private JLabel lblBuyAmount;
 	private JButton btnBuy;
 	private JLabel lblPrice;
+	private JLabel lblGold;
+	private DefaultListModel<ArrayList<Purchasable>> listShopModel;
 
-	protected ShopScreen(GameEnvironment gameEnvironment, String back) {
-		super("Monster Fighter Shop", gameEnvironment);
-		backButtonRoute = back;
+	protected ShopScreen(GameEnvironment gameEnvironment, String backButtonRoute) {
+		super("Monster Fighter Shop", gameEnvironment, backButtonRoute);
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class ShopScreen extends Screen{
 		lblSell.setBounds(255, 11, 39, 43);
 		container.add(lblSell);
 		
-		JLabel lblGold = new JLabel("Gold: " + getGameEnvironment().getGoldBalance());
+		lblGold = new JLabel("Gold: " + getGameEnvironment().getGoldBalance());
 		lblGold.setFont(new Font("Tahoma", Font.BOLD, 18));
 		lblGold.setBounds(21, 48, 225, 43);
 		container.add(lblGold);
@@ -88,32 +88,55 @@ public class ShopScreen extends Screen{
 	
 	private void addButtons(Container container) {
 		JButton btnBack = new JButton("Back");
-		btnBack.addActionListener(e -> getGameEnvironment().transitionScreen(backButtonRoute, "SHOP"));
+		btnBack.addActionListener(e -> getGameEnvironment().transitionScreen(getBackButtonRoute(), "SHOP", true));
 		btnBack.setBounds(10, 358, 105, 42);
 		container.add(btnBack);
 		
 		btnBuy = new JButton("Buy");
+		btnBuy.addActionListener(e -> {
+				int shopSize = getGameEnvironment().getShop().size();
+				for (int i = 0; i < (int)comboBoxNumItems.getSelectedItem(); i++) {
+					getGameEnvironment().purchase(listShop.getSelectedValue().get(0));
+				}
+				lblGold.setText("Gold: " + getGameEnvironment().getGoldBalance());
+				if (shopSize != getGameEnvironment().getShop().size()) {
+					listShop.clearSelection();
+					listShopModel.removeAllElements();
+					listShopModel.addAll(getGameEnvironment().getShop());
+				}
+				getParentComponent().repaint();
+				
+		});
 		btnBuy.setEnabled(false);
 		btnBuy.setBounds(419, 358, 105, 42);
 		container.add(btnBuy);
 		
-		JButton btnItem = new JButton("Item");
-		btnItem.setBounds(419, 11, 105, 42);
-		container.add(btnItem);
+		JButton btnSellItem = new JButton("Item");
+		btnSellItem.addActionListener(e -> getGameEnvironment().transitionScreen("INVENTORY", "SHOP", true));
+		btnSellItem.setBounds(419, 11, 105, 42);
+		container.add(btnSellItem);
 		
-		JButton btnMonster = new JButton("Monster");
-		btnMonster.setBounds(304, 11, 105, 42);
-		container.add(btnMonster);
+		JButton btnSellMonster = new JButton("Monster");
+		btnSellMonster.addActionListener(e -> getGameEnvironment().transitionScreen("PARTY", "SHOP", true));
+		btnSellMonster.setBounds(304, 11, 105, 42);
+		container.add(btnSellMonster);
 	}
 	
 	private void addComboBox(Container container) {
 		comboBoxNumItems = new JComboBox<Integer>();
-		comboBoxNumItems.setToolTipText("");
 		comboBoxNumItems.setVisible(false);
 		comboBoxNumItems.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				lblPrice.setText("Price: " + (listShop.getSelectedValue().get(0).getBuyPrice() * (Integer)comboBoxNumItems.getSelectedItem()));
+				if (comboBoxNumItems.getSelectedItem()!=null) {
+					int totalPrice = listShop.getSelectedValue().get(0).getBuyPrice() * (int)comboBoxNumItems.getSelectedItem();
+					lblPrice.setText("Price: " + totalPrice);
+					if (getGameEnvironment().getGoldBalance() < totalPrice) {
+						btnBuy.setEnabled(false);
+					} else {
+						btnBuy.setEnabled(true);
+					}
+				}
 			}
 		});
 	
@@ -124,8 +147,9 @@ public class ShopScreen extends Screen{
 	
 	private void addListShop(Container container) {
 
-		DefaultListModel<ArrayList<Purchasable>> listShopModel = new DefaultListModel<ArrayList<Purchasable>>();
+		listShopModel = new DefaultListModel<ArrayList<Purchasable>>();
 		// Add the existing difficulties to the ListModel
+		
 		listShopModel.addAll(getGameEnvironment().getShop());
 		
 		listShop = new JList<ArrayList<Purchasable>>(listShopModel);
@@ -138,16 +162,7 @@ public class ShopScreen extends Screen{
 			
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				lblBuyAmount.setVisible(true);
-				comboBoxNumItems.setVisible(true);
-				/*
-				List<Integer> range = IntStream.rangeClosed(0, listShop.getSelectedValue().size())
-					    .boxed().collect(Collectors.toList());
-				comboBoxNumItems.setModel((ComboBoxModel<Integer>) range);
-				*/
-				lblPrice.setVisible(true);
-				lblPrice.setText("Price: " + listShop.getSelectedValue().get(0).getBuyPrice());
-				btnBuy.setEnabled(true);
+				checkCanBuy();
 			}
 		});
 
@@ -156,6 +171,21 @@ public class ShopScreen extends Screen{
 		
 	}
 		
+	private void checkCanBuy() {
+		
+		comboBoxNumItems.setVisible(listShop.getSelectedValue()!=null);
+		if (listShop.getSelectedValue()!=null) {
+			comboBoxNumItems.removeAllItems();
+			for (int i = 1; i <= listShop.getSelectedValue().size(); i++) {
+				comboBoxNumItems.addItem(i);
+			}
+			comboBoxNumItems.setSelectedIndex(0);
+			lblPrice.setText("Price: " + listShop.getSelectedValue().get(0).getBuyPrice());
+		}
+		lblPrice.setVisible(listShop.getSelectedValue()!=null);
+		lblBuyAmount.setVisible(listShop.getSelectedValue()!=null);
+		btnBuy.setEnabled(listShop.getSelectedValue()!=null && getGameEnvironment().getGoldBalance() >= listShop.getSelectedValue().get(0).getBuyPrice());
+	}
 
 
 

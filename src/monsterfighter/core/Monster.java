@@ -121,12 +121,12 @@ public class Monster implements Purchasable{
 	}
 	
 	/**
-	 * 
+	 * Compares two different {@link Monster}'s and returns true
+	 * if they have the same values
 	 * 
 	 * @param monster Monster object that is compared against
 	 * @return Boolean 
 	 */
-
 	public boolean sameMonster(Monster monster) {
 		return this.name.equals(monster.name) &&
 				this.index == monster.index  &&
@@ -192,6 +192,11 @@ public class Monster implements Purchasable{
 		enemyMonster.receiveDamage(attack);
 	}
 	
+	/**
+	 * Text displayed for a {@link Monster} while battling
+	 * 
+	 * @return String description
+	 */
 	public String battleDescription() {
 		String description = name + " " + currentHealth + "/" + maxHealth;
 		return description;
@@ -202,9 +207,12 @@ public class Monster implements Purchasable{
 		return description;
 	}
 	
-	public String shopDescription() {
-		String description = "[Buy Price: " + buyPrice + " | Sell Price: " + sellPrice + "] " + basicDescription();
-		return description;
+	public String toolTipText() {
+		String text = "<html>Nickname: " + nickname + "<br>Monster: " + name + "<br>Type: " + type.value + "<br>Health: " + currentHealth + "/" + maxHealth + "<br>Attack: " + attack + "</html>";
+		if (status.name == "Fainted") {
+			text = "<html>[FAINTED]<br>" + text.substring(6);
+		}
+		return text;
 	}
 	
 	@Override

@@ -78,6 +78,7 @@ public class Item implements Purchasable{
 		switch (stat) {
         case MAXHEALTH:
         	monster.setMaxHealth(amount);
+        	monster.receiveHealth(amount);
         	break;
         case ATTACK:
         	monster.setAttack(amount);

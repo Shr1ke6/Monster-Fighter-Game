@@ -17,6 +17,8 @@ public abstract class Screen {
     private JFrame frame;
 
     private final GameEnvironment gameEnvironment;
+    
+    private final String backButtonRoute;
 
     /**
      * Creates this screen.
@@ -24,8 +26,9 @@ public abstract class Screen {
      * @param title The title for the screen
      * @param gameEnvironment The {@link GameEnvironment} that this screen interacts with
      */
-    protected Screen(final String title, final GameEnvironment gameEnvironment) {
+    protected Screen(final String title, final GameEnvironment gameEnvironment, String backButtonRoute) {
         this.gameEnvironment = gameEnvironment;
+        this.backButtonRoute = backButtonRoute;
         initialise(title);
     }
 
@@ -80,6 +83,15 @@ public abstract class Screen {
      */
     protected GameEnvironment getGameEnvironment() {
         return gameEnvironment;
+    }
+    
+    /**
+     * Gets the name of the previous screen
+     * 
+     * @return A string representation of the previous screen
+     */
+    protected String getBackButtonRoute() {
+    	return backButtonRoute;
     }
 
     /**

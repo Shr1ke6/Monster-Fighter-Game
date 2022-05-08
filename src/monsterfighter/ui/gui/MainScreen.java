@@ -19,7 +19,7 @@ public class MainScreen extends Screen{
 	private JLabel lblDay;
 
 	public MainScreen(GameEnvironment incomingGameEnvironment) {
-		super("Monster Fighter Main Menu", incomingGameEnvironment);
+		super("Monster Fighter Main Menu", incomingGameEnvironment, null);
 	}
 	
 	@Override
@@ -55,25 +55,25 @@ public class MainScreen extends Screen{
 		JButton btnBattle = new JButton("Battle");
 		btnBattle.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnBattle.setBounds(165, 128, 143, 73);
-		btnBattle.addActionListener(e -> getGameEnvironment().transitionScreen("BATTLE_SELECT", "MAIN_MENU"));
+		btnBattle.addActionListener(e -> getGameEnvironment().transitionScreen("BATTLE_SELECT", "MAIN_MENU", true));
 		container.add(btnBattle);
 
 		JButton btnShop = new JButton("Shop");
 		btnShop.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnShop.setBounds(165, 212, 143, 73);
-		btnShop.addActionListener(e -> getGameEnvironment().transitionScreen("SHOP", "MAIN_MENU"));
+		btnShop.addActionListener(e -> getGameEnvironment().transitionScreen("SHOP", "MAIN_MENU", true));
 		container.add(btnShop);
 
 		JButton btnViewParty = new JButton("View Party");
 		btnViewParty.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnViewParty.setBounds(165, 295, 143, 73);
-		btnViewParty.addActionListener(e -> getGameEnvironment().transitionScreen("PARTY", "MAIN_MENU"));
+		btnViewParty.addActionListener(e -> getGameEnvironment().transitionScreen("PARTY", "MAIN_MENU", true));
 		container.add(btnViewParty);
 
 		JButton btnInventory = new JButton("Inventory");
 		btnInventory.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnInventory.setBounds(165, 378, 143, 73);
-		btnInventory.addActionListener(e -> getGameEnvironment().transitionScreen("INVENTORY", "MAIN_MENU"));
+		btnInventory.addActionListener(e -> getGameEnvironment().transitionScreen("INVENTORY", "MAIN_MENU", true));
 		container.add(btnInventory);
 
 		JButton btnRest = new JButton("Rest");

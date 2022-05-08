@@ -1,37 +1,56 @@
 package monsterfighter.ui.gui;
 
-import java.awt.Color;
 import java.awt.Container;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.JToggleButton;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import monsterfighter.core.GameEnvironment;
+import monsterfighter.core.Item;
 import monsterfighter.core.Monster;
+import monsterfighter.ui.GameEnvironmentUi;
 
 public class PartyScreen extends Screen{
 	
-	private String backButtonRoute;
-	private String txtMonsterOne = "";
-	private String txtMonsterTwo = "";
-	private String txtMonsterThree = "";
-	private String txtMonsterFour = "";
-	private ButtonGroup buttonsMonsterOptions;
+	private JButton btnNickname;
+	private JButton btnUseItem;
+	private JToggleButton btnSwitchMonsters;
+	private JButton btnSellMonster;
+	private JToggleButton btnMonsterOne;
+	private JToggleButton btnMonsterTwo;
+	private JToggleButton btnMonsterThree;
+	private JToggleButton btnMonsterFour;
+	private JToggleButton btnSelectedMonster;
+	private Monster selectedMonster;
+	private Monster selectedMonsterSwitch;
+	private Item selectedItem;
+	private List<AbstractButton> listOptionButtons;
+	private ButtonGroup buttonGroupPartyMonsters;
 	
-	protected PartyScreen(GameEnvironment gameEnvironment, String back) {
-		super("Monster Fighter Party", gameEnvironment);
-		backButtonRoute = back;
+	
+	protected PartyScreen(GameEnvironment gameEnvironment, String backButtonRoute) {
+		super("Monster Fighter Party", gameEnvironment, backButtonRoute);
 	}
 	
 	@Override
 	protected void initialise(Container container) {
 		container.setSize(550, 450);
+		
+		if (getBackButtonRoute().equals("INVENTORY")) {
+			selectedItem = (Item)getGameEnvironment().getSelectedObject();
+		}
 		
 		addlabels(container);
 		addMonsterBtns(container);
@@ -68,70 +87,224 @@ public class PartyScreen extends Screen{
 	
 
 	private void addMonsterBtns(Container container) {
+		
+		buttonGroupPartyMonsters = new ButtonGroup();
+		ActionListener listenerPartyMonsters = new ActionListener() {
 
-		if (getGameEnvironment().getParty().size()>=1) {
-			txtMonsterOne = getGameEnvironment().getParty().get(0).getNickname();
-		}
-		JToggleButton btnMonsterOne = new JToggleButton(txtMonsterOne);
-		if (txtMonsterOne==null) {
-			btnMonsterOne.setEnabled(false);
-		}
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				for (AbstractButton button: listOptionButtons) {
+					button.setEnabled(buttonGroupPartyMonsters.getSelection()!=null);
+				}
+				btnSelectedMonster = (JToggleButton) e.getSource();
+				if (e.getSource().equals(btnMonsterOne)) {
+					selectedMonster = getGameEnvironment().getParty().get(0);
+				} else if (e.getSource().equals(btnMonsterTwo)){
+					selectedMonster = getGameEnvironment().getParty().get(1);
+				} else if (e.getSource().equals(btnMonsterThree)) {
+					selectedMonster = getGameEnvironment().getParty().get(2);
+				} else {
+					selectedMonster = getGameEnvironment().getParty().get(3);
+				}
+				if (btnSwitchMonsters!=null && btnSwitchMonsters.isSelected() && !getGameEnvironment().getBattleRunning()) {
+					getGameEnvironment().switchMonsters(selectedMonsterSwitch, selectedMonster);
+					paintBtnsMonsters();
+				}
+			}
+		};
+
+
+		btnMonsterOne = new JToggleButton();
+		btnMonsterOne.addActionListener(listenerPartyMonsters);
 		btnMonsterOne.setBounds(69, 83, 182, 106);
 		container.add(btnMonsterOne);
 		
-		if (getGameEnvironment().getParty().size()>=2) {
-			txtMonsterTwo = getGameEnvironment().getParty().get(1).getNickname();
-		}
-		JToggleButton btnMonsterTwo = new JToggleButton(txtMonsterTwo);
-		if (txtMonsterTwo==null) {
-			btnMonsterTwo.setEnabled(false);
-		}
+
+		btnMonsterTwo = new JToggleButton();
+		btnMonsterTwo.addActionListener(listenerPartyMonsters);
 		btnMonsterTwo.setBounds(282, 83, 182, 106);
 		container.add(btnMonsterTwo);
 		
-		if (getGameEnvironment().getParty().size()>=3) {
-			txtMonsterThree = getGameEnvironment().getParty().get(2).getNickname();
-		}
-		JToggleButton btnMonsterThree = new JToggleButton(txtMonsterThree);
-		if (txtMonsterThree==null) {
-			btnMonsterThree.setEnabled(false);
-		}
+
+		btnMonsterThree = new JToggleButton();
+		btnMonsterThree.addActionListener(listenerPartyMonsters);
 		btnMonsterThree.setBounds(69, 229, 182, 106);
 		container.add(btnMonsterThree);
 		
-		if (getGameEnvironment().getParty().size()==4) {
-			txtMonsterFour = getGameEnvironment().getParty().get(3).getNickname();
-		}
-		JToggleButton btnMonsterFour = new JToggleButton(txtMonsterFour);
-		if (txtMonsterFour==null) {
-			btnMonsterFour.setEnabled(false);
-		}
+
+		btnMonsterFour = new JToggleButton();
+		btnMonsterFour.addActionListener(listenerPartyMonsters);
 		btnMonsterFour.setBounds(282, 229, 182, 106);
 		container.add(btnMonsterFour);
+		
+		paintBtnsMonsters();
+		
+		buttonGroupPartyMonsters.add(btnMonsterOne);
+		buttonGroupPartyMonsters.add(btnMonsterTwo);
+		buttonGroupPartyMonsters.add(btnMonsterThree);
+		buttonGroupPartyMonsters.add(btnMonsterFour);
+			
+	}
+	
+	private void paintBtnsMonsters() {
+		
+		if (getGameEnvironment().getParty().size()>=1) {
+			btnMonsterOne.setText(getGameEnvironment().getParty().get(0).getNickname());
+			btnMonsterOne.setToolTipText(getGameEnvironment().getParty().get(0).toolTipText());
+		} else {
+			btnMonsterOne.setEnabled(false);
+			btnMonsterOne.setText(null);
+		}
+		
+		if (getGameEnvironment().getParty().size()>=2) {
+			btnMonsterTwo.setText(getGameEnvironment().getParty().get(1).getNickname());
+			btnMonsterTwo.setToolTipText(getGameEnvironment().getParty().get(1).toolTipText());
+		} else {
+			btnMonsterTwo.setEnabled(false);
+			btnMonsterTwo.setText(null);
+		}
+		
+		if (getGameEnvironment().getParty().size()>=3) {
+			btnMonsterThree.setText(getGameEnvironment().getParty().get(2).getNickname());
+			btnMonsterThree.setToolTipText(getGameEnvironment().getParty().get(2).toolTipText());
+		} else {
+			btnMonsterThree.setEnabled(false);
+			btnMonsterThree.setText(null);
+		}
+		
+		if (getGameEnvironment().getParty().size()==4) {
+			btnMonsterFour.setText(getGameEnvironment().getParty().get(3).getNickname());
+			btnMonsterFour.setToolTipText(getGameEnvironment().getParty().get(3).toolTipText());
+		} else {
+			btnMonsterFour.setEnabled(false);
+			btnMonsterFour.setText(null);
+		}
 	}
 	
 	private void addOptionBtns(Container container) {
 		
+		listOptionButtons = new ArrayList<AbstractButton>();
+		
 		JButton btnBack = new JButton("Back");
-		btnBack.addActionListener(e -> getGameEnvironment().transitionScreen(backButtonRoute, "PARTY_SCREEN"));
+		btnBack.addActionListener(e -> {
+			if (getBackButtonRoute().equals("MAIN_MENU")) {
+				getGameEnvironment().transitionScreen(getBackButtonRoute(), "PARTY", true);
+			} else {
+				getGameEnvironment().transitionScreen(getBackButtonRoute(), "MAIN_MENU", true);
+			}
+		});
 		btnBack.setBounds(10, 358, 105, 42);
 		container.add(btnBack);
-		
-		JButton btnNickname = new JButton("Nickname");
-		btnNickname.setBounds(304, 358, 105, 42);
-		container.add(btnNickname);
-		
-		JButton btnUseItem = new JButton("Use Item");
-		btnUseItem.setBounds(189, 358, 105, 42);
-		container.add(btnUseItem);
-		
-		JButton btnSwitchMonsters = new JButton("Switch ");
-		btnSwitchMonsters.setBounds(419, 358, 105, 42);
-		container.add(btnSwitchMonsters);
+	
+		if (getBackButtonRoute().equals("MAIN_MENU")) {
+			btnNickname = new JButton("Nickname");
+			btnNickname.setEnabled(false);
+			btnNickname.addActionListener(e -> {
+				optionPaneNickname();
+				paintBtnsMonsters();
+			});
+			btnNickname.setBounds(189, 358, 105, 42);
+			container.add(btnNickname);
+			listOptionButtons.add(btnNickname);
+			
+			btnUseItem = new JButton("Use Item");
+			btnUseItem.setEnabled(false);
+			btnUseItem.addActionListener(e -> {
+				getGameEnvironment().setSelectedObject(selectedMonster);
+				getGameEnvironment().transitionScreen("INVENTORY", "PARTY", false);
+			});
+			btnUseItem.setBounds(304, 358, 105, 42);
+			container.add(btnUseItem);
+			listOptionButtons.add(btnUseItem);
+			
+			btnSwitchMonsters = new JToggleButton("Switch");
+			btnSwitchMonsters.setEnabled(false);
+			btnSwitchMonsters.addActionListener(e -> { 
+				selectedMonsterSwitch = selectedMonster;
+				btnSelectedMonster.setPressedIcon(null);
+			});
+			btnSwitchMonsters.setBounds(419, 358, 105, 42);
+			container.add(btnSwitchMonsters);
+			listOptionButtons.add(btnSwitchMonsters);
+			
+		} else if (getBackButtonRoute().equals("SHOP")) {
+			btnSellMonster = new JButton("Sell");
+			btnSellMonster.setEnabled(false);
+			btnSellMonster.addActionListener(e -> {
+				getGameEnvironment().sellMonster(selectedMonster);
+				
+				buttonGroupPartyMonsters.clearSelection();
+				paintBtnsMonsters();
+			});
+			btnSellMonster.setBounds(419, 358, 105, 42);
+			container.add(btnSellMonster);
+			listOptionButtons.add(btnSellMonster);
+			
+		} else if (getBackButtonRoute().equals("INVENTORY")) {
+			btnUseItem = new JButton("Use Item");
+			btnUseItem.setEnabled(false);
+			btnUseItem.addActionListener(e -> {
+				getGameEnvironment().useItem(selectedMonster, selectedItem);
+				getGameEnvironment().transitionScreen(getBackButtonRoute(), "MAIN_MENU", true);
+			});
+			btnUseItem.setBounds(419, 358, 105, 42);
+			container.add(btnUseItem);
+			listOptionButtons.add(btnUseItem);
+		}
+
 	}
 	
-	private void buttonEnable() {
+	private void optionPaneNickname() {
+		final JButton btnCancel = new JButton("Cancel");
+		final JButton btnAccept = new JButton("Accept");
+		final JTextField fieldNickname = new JTextField();
+		JLabel lblNickname = new JLabel("Change Nickname");
+		
+		btnAccept.addActionListener(new ActionListener() {
 
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				selectedMonster.setNickname(fieldNickname.getText());
+				JOptionPane.getRootFrame().dispose();   
+			}
+			
+		});
+		
+		btnCancel.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.getRootFrame().dispose();   
+			}
+			
+		});
+		
+		fieldNickname.setColumns(50);
+		fieldNickname.getDocument().addDocumentListener(new DocumentListener() {
+	        protected void update() {
+	        	boolean validMonsterNickname = fieldNickname.getText().matches(GameEnvironmentUi.NAME_REGEX) || fieldNickname.getText().isEmpty();
+	            btnAccept.setEnabled(validMonsterNickname);
+	            lblNickname.setText(validMonsterNickname ? "Change Nickname" : "<html>Change Nickname <font color='red'>(" + GameEnvironmentUi.MONSTER_NAME_REQUIREMENTS + ")</font></html>");
+	        }
+
+	        @Override
+	        public void insertUpdate(DocumentEvent e) {
+	            update();
+	        }
+
+	        @Override
+	        public void removeUpdate(DocumentEvent e) {
+	            update();
+	        }
+
+	        @Override
+	        public void changedUpdate(DocumentEvent e) {
+	            update();
+	        }
+		});
+		
+        JOptionPane.showOptionDialog(null,  new Object[] {lblNickname, fieldNickname}, "Set Nickname", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, new JButton[]
+        {btnCancel, btnAccept}, btnCancel);
 	}
-
+	
 }

@@ -13,6 +13,8 @@ import javax.swing.JList;
 
 import monsterfighter.core.GameEnvironment;
 import monsterfighter.core.Item;
+import monsterfighter.core.Monster;
+
 import java.awt.Color;
 import java.awt.Container;
 
@@ -22,28 +24,38 @@ import javax.swing.ListSelectionModel;
 public class InventoryScreen extends Screen{
 
 	private JList<ArrayList<Item>> listInventory;
-	private String backButtonRoute;
+	private DefaultListModel<ArrayList<Item>> inventoryListModel;
+	private JButton btnUseItem;
+	private Monster selectedMonster;
+	private JLabel lblMonster;
+	private JLabel lblHealth;
+	private JLabel lblAttack;
+	
 
-	protected InventoryScreen(GameEnvironment gameEnvironment, String back) {
-		super("Monster Fighter Inventory", gameEnvironment);
-		backButtonRoute = back;
+	protected InventoryScreen(GameEnvironment gameEnvironment, String backButtonRoute) {
+		super("Monster Fighter Inventory", gameEnvironment, backButtonRoute);
 	}
 	
-	@Override
-	protected void initialise(Container container) {
-		initialize(container);
-	}
 
 	/**
 	 * Initialize the contents of the container.
 	 */
-	private void initialize(Container container) {
+	@Override
+	protected void initialise(Container container) {
 		container.setSize(550, 450);
+		
+		if (getBackButtonRoute().equals("PARTY")) {
+			selectedMonster = (Monster)getGameEnvironment().getSelectedObject();
+		} else if (getBackButtonRoute().equals("BATTLE")) {
+			selectedMonster = getGameEnvironment().getParty().get(0);
+		}
 		
 		addLabelInventory(container);
 		addBtns(container);
 		addListInventory(container);
-
+		if (getBackButtonRoute().equals("PARTY") || getBackButtonRoute().equals("BATTLE")) {
+			addLabelMonster(container);
+		}
 	}
 	
 	private void addLabelInventory(Container container) {
@@ -53,30 +65,89 @@ public class InventoryScreen extends Screen{
 		container.add(inventroyLabel);
 	}
 	
+	private void addLabelMonster(Container container) {
+		lblMonster = new JLabel();
+		lblMonster.setFont(new Font("Tahoma", Font.BOLD, 18));
+		lblMonster.setBounds(125, 312, 284, 54);
+		container.add(lblMonster);
+		
+		lblHealth = new JLabel();
+		lblHealth.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblHealth.setBounds(125, 358, 225, 23);
+		container.add(lblHealth);
+		
+		lblAttack = new JLabel();
+		lblAttack.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblAttack.setBounds(125, 377, 225, 23);
+		container.add(lblAttack);
+		
+		setTextLabelMonster();
+	}
+	
+	private void setTextLabelMonster() {
+		String txtMonsterName = "Monster: " + selectedMonster.getNickname();
+		if (selectedMonster.getStatus().equals(Monster.Status.FAINTED)) {
+			txtMonsterName += "[FAINTED]";
+		}
+		lblMonster.setText(txtMonsterName);
+		lblHealth.setText("Health: " + selectedMonster.getCurrentHealth() + "/" + selectedMonster.getMaxHealth());
+		lblAttack.setText("Attack: " + selectedMonster.getAttack());
+	}
+	
 	private void addBtns(Container container) {
-		JButton btnUseItem = new JButton("Use Item");
+		btnUseItem = new JButton("Use Item");
+		btnUseItem.setEnabled(false);
+		btnUseItem.addActionListener(e -> {
+			
+		if (getBackButtonRoute().equals("PARTY") || getBackButtonRoute().equals("BATTLE")) {
+				int inventorySize = getGameEnvironment().getInventory().size();
+				getGameEnvironment().useItem(selectedMonster, listInventory.getSelectedValue().get(0));
+				if (inventorySize != getGameEnvironment().getInventory().size()) {
+					listInventory.clearSelection();
+					inventoryListModel.removeAllElements();
+					inventoryListModel.addAll(getGameEnvironment().getInventory());
+				}
+				setTextLabelMonster();
+		} else {
+			getGameEnvironment().setSelectedObject(listInventory.getSelectedValue().get(0));
+			getGameEnvironment().transitionScreen("PARTY", "INVENTORY", false);
+			
+		}});
 		btnUseItem.setBounds(419, 358, 105, 42);
 		container.add(btnUseItem);
 		
 		JButton btnBack = new JButton("Back");
-		btnBack.addActionListener(e -> getGameEnvironment().transitionScreen(backButtonRoute, "INVENTORY"));
+		btnBack.addActionListener(e -> {
+		if (getBackButtonRoute().equals("PARTY")) {
+			getGameEnvironment().transitionScreen(getBackButtonRoute(), "MAIN_MENU", true);
+			getGameEnvironment().setSelectedObject(null);
+		} else if (getBackButtonRoute().equals("BATTLE")) {
+			getGameEnvironment().transitionScreen(getBackButtonRoute(), "BATTLE_SELECT", true);
+		} else {
+			getGameEnvironment().transitionScreen(getBackButtonRoute(), "INVENTORY", true);
+		}});
 		btnBack.setBounds(10, 358, 105, 42);
 		container.add(btnBack);
 	}
 	
 	private void addListInventory(Container container) {
 		
-		DefaultListModel<ArrayList<Item>> difficultyListModel = new DefaultListModel<ArrayList<Item>>();
+		inventoryListModel = new DefaultListModel<ArrayList<Item>>();
 		// Add the existing difficulties to the ListModel
-		difficultyListModel.addAll(getGameEnvironment().getInventory());
+		inventoryListModel.addAll(getGameEnvironment().getInventory());
 		
-		listInventory = new JList<ArrayList<Item>>(difficultyListModel);
+		listInventory = new JList<ArrayList<Item>>(inventoryListModel);
 		listInventory.setCellRenderer(new InventoryRenderer());
 		listInventory.setVisibleRowCount(-1);
 		listInventory.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listInventory.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		listInventory.setBackground(Color.WHITE);
-		listInventory.setBounds(10, 65, 514, 282);
+		listInventory.addListSelectionListener(e -> btnUseItem.setEnabled(true));
+		if (selectedMonster!=null) {
+			listInventory.setBounds(10, 65, 514, 247);
+		} else {
+			listInventory.setBounds(10, 65, 514, 282);
+		}
 		container.add(listInventory);
 	}
 

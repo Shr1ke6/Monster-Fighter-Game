@@ -17,8 +17,8 @@ public class BattleScreen extends Screen{
 
 
 
-	protected BattleScreen(GameEnvironment gameEnvironment, String back) {
-		super("Monster Fighter Battle", gameEnvironment);
+	protected BattleScreen(GameEnvironment gameEnvironment, String backButtonRoute) {
+		super("Monster Fighter Battle", gameEnvironment, backButtonRoute);
 	}
 	
 	@Override

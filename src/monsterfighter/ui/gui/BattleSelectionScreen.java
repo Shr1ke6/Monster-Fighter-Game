@@ -24,12 +24,10 @@ public class BattleSelectionScreen extends Screen{
 	
 	private JList<Battle> listWildBattles;
 	private JList<Battle> listTrainerBattles;
-	private String backButtonRoute;
 	
 
-	protected BattleSelectionScreen(GameEnvironment gameEnvironment, String back) {
-		super("Battle Selection Screen", gameEnvironment);
-		backButtonRoute = back;
+	protected BattleSelectionScreen(GameEnvironment gameEnvironment, String backButtonRoute) {
+		super("Battle Selection Screen", gameEnvironment, backButtonRoute);
 	}
 	
 	@Override
@@ -90,12 +88,12 @@ public class BattleSelectionScreen extends Screen{
 		
 		JButton btnBack = new JButton("Back");
 		btnBack.setBounds(10, 583, 105, 42);
-		btnBack.addActionListener(e -> getGameEnvironment().transitionScreen("MAIN_MENU", "BATTLE_SELECTION"));
+		btnBack.addActionListener(e -> getGameEnvironment().transitionScreen(getBackButtonRoute(), "BATTLE_SELECTION", true));
 		container.add(btnBack);
 		
 		JButton btnBattle = new JButton("Battle");
 		btnBattle.setBounds(359, 583, 105, 42);
-		btnBattle.addActionListener(e -> getGameEnvironment().transitionScreen("BATTLE", "BATTLE_SELECTION"));
+		btnBattle.addActionListener(e -> getGameEnvironment().transitionScreen("BATTLE", "BATTLE_SELECTION", true));
 		container.add(btnBattle);
 		
 	}
