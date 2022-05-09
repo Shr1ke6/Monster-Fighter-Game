@@ -105,7 +105,7 @@ public class ShopScreen extends Screen{
 					listShopModel.addAll(getGameEnvironment().getShop());
 				}
 				getParentComponent().repaint();
-				
+				checkCanBuy();
 		});
 		btnBuy.setEnabled(false);
 		btnBuy.setBounds(419, 358, 105, 42);

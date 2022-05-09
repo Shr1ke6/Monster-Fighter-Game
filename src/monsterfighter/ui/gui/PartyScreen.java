@@ -38,6 +38,8 @@ public class PartyScreen extends Screen{
 	private Item selectedItem;
 	private List<AbstractButton> listOptionButtons;
 	private ButtonGroup buttonGroupPartyMonsters;
+	private JLabel lblGold;
+	private JLabel lblSellPrice;
 	
 	
 	protected PartyScreen(GameEnvironment gameEnvironment, String backButtonRoute) {
@@ -55,6 +57,25 @@ public class PartyScreen extends Screen{
 		addlabels(container);
 		addMonsterBtns(container);
 		addOptionBtns(container);
+		
+		if (getBackButtonRoute().equals("SHOP")) {
+			addLabelsSell(container);
+		}
+	}
+
+	private void addLabelsSell(Container container) {
+		
+		lblGold = new JLabel("Gold: " + getGameEnvironment().getGoldBalance());
+		lblGold.setFont(new Font("Tahoma", Font.BOLD, 18));
+		lblGold.setBounds(411, 11, 113, 43);
+		container.add(lblGold);	
+		
+		lblSellPrice = new JLabel("Sell Price:");
+		lblSellPrice.setFont(new Font("Tahoma", Font.BOLD, 16));
+		lblSellPrice.setVisible(false);
+		lblSellPrice.setBounds(198, 356, 137, 43);
+		container.add(lblSellPrice);
+		
 	}
 
 	private void addlabels(Container container) {
@@ -83,6 +104,7 @@ public class PartyScreen extends Screen{
 		lblSlotFour.setFont(new Font("Tahoma", Font.BOLD, 12));
 		lblSlotFour.setBounds(296, 204, 46, 14);
 		container.add(lblSlotFour);
+		
 	}
 	
 
@@ -105,6 +127,10 @@ public class PartyScreen extends Screen{
 					selectedMonster = getGameEnvironment().getParty().get(2);
 				} else {
 					selectedMonster = getGameEnvironment().getParty().get(3);
+				}
+				if (getBackButtonRoute().equals("SHOP")) {
+					lblSellPrice.setVisible(true);
+					lblSellPrice.setText("Sell Price: " + selectedMonster.getSellPrice());
 				}
 				if (btnSwitchMonsters!=null && btnSwitchMonsters.isSelected() && !getGameEnvironment().getBattleRunning()) {
 					getGameEnvironment().switchMonsters(selectedMonsterSwitch, selectedMonster);
@@ -231,10 +257,11 @@ public class PartyScreen extends Screen{
 			btnSellMonster = new JButton("Sell");
 			btnSellMonster.setEnabled(false);
 			btnSellMonster.addActionListener(e -> {
-				getGameEnvironment().sellMonster(selectedMonster);
-				
-				buttonGroupPartyMonsters.clearSelection();
-				paintBtnsMonsters();
+				if (getGameEnvironment().getGoldBalance() + selectedMonster.getSellPrice() < 200) {
+					 optionPaneEndGame();
+				} else {
+					sellMonster();
+				}
 			});
 			btnSellMonster.setBounds(419, 358, 105, 42);
 			container.add(btnSellMonster);
@@ -305,6 +332,57 @@ public class PartyScreen extends Screen{
 		
         JOptionPane.showOptionDialog(null,  new Object[] {lblNickname, fieldNickname}, "Set Nickname", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, new JButton[]
         {btnCancel, btnAccept}, btnCancel);
+	}
+	
+	private void optionPaneEndGame() {
+		final JButton btnCancel = new JButton("Cancel");
+		final JButton btnSellAnyway = new JButton("Sell Anyway");
+		final JButton btnEndGame = new JButton("End Game");
+		final JLabel lblMessage = new JLabel("<html><font color='red'>WARNING:</font> Selling " + selectedMonster.getNickname() + " will "
+				+ "leave you without monsters and not enough gold to buy another.<br> "
+				+ "You can choose to cancel the sale, sell and carry on the game or sell and end the game here.");
+		
+		btnCancel.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.getRootFrame().dispose();   
+			}
+			
+		});
+		
+		btnSellAnyway.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				sellMonster();
+				JOptionPane.getRootFrame().dispose();
+			}
+			
+		});
+		
+		btnEndGame.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				sellMonster();
+				JOptionPane.getRootFrame().dispose();
+				getGameEnvironment().transitionScreen("GAME_OVER", "PARTY", true);
+			}
+		});
+		
+		JOptionPane.showOptionDialog(null,  new Object[] {lblMessage}, "Set Nickname", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, new JButton[]
+		        {btnCancel, btnSellAnyway, btnEndGame}, btnCancel);
+	}
+	
+	private void sellMonster() {
+		getGameEnvironment().sellMonster(selectedMonster);
+		buttonGroupPartyMonsters.clearSelection();
+		lblSellPrice.setVisible(false);
+		lblGold.setText("Gold: " + getGameEnvironment().getGoldBalance());
+		btnSellMonster.setEnabled(false);
+		selectedMonster=null;
+		paintBtnsMonsters();
 	}
 	
 }

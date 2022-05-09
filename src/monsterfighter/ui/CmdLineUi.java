@@ -25,9 +25,6 @@ public class CmdLineUi implements GameEnvironmentUi {
     // Flag to indicate when this ui should finish
     private boolean finish = false;
 
-    // Flag to indicate when this ui should finish
-    //private boolean finish = false;
-
     // An enum representing the various actions the user can perform
     private enum Option {
     	BATTLE("Battle"),

@@ -327,14 +327,10 @@ public class GameEnvironment {
 	}
 	
 	public void addToParty(Monster monster) {
-		try {
-			if (party.size() >= 4) {
-				throw new IllegalStateException("Party full, cannot add another monster to party!\n");	
-			} else {
-				party.add(monster);
-			}
-		} catch (IllegalStateException e) {
-			ui.showError(e.getMessage());
+		if (party.size() >= 4) {
+			throw new IllegalStateException("Party full, cannot add another monster to party!\n");	
+		} else {
+			party.add(monster);
 		}
 	}
 	
@@ -460,11 +456,13 @@ public class GameEnvironment {
 		fillBattles();
 		randomEvents = new RandomEvent(party);
 		for (int i = 0; i < party.size(); i++) {
-			if (randomEvents.getMonsterLeaves().get(i)) {
-				party.remove(i);
-			} else if (randomEvents.getLevelUp().get(i) && !randomEvents.getMonsterLeaves().get(i)) {
+			if (randomEvents.getLevelUp().get(i) && !randomEvents.getMonsterLeaves().get(i)) {
 				levelUp(party.get(i));
 			} 
+		} for (int i = 0; i < party.size(); i++) {
+			if (randomEvents.getMonsterLeaves().get(i)) {
+				party.remove(i);
+			}
 		}
 		if (randomEvents.getMonsterJoins()) {
 			int randomNumber = rng.nextInt(allMonsters.size());

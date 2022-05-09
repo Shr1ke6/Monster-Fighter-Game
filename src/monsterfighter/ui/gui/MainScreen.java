@@ -2,10 +2,11 @@ package monsterfighter.ui.gui;
 
 
 import javax.swing.JLabel;
-
+import javax.swing.JOptionPane;
 
 import monsterfighter.core.GameEnvironment;
-
+import monsterfighter.core.Monster;
+import monsterfighter.core.RandomEvent;
 
 import javax.swing.JButton;
 
@@ -13,10 +14,12 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class MainScreen extends Screen{
 	
 	private JLabel lblDay;
+	private ArrayList<Monster> partyCopy;
 
 	public MainScreen(GameEnvironment incomingGameEnvironment) {
 		super("Monster Fighter Main Menu", incomingGameEnvironment, null);
@@ -82,8 +85,22 @@ public class MainScreen extends Screen{
 		btnRest.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e){
-				getGameEnvironment().nextDay();
-				lblDay.setText("Day: " + getGameEnvironment().getDay() + " / " + getGameEnvironment().getTotalDays());
+				boolean lastDay = getGameEnvironment().getDay()==getGameEnvironment().getTotalDays();
+				if (lastDay) {
+					getGameEnvironment().transitionScreen("GAME_OVER", "MAIN_MENU", true);
+				} else {
+					partyCopy = new ArrayList<Monster>();
+					for (Monster monster: getGameEnvironment().getParty()) {
+						partyCopy.add(monster);
+					}
+					getGameEnvironment().nextDay();
+					optionPanelRandomEvent();
+					lastDay = getGameEnvironment().getDay()==getGameEnvironment().getTotalDays();
+					if (lastDay) {
+						btnRest.setText("End Game");
+					}
+					lblDay.setText("Day: " + getGameEnvironment().getDay() + " / " + getGameEnvironment().getTotalDays());
+				}
 			}
 		});
 		container.add(btnRest);
@@ -92,6 +109,44 @@ public class MainScreen extends Screen{
 		btnQuit.setBounds(10, 583, 105, 42);
 		btnQuit.addActionListener(e -> getGameEnvironment().onFinish());
 		container.add(btnQuit);
+	}
+	
+	private void optionPanelRandomEvent() {
+		final JButton btnOkay = new JButton("Okay");
+		JLabel lblMessage = new JLabel();
+		String message = "<html>";
+		
+		btnOkay.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.getRootFrame().dispose();
+			}
+			
+		});
+		
+		RandomEvent randomEvents = getGameEnvironment().getRandomEvent();
+		if (getGameEnvironment().getParty().size()>0) {
+			message += "Your Monsters received a good night's rest and healed to full health.<br>";
+		} for (int i = 0; i < partyCopy.size(); i++) {
+			if (randomEvents.getMonsterLeaves().get(i)) {
+				message += partyCopy.get(i).getNickname() +
+						" left your party overnight. Best of luck " + getGameEnvironment().getParty().get(i).getNickname() + ".<br>";
+			} else if (randomEvents.getLevelUp().get(i) && !randomEvents.getMonsterLeaves().get(i)) {
+				message += partyCopy.get(i).getNickname() + "'s stats increased overnight.<br>";
+			} 
+		}
+		if (randomEvents.getMonsterJoins()) {
+			message += "A monster decided to join your party overnight.<br>";
+		}
+		if (message.length()==6) {
+			message += "Nothing of note occured overnight.<br>";
+		}
+		message+="</html>";
+		lblMessage.setText(message);
+		
+		JOptionPane.showOptionDialog(null,  new Object[] {lblMessage}, "Nightly Happenings", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, new JButton[]
+		        {btnOkay}, btnOkay);
 	}
 	
 
