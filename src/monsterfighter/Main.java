@@ -38,11 +38,11 @@ public class Main {
 		
 		GameEnvironmentUi ui;
 
-        ui = new CmdLineUi();
-        GameEnvironment environment = new GameEnvironment(ui, monsters, items);
-        environment.start();
-       if (args.length > 0 && (args[0].equals("cmd"))) {
 
+       if (args.length > 0 && (args[0].equals("cmd"))) {
+           ui = new CmdLineUi();
+           GameEnvironment gameEnvironment = new GameEnvironment(ui, monsters, items);
+           gameEnvironment.start();
         } else {
 	        ui = new Gui();
 	        GameEnvironment gameEnvironment = new GameEnvironment(ui, monsters, items);

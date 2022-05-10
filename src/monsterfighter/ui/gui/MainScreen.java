@@ -1,127 +1,153 @@
 package monsterfighter.ui.gui;
 
-import java.awt.EventQueue;
 
-import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JTextField;
+import javax.swing.JOptionPane;
 
+import monsterfighter.core.GameEnvironment;
 import monsterfighter.core.Monster;
+import monsterfighter.core.RandomEvent;
 
 import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+
+import java.awt.Container;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
-public class MainScreen {
+public class MainScreen extends Screen{
+	
+	private JLabel lblDay;
+	private ArrayList<Monster> partyCopy;
 
-	private JFrame frame;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainScreen window = new MainScreen();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+	public MainScreen(GameEnvironment incomingGameEnvironment) {
+		super("Monster Fighter Main Menu", incomingGameEnvironment, null);
 	}
-
-	/**
-	 * Create the application.
-	 */
-	public MainScreen() {
-		initialize();
+	
+	@Override
+	protected void initialise(Container container) {
+		container.setSize(490, 675);
+		addLabels(container);
+		addBtns(container);
 	}
+	
+	private void addLabels(Container container) { 
+		JLabel lblTrainerLabel = new JLabel("Trainer: " + getGameEnvironment().getName());
+		lblTrainerLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblTrainerLabel.setBounds(10, 26, 300, 22);
+		container.add(lblTrainerLabel);
+		
+		lblDay = new JLabel("Day: " + getGameEnvironment().getDay() + " / " + getGameEnvironment().getTotalDays());
+		lblDay.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblDay.setBounds(372, 23, 100, 29);
+		container.add(lblDay);
+			
+		JLabel lblGold = new JLabel("Gold: " + getGameEnvironment().getGoldBalance());
+		lblGold.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblGold.setBounds(10, 59, 100, 22);
+		container.add(lblGold);
+		
+		JLabel lblPoints = new JLabel("Points: " + getGameEnvironment().getPoints());
+		lblPoints.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblPoints.setBounds(354, 63, 100, 14);
+		container.add(lblPoints);
+	}
+	
+	private void addBtns(Container container) {
+		JButton btnBattle = new JButton("Battle");
+		btnBattle.setFont(new Font("Tahoma", Font.BOLD, 18));
+		btnBattle.setBounds(165, 128, 143, 73);
+		btnBattle.addActionListener(e -> getGameEnvironment().transitionScreen("BATTLE_SELECT", "MAIN_MENU", true));
+		container.add(btnBattle);
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
-		frame = new JFrame();
-		frame.setTitle("MF Main Menu");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(490, 675);
-		frame.setVisible(true);
-		frame.setResizable(false);
-		frame.setLocationRelativeTo(null);
-		frame.getContentPane().setLayout(null);
-		
-		JLabel trainerLabel = new JLabel("Trainer:");
-		trainerLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		trainerLabel.setBounds(10, 26, 61, 22);
-		frame.getContentPane().add(trainerLabel);
-		
-		JLabel trainerNameLabel = new JLabel("New label");
-		trainerNameLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		trainerNameLabel.setBounds(81, 30, 224, 14);
-		frame.getContentPane().add(trainerNameLabel);
-		
-		JLabel dayLabel = new JLabel("Day:");
-		dayLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		dayLabel.setBounds(372, 23, 36, 29);
-		frame.getContentPane().add(dayLabel);
-		
-		JLabel currentDayLabel = new JLabel("15");
-		currentDayLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		currentDayLabel.setBounds(418, 31, 46, 14);
-		frame.getContentPane().add(currentDayLabel);
-		
-		JLabel goldLabel = new JLabel("Gold:");
-		goldLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		goldLabel.setBounds(10, 59, 46, 22);
-		frame.getContentPane().add(goldLabel);
-		
-		JLabel currentGoldLabel = new JLabel("1000");
-		currentGoldLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		currentGoldLabel.setBounds(66, 64, 46, 14);
-		frame.getContentPane().add(currentGoldLabel);
-		
-		JLabel pointsLabel = new JLabel("Points:");
-		pointsLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		pointsLabel.setBounds(354, 63, 54, 14);
-		frame.getContentPane().add(pointsLabel);
-		
-		JLabel currentPointsLabel = new JLabel("1500");
-		currentPointsLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		currentPointsLabel.setBounds(418, 64, 46, 14);
-		frame.getContentPane().add(currentPointsLabel);
-		
-		JButton btnNewButton = new JButton("Battle");
-		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 18));
-		btnNewButton.setBounds(165, 128, 143, 73);
-		frame.getContentPane().add(btnNewButton);
-		
 		JButton btnShop = new JButton("Shop");
 		btnShop.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnShop.setBounds(165, 212, 143, 73);
-		frame.getContentPane().add(btnShop);
-		
+		btnShop.addActionListener(e -> getGameEnvironment().transitionScreen("SHOP", "MAIN_MENU", true));
+		container.add(btnShop);
+
 		JButton btnViewParty = new JButton("View Party");
 		btnViewParty.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnViewParty.setBounds(165, 295, 143, 73);
-		frame.getContentPane().add(btnViewParty);
-		
+		btnViewParty.addActionListener(e -> getGameEnvironment().transitionScreen("PARTY", "MAIN_MENU", true));
+		container.add(btnViewParty);
+
 		JButton btnInventory = new JButton("Inventory");
 		btnInventory.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnInventory.setBounds(165, 378, 143, 73);
-		frame.getContentPane().add(btnInventory);
-		
+		btnInventory.addActionListener(e -> getGameEnvironment().transitionScreen("INVENTORY", "MAIN_MENU", true));
+		container.add(btnInventory);
+
 		JButton btnRest = new JButton("Rest");
 		btnRest.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnRest.setBounds(165, 462, 143, 73);
-		frame.getContentPane().add(btnRest);
-		
+		btnRest.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e){
+				boolean lastDay = getGameEnvironment().getDay()==getGameEnvironment().getTotalDays();
+				if (lastDay) {
+					getGameEnvironment().transitionScreen("GAME_OVER", "MAIN_MENU", true);
+				} else {
+					partyCopy = new ArrayList<Monster>();
+					for (Monster monster: getGameEnvironment().getParty()) {
+						partyCopy.add(monster);
+					}
+					getGameEnvironment().nextDay();
+					optionPanelRandomEvent();
+					lastDay = getGameEnvironment().getDay()==getGameEnvironment().getTotalDays();
+					if (lastDay) {
+						btnRest.setText("End Game");
+					}
+					lblDay.setText("Day: " + getGameEnvironment().getDay() + " / " + getGameEnvironment().getTotalDays());
+				}
+			}
+		});
+		container.add(btnRest);
+
 		JButton btnQuit = new JButton("Quit");
 		btnQuit.setBounds(10, 583, 105, 42);
-		frame.getContentPane().add(btnQuit);
-		
-
+		btnQuit.addActionListener(e -> getGameEnvironment().onFinish());
+		container.add(btnQuit);
 	}
+	
+	private void optionPanelRandomEvent() {
+		final JButton btnOkay = new JButton("Okay");
+		JLabel lblMessage = new JLabel();
+		String message = "<html>";
+		
+		btnOkay.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.getRootFrame().dispose();
+			}
+			
+		});
+		
+		RandomEvent randomEvents = getGameEnvironment().getRandomEvent();
+		if (getGameEnvironment().getParty().size()>0) {
+			message += "Your Monsters received a good night's rest and healed to full health.<br>";
+		} for (int i = 0; i < partyCopy.size(); i++) {
+			if (randomEvents.getMonsterLeaves().get(i)) {
+				message += partyCopy.get(i).getNickname() +
+						" left your party overnight. Best of luck " + getGameEnvironment().getParty().get(i).getNickname() + ".<br>";
+			} else if (randomEvents.getLevelUp().get(i) && !randomEvents.getMonsterLeaves().get(i)) {
+				message += partyCopy.get(i).getNickname() + "'s stats increased overnight.<br>";
+			} 
+		}
+		if (randomEvents.getMonsterJoins()) {
+			message += "A monster decided to join your party overnight.<br>";
+		}
+		if (message.length()==6) {
+			message += "Nothing of note occured overnight.<br>";
+		}
+		message+="</html>";
+		lblMessage.setText(message);
+		
+		JOptionPane.showOptionDialog(null,  new Object[] {lblMessage}, "Nightly Happenings", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, new JButton[]
+		        {btnOkay}, btnOkay);
+	}
+	
+
 }

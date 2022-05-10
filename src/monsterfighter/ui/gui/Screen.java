@@ -17,15 +17,18 @@ public abstract class Screen {
     private JFrame frame;
 
     private final GameEnvironment gameEnvironment;
+    
+    private final String backButtonRoute;
 
     /**
      * Creates this screen.
      *
      * @param title The title for the screen
-     * @param manager The {@link GameEnvironment} that this screen interacts with
+     * @param gameEnvironment The {@link GameEnvironment} that this screen interacts with
      */
-    protected Screen(final String title, final GameEnvironment gameEnvironment) {
+    protected Screen(final String title, final GameEnvironment gameEnvironment, String backButtonRoute) {
         this.gameEnvironment = gameEnvironment;
+        this.backButtonRoute = backButtonRoute;
         initialise(title);
     }
 
@@ -41,7 +44,6 @@ public abstract class Screen {
         // has requested to quit. This allows the rocket manager to perform actions that may
         // be required before quitting E.g. Confirming the user really wants to quit,
         // saving state etc.
-        /*
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -51,13 +53,11 @@ public abstract class Screen {
 
         initialise(frame);
 
-        // Size our frame
-        frame.pack();
-
-        // We set the location of our frame relative to null. This causes the frame to be placed
-        // in the centre of the screen.
         frame.setLocationRelativeTo(null);
-        */
+        
+        frame.setResizable(false);
+        
+        frame.getContentPane().setLayout(null);
     }
 
     /**
@@ -84,6 +84,15 @@ public abstract class Screen {
     protected GameEnvironment getGameEnvironment() {
         return gameEnvironment;
     }
+    
+    /**
+     * Gets the name of the previous screen
+     * 
+     * @return A string representation of the previous screen
+     */
+    protected String getBackButtonRoute() {
+    	return backButtonRoute;
+    }
 
     /**
      * Shows this screen by making it visible.
@@ -100,7 +109,6 @@ public abstract class Screen {
     protected boolean confirmQuit() {
         int selection = JOptionPane.showConfirmDialog(frame, "Are you sure you want to quit?",
                 "Quit?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-
         return selection == JOptionPane.YES_OPTION;
     }
 

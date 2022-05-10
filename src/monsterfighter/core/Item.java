@@ -64,10 +64,21 @@ public class Item implements Purchasable{
 		return storeQuantity;
 	}
 	
+	@Override
+	public int getBuyPrice() {
+		return buyPrice;
+	}
+
+	@Override
+	public int getSellPrice() {
+		return sellPrice;
+	}
+	
 	public void useItem(Monster monster) {
 		switch (stat) {
         case MAXHEALTH:
         	monster.setMaxHealth(amount);
+        	monster.receiveHealth(amount);
         	break;
         case ATTACK:
         	monster.setAttack(amount);
@@ -96,19 +107,17 @@ public class Item implements Purchasable{
 		return "Item: " + name + " Effect: increases " + stat.name + " by " + amount;
 	}
 
+
 	@Override
-	public String shopDescription() {
-		return "[Buy Price: " + buyPrice + " | Sell Price: " + sellPrice + "] " + toString();
+	public String buyDescription() {
+		String description = "[Buy Price: " + buyPrice + "] " + toString();
+		return description;
 	}
 
 	@Override
-	public int getBuyPrice() {
-		return buyPrice;
-	}
-
-	@Override
-	public int getSellPrice() {
-		return sellPrice;
+	public String sellDescription() {
+		String description = "[Sell Price: " + sellPrice + "] " + toString();
+		return description;
 	}
 	
 }

@@ -1,59 +1,41 @@
 package monsterfighter.ui.gui;
 
+import java.awt.Container;
 import java.awt.EventQueue;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
+
+import monsterfighter.core.GameEnvironment;
+
 import javax.swing.JDesktopPane;
-import javax.swing.JInternalFrame;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
-public class BattleScreen {
+public class BattleScreen extends Screen{
 
-	private JFrame frame;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					BattleScreen window = new BattleScreen();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+
+	protected BattleScreen(GameEnvironment gameEnvironment, String backButtonRoute) {
+		super("Monster Fighter Battle", gameEnvironment, backButtonRoute);
+	}
+	
+	@Override
+	protected void initialise(Container container) {
+		initialize(container);
+		
 	}
 
 	/**
-	 * Create the application.
+	 * Initialize the contents of the container.
 	 */
-	public BattleScreen() {
-		initialize();
-	}
-
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
-		frame = new JFrame();
-		frame.setTitle("MF Battle Screen");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(490, 675);
-		frame.setVisible(true);
-		frame.setResizable(false);
-		frame.setLocationRelativeTo(null);
-		frame.getContentPane().setLayout(null);
+	private void initialize(Container container) {
+		container.setSize(490, 675);
 		
 		JPanel opponentPanel = new JPanel();
 		opponentPanel.setBounds(229, 30, 235, 95);
-		frame.getContentPane().add(opponentPanel);
+		container.add(opponentPanel);
 		opponentPanel.setLayout(null);
 		
 		JPanel oppHealthPanel = new JPanel();
@@ -74,7 +56,7 @@ public class BattleScreen {
 		
 		JPanel userPanel = new JPanel();
 		userPanel.setBounds(10, 291, 235, 95);
-		frame.getContentPane().add(userPanel);
+		container.add(userPanel);
 		userPanel.setLayout(null);
 		
 		JLabel userMonsterNameLabel = new JLabel("New label");
@@ -91,7 +73,7 @@ public class BattleScreen {
 		
 		JPanel battleMessagePanel = new JPanel();
 		battleMessagePanel.setBounds(10, 420, 454, 124);
-		frame.getContentPane().add(battleMessagePanel);
+		container.add(battleMessagePanel);
 		battleMessagePanel.setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("New label");
@@ -100,14 +82,16 @@ public class BattleScreen {
 		
 		JButton btnAttack = new JButton("Attack");
 		btnAttack.setBounds(20, 565, 105, 42);
-		frame.getContentPane().add(btnAttack);
+		container.add(btnAttack);
 		
 		JButton btnUseItem = new JButton("Use Item");
 		btnUseItem.setBounds(184, 565, 105, 42);
-		frame.getContentPane().add(btnUseItem);
+		container.add(btnUseItem);
 		
 		JButton btnSwitchMonster = new JButton("Switch Monster");
 		btnSwitchMonster.setBounds(348, 565, 105, 42);
-		frame.getContentPane().add(btnSwitchMonster);
+		container.add(btnSwitchMonster);
 	}
+
+
 }

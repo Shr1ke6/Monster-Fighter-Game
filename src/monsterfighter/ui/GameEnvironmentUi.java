@@ -1,9 +1,9 @@
 package monsterfighter.ui;
 
 
-	import java.util.List;
+import java.util.List;
 
-	import monsterfighter.core.GameEnvironment;
+import monsterfighter.core.GameEnvironment;
 
 
 public interface GameEnvironmentUi {
@@ -22,17 +22,6 @@ public interface GameEnvironmentUi {
      * A regex for validating the name against the specified name requirements.
      */
     String NAME_REGEX = "[a-zA-Z]{1,12}";
-    
-	 /**
-	 * The maximum number of days that a game can last.
-	 */
-    int MAX_DAYS = 15;
-    
-    /**
-	 * The minimum number of days that a game can last.
-	 */
-    int MIN_DAYS = 5;
-    
     
     /**
      * A description of the day requirements for the player of a monster fighter.
@@ -59,6 +48,11 @@ public interface GameEnvironmentUi {
      * @return true if the user wants to quit, false otherwise
      */
 
+	boolean confirmQuit();
+    
+	/**
+	 * Quits the application
+	 */
     void quit();
 
     /**
@@ -67,4 +61,6 @@ public interface GameEnvironmentUi {
      * @param error The error to display
      */
     void showError(String error);
+
+
 }
