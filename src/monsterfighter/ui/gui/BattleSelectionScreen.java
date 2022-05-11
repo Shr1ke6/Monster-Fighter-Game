@@ -1,11 +1,8 @@
 package monsterfighter.ui.gui;
 
-import java.awt.EventQueue;
-
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
-import java.util.Arrays;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -13,7 +10,6 @@ import javax.swing.JList;
 
 import monsterfighter.core.Battle;
 import monsterfighter.core.GameEnvironment;
-import monsterfighter.core.Monster;
 import java.awt.Color;
 import java.awt.Container;
 
@@ -103,7 +99,7 @@ public class BattleSelectionScreen extends Screen{
 		// Create a ListModel to store the items in the JList
 		DefaultListModel<Battle> wildBattlesListModel = new DefaultListModel<Battle>();
 		// Add the existing difficulties to the ListModel
-		wildBattlesListModel.addAll(getGameEnvironment().getWildBattles());
+		wildBattlesListModel.addAll(getGameEnvironment().getBattles().getWildBattles());
 		
 		listWildBattles = new JList<Battle>(wildBattlesListModel);
 		listWildBattles.setVisibleRowCount(-1);
@@ -119,7 +115,7 @@ public class BattleSelectionScreen extends Screen{
 		// Create a ListModel to store the items in the JList
 		DefaultListModel<Battle> trainerBattleListModel = new DefaultListModel<Battle>();
 		// Add the existing difficulties to the ListModel
-		trainerBattleListModel.addAll(getGameEnvironment().getTrainerBattles());
+		trainerBattleListModel.addAll(getGameEnvironment().getBattles().getTrainerBattles());
 		
 		listTrainerBattles = new JList<Battle>(trainerBattleListModel);
 		listTrainerBattles.setVisibleRowCount(-1);

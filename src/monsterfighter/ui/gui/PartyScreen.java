@@ -65,7 +65,7 @@ public class PartyScreen extends Screen{
 
 	private void addLabelsSell(Container container) {
 		
-		lblGold = new JLabel("Gold: " + getGameEnvironment().getGoldBalance());
+		lblGold = new JLabel("Gold: " + getGameEnvironment().getPlayer().getGoldBalance());
 		lblGold.setFont(new Font("Tahoma", Font.BOLD, 18));
 		lblGold.setBounds(411, 11, 113, 43);
 		container.add(lblGold);	
@@ -120,13 +120,13 @@ public class PartyScreen extends Screen{
 				}
 				btnSelectedMonster = (JToggleButton) e.getSource();
 				if (e.getSource().equals(btnMonsterOne)) {
-					selectedMonster = getGameEnvironment().getParty().get(0);
+					selectedMonster = getGameEnvironment().getPlayer().getParty().get(0);
 				} else if (e.getSource().equals(btnMonsterTwo)){
-					selectedMonster = getGameEnvironment().getParty().get(1);
+					selectedMonster = getGameEnvironment().getPlayer().getParty().get(1);
 				} else if (e.getSource().equals(btnMonsterThree)) {
-					selectedMonster = getGameEnvironment().getParty().get(2);
+					selectedMonster = getGameEnvironment().getPlayer().getParty().get(2);
 				} else {
-					selectedMonster = getGameEnvironment().getParty().get(3);
+					selectedMonster = getGameEnvironment().getPlayer().getParty().get(3);
 				}
 				if (getBackButtonRoute().equals("SHOP")) {
 					lblSellPrice.setVisible(true);
@@ -174,33 +174,33 @@ public class PartyScreen extends Screen{
 	
 	private void paintBtnsMonsters() {
 		
-		if (getGameEnvironment().getParty().size()>=1) {
-			btnMonsterOne.setText(getGameEnvironment().getParty().get(0).getNickname());
-			btnMonsterOne.setToolTipText(getGameEnvironment().getParty().get(0).toolTipText());
+		if (getGameEnvironment().getPlayer().getParty().size()>=1) {
+			btnMonsterOne.setText(getGameEnvironment().getPlayer().getParty().get(0).getNickname());
+			btnMonsterOne.setToolTipText(getGameEnvironment().getPlayer().getParty().get(0).toolTipText());
 		} else {
 			btnMonsterOne.setEnabled(false);
 			btnMonsterOne.setText(null);
 		}
 		
-		if (getGameEnvironment().getParty().size()>=2) {
-			btnMonsterTwo.setText(getGameEnvironment().getParty().get(1).getNickname());
-			btnMonsterTwo.setToolTipText(getGameEnvironment().getParty().get(1).toolTipText());
+		if (getGameEnvironment().getPlayer().getParty().size()>=2) {
+			btnMonsterTwo.setText(getGameEnvironment().getPlayer().getParty().get(1).getNickname());
+			btnMonsterTwo.setToolTipText(getGameEnvironment().getPlayer().getParty().get(1).toolTipText());
 		} else {
 			btnMonsterTwo.setEnabled(false);
 			btnMonsterTwo.setText(null);
 		}
 		
-		if (getGameEnvironment().getParty().size()>=3) {
-			btnMonsterThree.setText(getGameEnvironment().getParty().get(2).getNickname());
-			btnMonsterThree.setToolTipText(getGameEnvironment().getParty().get(2).toolTipText());
+		if (getGameEnvironment().getPlayer().getParty().size()>=3) {
+			btnMonsterThree.setText(getGameEnvironment().getPlayer().getParty().get(2).getNickname());
+			btnMonsterThree.setToolTipText(getGameEnvironment().getPlayer().getParty().get(2).toolTipText());
 		} else {
 			btnMonsterThree.setEnabled(false);
 			btnMonsterThree.setText(null);
 		}
 		
-		if (getGameEnvironment().getParty().size()==4) {
-			btnMonsterFour.setText(getGameEnvironment().getParty().get(3).getNickname());
-			btnMonsterFour.setToolTipText(getGameEnvironment().getParty().get(3).toolTipText());
+		if (getGameEnvironment().getPlayer().getParty().size()==4) {
+			btnMonsterFour.setText(getGameEnvironment().getPlayer().getParty().get(3).getNickname());
+			btnMonsterFour.setToolTipText(getGameEnvironment().getPlayer().getParty().get(3).toolTipText());
 		} else {
 			btnMonsterFour.setEnabled(false);
 			btnMonsterFour.setText(null);
@@ -257,7 +257,7 @@ public class PartyScreen extends Screen{
 			btnSellMonster = new JButton("Sell");
 			btnSellMonster.setEnabled(false);
 			btnSellMonster.addActionListener(e -> {
-				if (getGameEnvironment().getGoldBalance() + selectedMonster.getSellPrice() < 200) {
+				if (getGameEnvironment().getPlayer().getGoldBalance() + selectedMonster.getSellPrice() < 200) {
 					 optionPaneEndGame();
 				} else {
 					sellMonster();
@@ -379,7 +379,7 @@ public class PartyScreen extends Screen{
 		getGameEnvironment().sellMonster(selectedMonster);
 		buttonGroupPartyMonsters.clearSelection();
 		lblSellPrice.setVisible(false);
-		lblGold.setText("Gold: " + getGameEnvironment().getGoldBalance());
+		lblGold.setText("Gold: " + getGameEnvironment().getPlayer().getGoldBalance());
 		btnSellMonster.setEnabled(false);
 		selectedMonster=null;
 		paintBtnsMonsters();

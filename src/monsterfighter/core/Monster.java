@@ -1,5 +1,7 @@
 package monsterfighter.core;
 
+import java.util.Random;
+
 public class Monster implements Purchasable{
 	
 	public enum Status {
@@ -28,6 +30,7 @@ public class Monster implements Purchasable{
 	        this.value = value;
 	    }
 	}
+	
 	private final int index;
 	private final String name;
 	private String nickname;
@@ -40,7 +43,7 @@ public class Monster implements Purchasable{
 	private final int sellPrice;
 	private boolean faintedToday = false;
 	private int wins = 0;
-	
+	private Random rng = new Random();
 	
 	public Monster(int index, String name, Type type, int maxHealth, int attack, int buyPrice) {
 		this.index = index;
@@ -190,6 +193,22 @@ public class Monster implements Purchasable{
 	
 	public void attack(Monster enemyMonster) {
 		enemyMonster.receiveDamage(attack);
+	}
+	
+	public void scaleMonster(int scalar) {
+		for (int i = 0; i < scalar; i++) {
+			levelUp();
+		}
+	}
+	
+	public void levelUp() {
+		int randomNumber = rng.nextInt(2);
+		if (randomNumber == 0) {
+			setMaxHealth(20);
+			receiveHealth(20);
+		} else {
+			setAttack(10);
+		}
 	}
 	
 	/**

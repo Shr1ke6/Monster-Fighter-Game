@@ -1,5 +1,6 @@
 package monsterfighter.core;
 
+import java.util.Collections;
 import java.util.List;
 
 public abstract class Battle {
@@ -28,6 +29,10 @@ public abstract class Battle {
 			}
 		}
 		return conscious;
+	}
+	
+	public void nextMonster() {
+		Collections.rotate(monsters, -1);
 	}
 		
 	public String battleStatus() {

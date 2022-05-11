@@ -1,15 +1,11 @@
 package monsterfighter.core;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
 import monsterfighter.ui.gui.Gui;
-import monsterfighter.ui.gui.MainScreen;
-import monsterfighter.ui.gui.SetupScreen;
-
 
 import monsterfighter.ui.GameEnvironmentUi;
 
@@ -31,25 +27,12 @@ public class GameEnvironment {
 	// The list of all {@link Monster}s
 	private final List<Monster> allMonsters;
 	
-	// List of trainer names
-	private final List<String> trainers = Arrays.asList("Ben","Matt","Lee","Ian","John","Eva","Nancy","Haley","Jade","Beth");
-
 	// The list of available starting {@link Monster}s 
 	private final List<Monster> startingMonsters = new ArrayList<Monster>();
 	
 	// The list of all {@link Items}s
 	private final List<Item> allItems;
 
-	// The array list representing the players inventory. 
-	// Contains starting {@link items}s at initialisation.
-	private final List<ArrayList<Item>> inventory = new ArrayList<ArrayList<Item>>();
-
-	// The array list of Monsters in the users party
-	private ArrayList<Monster> party = new ArrayList<Monster>(3);
-	
-	// The name of the user using this manager
-	private String name;
-	
 	// The total number of days the game will last
 	private int totalDays;
 	
@@ -58,25 +41,7 @@ public class GameEnvironment {
 	
 	// The game difficulty
 	private Difficulty difficulty;
-	
-	// The users gold
-	private int goldBalance = 0;
-	
-	// The total gold the user earned over the course of the game
-	private int totalGold = 0;
-	
-	// The users points
-	private int points = 0;
-	
-	// The shop
-	private ArrayList<ArrayList<Purchasable>> shop = new ArrayList<ArrayList<Purchasable>>();
-	
-	// An ArrayList of all available wild battles
-	private ArrayList<Battle> wildBattles = new ArrayList<Battle>(); 
-	
-	// An ArrayList of all available trainer battles
-	private ArrayList<Battle> trainerBattles = new ArrayList<Battle>();
-	
+
 	// Random events that occur upon resting
 	private RandomEvent randomEvents;
 	
@@ -85,10 +50,15 @@ public class GameEnvironment {
 	
 	// Boolean that signals whether a battle is running
 	private boolean battleRunning = false;
-
-	// 
+	
 	private Object selectedObject;
 	
+	private Player player;
+	
+	private Shop shop;
+	
+	private Battles battles;
+
 	// Enum that stores the difficulty options for the game 
     public enum Difficulty {
 	    EASY(200, 50, 0,"Easy"),
@@ -107,6 +77,14 @@ public class GameEnvironment {
 	        this.name = name;
 	    }
 	    
+	    public int getBattleGold() {
+	    	return battleGold;
+	    }
+	    
+	    public int getBattlePoints() {
+	    	return battlePoints;
+	    }
+	    
 	    @Override
 	    public String toString() {
 			return name + ": Starting Gold: " + startingGold + " Bonus gold: " 
@@ -122,23 +100,6 @@ public class GameEnvironment {
 			this.startingMonsters.add(new Monster(monsters.get(i)));
 		}
 		this.allItems = items;
-		for (int i = 0; i < items.size(); i++) {
-			this.inventory.add(new ArrayList<Item>());
-		}
-		// Adds 3 potion's to the inventory 
-		for (int i = 0; i < 3; i++) {
-			addToInventory(allItems.get(1));
-		}
-		for (int i = 0; i < 5; i++) {
-			if (i < 3) {
-				//battles.add(new WildBattle());
-			} else {
-				//battles.add(new TrainerBattle(monsters, i - 3));
-				
-			}
-			
-		}
-		
 	}
 	
 
@@ -150,15 +111,19 @@ public class GameEnvironment {
 	
 	//rm
 	public void onSetupFinished(String name, int totalDays, Monster startingMonster, String nickname, Difficulty difficulty) {
-		this.name = name;
+		this.player = new Player(name, allItems.size());
 		this.totalDays = totalDays;
-		this.party.add(startingMonster);
+		player.addMonsterToParty(startingMonster);
+		for (int i = 0; i < 3; i++) {
+			player.addItemToInventory(new Item(allItems.get(0)));
+		} 
 		startingMonster.setNickname(nickname);
 		this.difficulty = difficulty;
-		goldBalance += difficulty.startingGold;
-		this.totalGold += goldBalance;
-		fillShop();
-		fillBattles();
+		player.setGoldBalance(difficulty.startingGold);
+		this.shop = new Shop();
+		shop.fillShop(day, allItems, allMonsters);
+		this.battles = new Battles();
+		battles.fillBattles(allItems, allMonsters, difficulty, day, player.getParty().size());
 		ui.start();
 	}
 	
@@ -174,11 +139,17 @@ public class GameEnvironment {
 			ui.quit();
 		}
 	}
-		
 	
-
-	public String getName() {
-		return name;
+	public Player getPlayer() {
+		return player;
+	}
+	
+	public Shop getShop() {
+		return shop;
+	}
+	
+	public Battles getBattles() {
+		return battles;
 	}
 	
 	public int getTotalDays() {
@@ -191,18 +162,6 @@ public class GameEnvironment {
 	
 	public Difficulty getDifficulty() {
 		return difficulty;
-	}
-
-	public int getGoldBalance() {
-		return goldBalance;
-	}
-	
-	public int getTotalGold() {
-		return totalGold;
-	}
-	
-	public int getPoints() {
-		return points;
 	}
 	
 	public RandomEvent getRandomEvent() {
@@ -220,78 +179,35 @@ public class GameEnvironment {
 	public List<Item> getAllItems() {
 		return Collections.unmodifiableList(allItems);
 	}
-	
-	public List<ArrayList<Purchasable>> getShop() {
-		return Collections.unmodifiableList(shop);
-	}
-	
+		
 	public List<Monster> getStartingMonsters() {
 		return Collections.unmodifiableList(startingMonsters);
 	}
 	
-	public List<Monster> getParty() {
-		return Collections.unmodifiableList(party);
-	}
-	
-	public List<Battle> getWildBattles() {
-		return Collections.unmodifiableList(wildBattles);
-	}
-	
-	public List<Battle> getTrainerBattles() {
-		return Collections.unmodifiableList(trainerBattles);
-	}
-	
-	public List<ArrayList<Item>> getInventory() {
+	/**
+	 * Creates a copy of the players inventory that contains ArrayLists of size > 0
+	 * 
+	 * Used in the UI to display only existing items
+	 * 
+	 * @return
+	 */
+	public List<ArrayList<Item>> getInventoryUI() {
 		ArrayList<ArrayList<Item>> inventoryUI = new ArrayList<ArrayList<Item>>();;
-		for (ArrayList<Item> item : inventory) {
+		for (ArrayList<Item> item : player.getInventory()) {
 			if (!item.isEmpty()) {
 				inventoryUI.add(item);
 			}
 		}
 		return Collections.unmodifiableList(inventoryUI);
 	}
-
-	public void setSelectedObject(Object selectedObject) {
-		this.selectedObject = selectedObject;
-	}
 	
+
 	public Object getSelectedObject() {
 		return selectedObject;
 	}
 	
-	/**
-	 * Checks to see if user inventory is empty
-	 * @return isEmpty States whether the user's {@link inventory} is empty or not
-	 */
-	public boolean inventoryIsEmpty() {
-		boolean isEmpty = true;
-		for (ArrayList<Item> item : inventory) {
-			if (!item.isEmpty()) {
-				isEmpty = false;
-			}
-		}
-		return isEmpty;
-	}
-	
-	/**
-	 * Checks to see if the shop is empty
-	 * @return isEmpty States whether the shop {@link shop} is empty or not
-	 */
-	public boolean shopIsEmpty() {
-		boolean isEmpty = true;
-		for (ArrayList<Purchasable> item : shop) {
-			if (!item.isEmpty()) {
-				isEmpty = false;
-			}
-		}
-		return isEmpty;
-	}
-	
-	public int inventorySize() {
-		int inventorySize = 0;
-			for (ArrayList<Item> items: inventory)
-				inventorySize += items.size();
-		return inventorySize;
+	public void setSelectedObject(Object selectedObject) {
+		this.selectedObject = selectedObject;
 	}
 	
 	public void switchMonsters(Monster monster, Monster monsterSwitch) {
@@ -301,57 +217,24 @@ public class GameEnvironment {
 			}
 			int monsterID = 10000;
 			int monsterSwitchID = 10000;
-			for (int i = 0; i < party.size(); i++) {
-				if (party.get(i).equals(monster)) {
+			for (int i = 0; i < player.getParty().size(); i++) {
+				if (player.getParty().get(i).equals(monster)) {
 					monsterID = i;
 				}
-				if (party.get(i).equals(monsterSwitch)) {
+				if (player.getParty().get(i).equals(monsterSwitch)) {
 					monsterSwitchID = i;
 				}
 			}
-			Collections.swap(party, monsterID, monsterSwitchID);
+			player.switchMonsters(monsterID, monsterSwitchID);
 		} catch (IllegalStateException e) {
 			ui.showError(e.getMessage());
 		}
 	}
 	
-	
-	public boolean partyFainted() {
-		boolean fainted = true;
-		for (Monster monster: party) {
-			if (monster.getStatus() == Monster.Status.CONSCIOUS) {
-				fainted = false;
-			}
-		}
-		return fainted;	
-	}
-	
-	public void addToParty(Monster monster) {
-		if (party.size() >= 4) {
-			throw new IllegalStateException("Party full, cannot add another monster to party!\n");	
-		} else {
-			party.add(monster);
-		}
-	}
-	
-	public int getItemID(int inventoryID) {
-		int i = 0;
-		int j = 0;
-		for (ArrayList<Item> items: inventory) {
-			if (items.size() > 0) {
-				if (i == inventoryID) {
-					j = items.get(0).getIndex();
-				}
-				i++;
-			}
-		}
-		return j;
-	}
-	
 	public void useItem(Monster monster, Item item) {
 		try {
 			item.useItem(monster);
-			inventory.get(item.getIndex()).remove(0);
+			player.removeItemFromInventory(item);
 		} catch(IllegalStateException e) {
 			ui.showError(e.getMessage());
 		}
@@ -363,9 +246,8 @@ public class GameEnvironment {
 	 * @param itemID
 	 */
 	public void sellItem(Item item) {
-		goldBalance += item.getSellPrice();
-		totalGold += item.getSellPrice();
-		inventory.get(item.getIndex()).remove(0);
+		player.setGoldBalance(item.getSellPrice());
+		player.removeItemFromInventory(item);
 	}
 	
 	/**
@@ -374,73 +256,23 @@ public class GameEnvironment {
 	 * @param monster
 	 */
 	public void sellMonster(Monster monster) {
-		goldBalance += monster.getSellPrice();
-		totalGold += monster.getSellPrice();
-		party.remove(monster);
-	}
-
-	public void addToInventory(Item reward) {
-		inventory.get(reward.getIndex()).add(reward);
-	}
-	
-	public Monster scaleMonster(Monster monster, int scalar) {
-		for (int i = 0; i < scalar; i++) {
-			levelUp(monster);
-		}
-		return monster;
-	}
-	
-	public void levelUp(Monster monster) {
-		int randomNumber = rng.nextInt(2);
-		if (randomNumber == 0) {
-			monster.setMaxHealth(20);
-			monster.receiveHealth(20);
-		} else {
-			monster.setAttack(10);
-		}
-	}
-	
-	public void fillShop() {
-		final ArrayList<Monster> allMonstersCopy = new ArrayList<Monster>(allMonsters);
-		if (shop.size() > 0) {
-			shop.clear();
-		}
-		for (int i = 0; i <= allItems.size() + 2; i++) {
-			shop.add(new ArrayList<Purchasable>());
-			if (i > 2) {
-				for (int j = 0; j < ((allItems.get(i-3).getStoreQuantity()) * ((int) Math.ceil((double)day / 5))) ; j++) {
-					shop.get(i).add(allItems.get(i-3));
-				}
-			} else {
-				int randomNumber = rng.nextInt(allMonstersCopy.size());
-				Monster monster = new Monster(allMonstersCopy.get(randomNumber));
-				shop.get(i).add(scaleMonster(monster, day - 1));
-				allMonstersCopy.remove(randomNumber);
-			}
-		}
+		player.setGoldBalance(monster.getSellPrice());
+		player.removeMonsterFromParty(monster);
 	}
 	
 	public void purchase(Purchasable object) {
 		try {
-			if (shop.size() == 0) {
+			if (shop.getShopInventory().size() == 0) {
 				throw new IllegalStateException("No Items left! Come back tomorrow for new stock");	
 			}
-			if (goldBalance >= object.getBuyPrice()) {
+			if (player.getGoldBalance() >= object.getBuyPrice()) {
 				if (object instanceof Monster) {
-					addToParty((Monster) object);
+					player.addMonsterToParty((Monster) object);
 				} else {
-					addToInventory((Item) object);
+					player.addItemToInventory((Item) object);
 				}
-				goldBalance -= object.getBuyPrice();
-				for (int i = 0; i < shop.size(); i++) {
-					if (object.getClass().equals(shop.get(i).get(0).getClass()) && object.getIndex() == shop.get(i).get(0).getIndex()) {
-						shop.get(i).remove(0);
-						if (shop.get(i).size()==0) {
-							shop.remove(i);
-						}
-						break;
-					}
-				}
+				player.setGoldBalance(-object.getBuyPrice());
+				shop.removeObject(object);
 			} else {
 				throw new IllegalStateException("Not enough gold!\n");
 			}
@@ -452,115 +284,41 @@ public class GameEnvironment {
 	
 	public void nextDay() {
 		day += 1;
-		fillShop();
-		fillBattles();
-		randomEvents = new RandomEvent(party);
-		for (int i = 0; i < party.size(); i++) {
+		shop.fillShop(day, allItems, allMonsters);
+		battles.fillBattles(allItems, allMonsters, difficulty, day, player.getParty().size());
+		randomEvents = new RandomEvent(player.getParty());
+		for (int i = 0; i < player.getParty().size(); i++) {
 			if (randomEvents.getLevelUp().get(i) && !randomEvents.getMonsterLeaves().get(i)) {
-				levelUp(party.get(i));
+				player.getParty().get(i).levelUp();
 			} 
-		} for (int i = 0; i < party.size(); i++) {
+		} for (int i = 0; i < player.getParty().size(); i++) {
 			if (randomEvents.getMonsterLeaves().get(i)) {
-				party.remove(i);
+				player.removeMonsterFromParty(player.getParty().get(i));
 			}
 		}
 		if (randomEvents.getMonsterJoins()) {
 			int randomNumber = rng.nextInt(allMonsters.size());
 			Monster monster = allMonsters.get(randomNumber);
-			party.add(monster);
+			player.addMonsterToParty(monster);
 		}
-		for (Monster monster : party) {
+		for (Monster monster : player.getParty()) {
 			monster.receiveHealth(monster.getMaxHealth());
 			monster.setFaintedToday(false);
 			monster.resetWins();
 		}
 	}
 			
-	public void fillBattles() {
-		fillWildBattles();
-		fillTrainerBattles();
-	}
-			
-	
-	public void fillWildBattles() {
-		// Clears out yesterdays wild battles
-		if (wildBattles.size() > 0) {
-			wildBattles.clear();
-		}
-		
-		for (int i = 0; i < 2; i++) {
-			// Selects a random item as a reward
-			int randomNumber = rng.nextInt(0, allItems.size());
-			Item reward = allItems.get(randomNumber);
-			
-			// Selects and scales a random monster
-			ArrayList<Monster> monsters = new ArrayList<>();
-			randomNumber = rng.nextInt(allMonsters.size());
-			Monster monster = new Monster(allMonsters.get(randomNumber));
-			monsters.add(scaleMonster(monster, day - 3));
-			
-			// Selects the correct amount of points
-			int points = calculatePoints("Wild", monsters.size());
-			
-			wildBattles.add(new WildBattle(reward, points, monsters));
-		}
-	}
-	
-	public void fillTrainerBattles() {
-		// Clears out yesterdays trainer battles
-		if (trainerBattles.size() > 0) {
-			trainerBattles.clear();
-		}
-		for (int i = 0; i < 3; i++) {
-			// Selects a random party size based on the size of the users party
-			int randomNumber = rng.nextInt(party.size() + 1);
-			
-			// Fills the party with scaled monsters equal to selected size
-			ArrayList<Monster> monsters = new ArrayList<>();
-			for (int j = 0; j <= Math.min(randomNumber, 3); j++) {
-				Monster monster = new Monster(allMonsters.get(rng.nextInt(allMonsters.size())));
-				monsters.add(scaleMonster(monster, day - 1));
-			}
-			
-			// Selects a random name for the trainer
-			String trainer = trainers.get(rng.nextInt(0, trainers.size()));
-			
-			// Selects the correct amount of gold
-			int gold = calculateGold(monsters.size());
-			
-			//  Selects the correct amount of points
-			int points = calculatePoints("Trainer", monsters.size());
-			
-			trainerBattles.add(new TrainerBattle(gold, points, monsters, trainer));
-		}
-	}
-	
-	
-	public int calculatePoints(String battleType, int partySize) {
-		int points = 50 * partySize + difficulty.battlePoints;
-		if (battleType != "Wild") {
-			points += 100;
-		}
-		return points;
-	}
-	
-	public int calculateGold(int partySize) {
-		int gold = 200 * partySize + difficulty.battleGold;
-		return gold;
-	}
-	
 	public void startBattle() {
 		try {
-			if (party.size() == 0 || partyFainted()) {
+			if (player.getParty().size() == 0 || player.partyFainted()) {
 				throw new IllegalStateException("No available monsters to battle");
 			}
 			int i = 0;
-			for (Monster monster: party) {
+			for (Monster monster: player.getParty()) {
 				if (monster.getStatus().equals(Monster.Status.CONSCIOUS)) {
-					Collections.swap(party, 0, i);
-					i++;
+					player.switchMonsters(0,i);
 					break;
-				}
+				} i++;
 			}
 			battleRunning = true;
 		} catch (IllegalStateException e) {
@@ -570,41 +328,40 @@ public class GameEnvironment {
 	
 	public void manageBattle(Battle opponent, int battleID) {
 		opponentTurn(opponent);
-		battleRunning = opponent.getConsciousMonsters() > 0 && !partyFainted();
+		battleRunning = opponent.getConsciousMonsters() > 0 && !player.partyFainted();
 		if (!battleRunning) {
 			rewards(opponent);
 			if (opponent instanceof WildBattle) {
-				opponent = wildBattles.remove(battleID);
+				battles.removeWildBattle(opponent);
 			} else if (opponent instanceof TrainerBattle){
-				opponent = trainerBattles.remove(battleID);
+				battles.removeTrainerBattle(opponent);
 			}
 		}
 	}
 	
 	public void opponentTurn(Battle opponent) {
 		if (opponent.getMonsters().get(0).getStatus() == Monster.Status.FAINTED) {
-			Collections.rotate(opponent.getMonsters(), -1);
+			opponent.nextMonster();
 		} else {
-			opponent.getMonsters().get(0).attack(party.get(0));
+			opponent.getMonsters().get(0).attack(player.getLeadingMonster());
 		}
 		
 	}
 
 	public void rewards(Battle opponent) {
-		if (partyFainted()) {
-			points += 25 * (opponent.getMonsters().size() - opponent.getConsciousMonsters());
+		if (player.partyFainted()) {
+			player.setPoints(opponent.getMonsters().size() - opponent.getConsciousMonsters());
 		} else if (opponent.getConsciousMonsters() == 0) {
-			points += opponent.getPoints();
+			player.setPoints(opponent.getPoints());
 			if (opponent instanceof WildBattle) {
 				WildBattle wildOpponent = (WildBattle) opponent;
 				Item reward = wildOpponent.getReward();
-				addToInventory(reward);
+				player.addItemToInventory(reward);
 			} else if (opponent instanceof TrainerBattle) {
 				TrainerBattle trainerOpponent = (TrainerBattle) opponent;
-				goldBalance += trainerOpponent.getGold();
-				totalGold += trainerOpponent.getGold();
+				player.setGoldBalance(trainerOpponent.getGold());
 			}
-			for (Monster monster: party) {
+			for (Monster monster: player.getParty()) {
 				monster.addWin(1);
 			}
 		}

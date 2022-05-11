@@ -1,7 +1,6 @@
 package monsterfighter.ui.gui;
 
 import java.awt.Container;
-import java.awt.EventQueue;
 
 import monsterfighter.core.GameEnvironment;
 
@@ -34,12 +33,12 @@ public class GameOverScreen extends Screen{
 		gameOverLabel.setBounds(217, 11, 100, 80);
 		container.add(gameOverLabel);
 		
-		JLabel lblPoints = new JLabel("Points: " + getGameEnvironment().getPoints());
+		JLabel lblPoints = new JLabel("Points: " + getGameEnvironment().getPlayer().getPoints());
 		lblPoints.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblPoints.setBounds(40, 171, 167, 30);
 		container.add(lblPoints);
 		
-		JLabel lblTotalGold = new JLabel("Total Gold: " + getGameEnvironment().getTotalGold());
+		JLabel lblTotalGold = new JLabel("Total Gold: " + getGameEnvironment().getPlayer().getTotalGold());
 		lblTotalGold.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblTotalGold.setBounds(40, 238, 167, 30);
 		container.add(lblTotalGold);
@@ -49,7 +48,7 @@ public class GameOverScreen extends Screen{
 		lblDays.setBounds(40, 304, 167, 30);
 		container.add(lblDays);
 		
-		JLabel lblName = new JLabel("Name: " + getGameEnvironment().getName());
+		JLabel lblName = new JLabel("Name: " + getGameEnvironment().getPlayer().getName());
 		lblName.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblName.setBounds(40, 101, 167, 30);
 		container.add(lblName);

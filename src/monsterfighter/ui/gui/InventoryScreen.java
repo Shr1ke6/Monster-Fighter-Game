@@ -10,7 +10,6 @@ import javax.swing.JComboBox;
 
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JList;
@@ -57,7 +56,7 @@ public class InventoryScreen extends Screen{
 		if (getBackButtonRoute().equals("PARTY")) {
 			selectedMonster = (Monster)getGameEnvironment().getSelectedObject();
 		} else if (getBackButtonRoute().equals("BATTLE")) {
-			selectedMonster = getGameEnvironment().getParty().get(0);
+			selectedMonster = getGameEnvironment().getPlayer().getParty().get(0);
 		}
 		
 		addLabelInventory(container);
@@ -85,7 +84,7 @@ public class InventoryScreen extends Screen{
 		lblSellPrice.setBounds(198, 356, 137, 43);
 		container.add(lblSellPrice);
 		
-		lblGold = new JLabel("Gold: " + getGameEnvironment().getGoldBalance());
+		lblGold = new JLabel("Gold: " + getGameEnvironment().getPlayer().getGoldBalance());
 		lblGold.setFont(new Font("Tahoma", Font.BOLD, 18));
 		lblGold.setBounds(411, 11, 113, 43);
 		container.add(lblGold);	
@@ -149,15 +148,15 @@ public class InventoryScreen extends Screen{
 			btnSellItem = new JButton("Sell");
 			btnSellItem.setEnabled(false);
 			btnSellItem.addActionListener(e -> {
-				int inventorySize = getGameEnvironment().getInventory().size();
+				int inventorySize = getGameEnvironment().getInventoryUI().size();
 				for (int i = 0; i < (int)comboBoxNumItems.getSelectedItem(); i++) {
 					getGameEnvironment().sellItem(listInventory.getSelectedValue().get(0));
 				}
-				lblGold.setText("Gold: " + getGameEnvironment().getGoldBalance());
-				if (inventorySize != getGameEnvironment().getInventory().size()) {
+				lblGold.setText("Gold: " + getGameEnvironment().getPlayer().getGoldBalance());
+				if (inventorySize != getGameEnvironment().getInventoryUI().size()) {
 					listInventory.clearSelection();
 					inventoryListModel.removeAllElements();
-					inventoryListModel.addAll(getGameEnvironment().getInventory());
+					inventoryListModel.addAll(getGameEnvironment().getInventoryUI());
 				}
 				getParentComponent().repaint();
 				sellDisplay();
@@ -170,12 +169,12 @@ public class InventoryScreen extends Screen{
 			btnUseItem.setEnabled(false);
 			btnUseItem.addActionListener(e -> {
 			if (getBackButtonRoute().equals("PARTY") || getBackButtonRoute().equals("BATTLE")) {
-				int inventorySize = getGameEnvironment().getInventory().size();
+				int inventorySize = getGameEnvironment().getInventoryUI().size();
 				getGameEnvironment().useItem(selectedMonster, listInventory.getSelectedValue().get(0));
-				if (inventorySize != getGameEnvironment().getInventory().size()) {
+				if (inventorySize != getGameEnvironment().getInventoryUI().size()) {
 					listInventory.clearSelection();
 					inventoryListModel.removeAllElements();
-					inventoryListModel.addAll(getGameEnvironment().getInventory());
+					inventoryListModel.addAll(getGameEnvironment().getInventoryUI());
 				}
 				setTextLabelMonster();
 			} else {
@@ -193,7 +192,7 @@ public class InventoryScreen extends Screen{
 		
 		inventoryListModel = new DefaultListModel<ArrayList<Item>>();
 		// Add the existing difficulties to the ListModel
-		inventoryListModel.addAll(getGameEnvironment().getInventory());
+		inventoryListModel.addAll(getGameEnvironment().getInventoryUI());
 		
 		listInventory = new JList<ArrayList<Item>>(inventoryListModel);
 		listInventory.setCellRenderer(new InventoryRenderer());

@@ -33,7 +33,7 @@ public class MainScreen extends Screen{
 	}
 	
 	private void addLabels(Container container) { 
-		JLabel lblTrainerLabel = new JLabel("Trainer: " + getGameEnvironment().getName());
+		JLabel lblTrainerLabel = new JLabel("Trainer: " + getGameEnvironment().getPlayer().getName());
 		lblTrainerLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblTrainerLabel.setBounds(10, 26, 300, 22);
 		container.add(lblTrainerLabel);
@@ -43,12 +43,12 @@ public class MainScreen extends Screen{
 		lblDay.setBounds(372, 23, 100, 29);
 		container.add(lblDay);
 			
-		JLabel lblGold = new JLabel("Gold: " + getGameEnvironment().getGoldBalance());
+		JLabel lblGold = new JLabel("Gold: " + getGameEnvironment().getPlayer().getGoldBalance());
 		lblGold.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblGold.setBounds(10, 59, 100, 22);
 		container.add(lblGold);
 		
-		JLabel lblPoints = new JLabel("Points: " + getGameEnvironment().getPoints());
+		JLabel lblPoints = new JLabel("Points: " + getGameEnvironment().getPlayer().getPoints());
 		lblPoints.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblPoints.setBounds(354, 63, 100, 14);
 		container.add(lblPoints);
@@ -90,7 +90,7 @@ public class MainScreen extends Screen{
 					getGameEnvironment().transitionScreen("GAME_OVER", "MAIN_MENU", true);
 				} else {
 					partyCopy = new ArrayList<Monster>();
-					for (Monster monster: getGameEnvironment().getParty()) {
+					for (Monster monster: getGameEnvironment().getPlayer().getParty()) {
 						partyCopy.add(monster);
 					}
 					getGameEnvironment().nextDay();
@@ -126,12 +126,12 @@ public class MainScreen extends Screen{
 		});
 		
 		RandomEvent randomEvents = getGameEnvironment().getRandomEvent();
-		if (getGameEnvironment().getParty().size()>0) {
+		if (getGameEnvironment().getPlayer().getParty().size()>0) {
 			message += "Your Monsters received a good night's rest and healed to full health.<br>";
 		} for (int i = 0; i < partyCopy.size(); i++) {
 			if (randomEvents.getMonsterLeaves().get(i)) {
 				message += partyCopy.get(i).getNickname() +
-						" left your party overnight. Best of luck " + getGameEnvironment().getParty().get(i).getNickname() + ".<br>";
+						" left your party overnight. Best of luck " + getGameEnvironment().getPlayer().getParty().get(i).getNickname() + ".<br>";
 			} else if (randomEvents.getLevelUp().get(i) && !randomEvents.getMonsterLeaves().get(i)) {
 				message += partyCopy.get(i).getNickname() + "'s stats increased overnight.<br>";
 			} 
