@@ -297,7 +297,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 				if (monsterID >= 0 && monsterID < party.size()) {
 					partyOptions(monsterID, party);
 				} else {
-					start();
+					break;
 				}
 			} else {
 				showError("Party is empty!\n");
@@ -347,8 +347,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 				if (inventoryID < inventory.size()) {
 					inventoryOptions(inventoryID);
 				} else if (inventoryID == inventory.size()) {
-					System.out.println("boob");
-					start();
+					break;
 				}
 			} else {
 				showError("Inventory is empty!\n");
@@ -474,7 +473,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 				} else if (option == 1 || option == 2) {
 					sell(option);
 				} else if (option == 3) {
-					start();
+					break;
 				}
 			} catch (Exception e) {
 				scanner.nextLine();
@@ -569,7 +568,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 						showError("No more trainer battles! Come back tomorrow for new battles\n");
 					}
 				} else if (option == 2) {
-					start();
+					break;
 				}
 			} catch (Exception e) {
 				scanner.nextLine();
@@ -638,18 +637,18 @@ public class CmdLineUi implements GameEnvironmentUi {
 				System.out.println(party.get(0).getName() + " fainted!");
 			}
 			while (party.get(0).getStatus().equals(Monster.Status.FAINTED)) {
-				Monster monster = new Monster(party.get(0));
+				Monster activeMonster = party.get(0);
 				switchMonsters(0, "Select a monster to switch into battle");
-				if (!monster.sameMonster(party.get(0))) {
-					System.out.println("Go get 'em " + monster.getNickname());
+				if (!activeMonster.equals(party.get(0))) {
+					System.out.println("Go get 'em " + party.get(0).getNickname());
 				}
 			}
 			takeTurn(battle, party, inventory);
 			int health = party.get(0).getCurrentHealth();
-			Monster opponentsMonsterCopy = new Monster(battle.getMonsters().get(0));
+			Monster opponentsActiveMonster = battle.getMonsters().get(0);
 			gameEnvironment.manageBattle(battle, battleID);
-			if (opponentsMonsterCopy.getStatus().equals(Monster.Status.CONSCIOUS)) {
-				System.out.println("Opponent's " + opponentsMonsterCopy.getNickname() + " did " + (health - party.get(0).getCurrentHealth()) + " damage to " + party.get(0).getNickname() + "\n");
+			if (opponentsActiveMonster.getStatus().equals(Monster.Status.CONSCIOUS)) {
+				System.out.println("Opponent's " + opponentsActiveMonster.getNickname() + " did " + (health - party.get(0).getCurrentHealth()) + " damage to " + party.get(0).getNickname() + "\n");
 			}
 			battleRunning = gameEnvironment.getBattleRunning();
 		} while(battleRunning);
@@ -659,7 +658,6 @@ public class CmdLineUi implements GameEnvironmentUi {
 	private void takeTurn(Battle battle, List<Monster> party, List<ArrayList<Item>> inventory) {
 		Monster activeMonster = party.get(0);
 		Monster opponent = battle.getMonsters().get(0);
-		Monster activeMonsterCopy = new Monster(party.get(0));
 		while (true) {
 			try {
 				battleStatus(battle, gameEnvironment.getPlayer().getParty());
@@ -679,15 +677,15 @@ public class CmdLineUi implements GameEnvironmentUi {
 					System.out.print("\n");
 					break;
 				} else if (battleOption == 1) {
-					int inventorySize = gameEnvironment.getInventoryUI().size();
+					int inventorySize = gameEnvironment.getPlayer().inventoryNumItems();
 					useItem(0,0);
-					if (inventorySize != gameEnvironment.getInventoryUI().size()) {
+					if (inventorySize != gameEnvironment.getPlayer().inventoryNumItems()) {
 						break;
 					}
 				} else if (battleOption == 2) {
 					switchMonsters(0, "Select a monster to switch " + party.get(0).getNickname() + " with:");
-					if (!activeMonsterCopy.sameMonster(activeMonster)) {
-						System.out.println("Switched " + activeMonsterCopy.getNickname() + " with " + activeMonster.getNickname());
+					if (!activeMonster.equals(party.get(0))) {
+						System.out.println("Switched " + activeMonster.getNickname() + " with " + party.get(0).getNickname());
 						break;
 					}
 				}
@@ -730,7 +728,7 @@ public class CmdLineUi implements GameEnvironmentUi {
                 if (input.matches("[yY]")) {
                 	ArrayList<Monster> partyCopy = new ArrayList<>();
                 	for (Monster monster: gameEnvironment.getPlayer().getParty()) {
-                		partyCopy.add(new Monster(monster));
+                		partyCopy.add(monster);
                 	}
                 	gameEnvironment.nextDay();
                 	endOfTheWorld();
@@ -754,12 +752,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 			if (randomEvents.getMonsterLeaves().get(i)) {
 				System.out.println(partyCopy.get(i).getNickname() + " left your party overnight. Best of luck " + partyCopy.get(i).getNickname());
 			} else if (randomEvents.getLevelUp().get(i) && !randomEvents.getMonsterLeaves().get(i)) {
-				if (party.get(i).getAttack() != partyCopy.get(i).getAttack()) {
-					System.out.println(partyCopy.get(i).getNickname() + "'s attack increased overnight!");
-				} else {
-					System.out.println(partyCopy.get(i).getNickname() + "'s health increased overnight!");
-				}
-				
+				System.out.println(partyCopy.get(i).getNickname() + "'s levelled up increased overnight!");
 			} 
 		}
 		if (randomEvents.getMonsterJoins()) {
@@ -772,9 +765,10 @@ public class CmdLineUi implements GameEnvironmentUi {
 	public void endOfTheWorld() {
 		gameEnvironment.getDay();
 		gameEnvironment.getTotalDays();
-		if (gameEnvironment.getDay() == gameEnvironment.getTotalDays()) {
-			System.out.print("You reach the max amount of days therefore the game ends, during that time you, " 
-					+ gameEnvironment.getPlayer().getName() + " has achieved:" + gameEnvironment.getPlayer().getPoints() + " points.");
+		if (gameEnvironment.getDay() > gameEnvironment.getTotalDays()) {
+			System.out.print("You reached the max amount of days therefore the game ends, during that time you receieved " 
+					+ gameEnvironment.getPlayer().getPoints() + " points, and earned " +gameEnvironment.getPlayer().getTotalGold()
+					+ " total gold.");
 			quit();
 		}
 	}

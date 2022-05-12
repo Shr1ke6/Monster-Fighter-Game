@@ -1,5 +1,6 @@
 package monsterfighter.core;
 
+import java.awt.Color;
 import java.util.Random;
 
 public class Monster implements Purchasable{
@@ -17,17 +18,19 @@ public class Monster implements Purchasable{
 	}
 	
 	public enum Type {
-		NORMAL("Normal"),
-	    FIRE("Fire"),
-	    WATER("Water"),
-	    GRASS("Grass"),
-	    LIGHT("Light"),
-	    DARK("Dark");
+		NORMAL("Normal", Color.GRAY),
+	    FIRE("Fire", Color.RED),
+	    WATER("Water", Color.BLUE),
+	    GRASS("Grass", Color.GREEN),
+	    LIGHT("Light", Color.WHITE),
+	    DARK("Dark", Color.BLACK);
 
 	    public final String value;
+	    public final Color colour;
 
-	    Type(String value) {
+	    Type(String value, Color colour) {
 	        this.value = value;
+	        this.colour = colour;
 	    }
 	}
 	

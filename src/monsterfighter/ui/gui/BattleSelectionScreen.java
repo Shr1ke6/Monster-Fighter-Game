@@ -3,6 +3,8 @@ package monsterfighter.ui.gui;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -14,6 +16,8 @@ import java.awt.Color;
 import java.awt.Container;
 
 import javax.swing.border.EtchedBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.ListSelectionModel;
 
 public class BattleSelectionScreen extends Screen{
@@ -28,7 +32,7 @@ public class BattleSelectionScreen extends Screen{
 	
 	@Override
 	protected void initialise(Container container) {
-		container.setSize(490, 675);
+		container.setSize(490, 517);
 		
 		addLabels(container);
 		addBtns(container);
@@ -70,12 +74,12 @@ public class BattleSelectionScreen extends Screen{
 		
 		JLabel lblWildBattle = new JLabel("Wild Monsters");
 		lblWildBattle.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblWildBattle.setBounds(28, 180, 188, 44);
+		lblWildBattle.setBounds(28, 165, 188, 44);
 		container.add(lblWildBattle);
 		
 		JLabel lblTrainerBattle = new JLabel("Trainers");
 		lblTrainerBattle.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblTrainerBattle.setBounds(28, 332, 188, 44);
+		lblTrainerBattle.setBounds(28, 275, 188, 44);
 		container.add(lblTrainerBattle);
 		
 	}
@@ -83,12 +87,12 @@ public class BattleSelectionScreen extends Screen{
 	private void addBtns(Container container) {
 		
 		JButton btnBack = new JButton("Back");
-		btnBack.setBounds(10, 583, 105, 42);
+		btnBack.setBounds(10, 426, 105, 42);
 		btnBack.addActionListener(e -> getGameEnvironment().transitionScreen(getBackButtonRoute(), "BATTLE_SELECTION", true));
 		container.add(btnBack);
 		
 		JButton btnBattle = new JButton("Battle");
-		btnBattle.setBounds(359, 583, 105, 42);
+		btnBattle.setBounds(359, 426, 105, 42);
 		btnBattle.addActionListener(e -> getGameEnvironment().transitionScreen("BATTLE", "BATTLE_SELECTION", true));
 		container.add(btnBattle);
 		
@@ -106,7 +110,18 @@ public class BattleSelectionScreen extends Screen{
 		listWildBattles.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listWildBattles.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		listWildBattles.setBackground(Color.WHITE);
-		listWildBattles.setBounds(28, 220, 420, 68);
+		listWildBattles.addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				if (!listWildBattles.isSelectionEmpty()) {
+					listTrainerBattles.clearSelection();
+				}
+				getGameEnvironment().setSelectedObject(listWildBattles.getSelectedValue());
+			}
+			
+		});
+		listWildBattles.setBounds(28, 220, 420, 44);
 		container.add(listWildBattles);
 	}
 
@@ -122,7 +137,18 @@ public class BattleSelectionScreen extends Screen{
 		listTrainerBattles.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listTrainerBattles.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		listTrainerBattles.setBackground(Color.WHITE);
-		listTrainerBattles.setBounds(28, 370, 420, 99);
+		listTrainerBattles.addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				if (!listTrainerBattles.isSelectionEmpty()) {
+					listWildBattles.clearSelection();
+				}
+				getGameEnvironment().setSelectedObject(listTrainerBattles.getSelectedValue());
+			}
+			
+		});
+		listTrainerBattles.setBounds(28, 330, 420, 62);
 		container.add(listTrainerBattles);
 		
 	}

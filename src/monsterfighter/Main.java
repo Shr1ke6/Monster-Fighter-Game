@@ -38,18 +38,18 @@ public class Main {
 		
 		GameEnvironmentUi ui;
 
-        ui = new CmdLineUi();
-        GameEnvironment gameEnvironment = new GameEnvironment(ui, monsters, items);
-        gameEnvironment.start();
-       if (args.length > 0 && (args[0].equals("cmd"))) {
 
+       if (args.length > 0 && (args[0].equals("cmd"))) {
+           ui = new CmdLineUi();
+           GameEnvironment gameEnvironment = new GameEnvironment(ui, monsters, items);
+           gameEnvironment.start();
         } else {
-	       // ui = new Gui();
-	       // GameEnvironment gameEnvironment = new GameEnvironment(ui, monsters, items);
+	       ui = new Gui();
+	       GameEnvironment gameEnvironment = new GameEnvironment(ui, monsters, items);
 	
 	        // Ensure the RocketManager is started on the Swing event dispatch thread (EDT). To be thread safe,
 	        // all swing code should run on this thread unless explicitly stated as being thread safe.
-	        //SwingUtilities.invokeLater(() -> gameEnvironment.start());
+	        SwingUtilities.invokeLater(() -> gameEnvironment.start());
         }
     }
 }

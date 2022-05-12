@@ -91,6 +91,8 @@ public class BattleScreen extends Screen{
 		JButton btnSwitchMonster = new JButton("Switch Monster");
 		btnSwitchMonster.setBounds(348, 565, 105, 42);
 		container.add(btnSwitchMonster);
+		
+		
 	}
 
 

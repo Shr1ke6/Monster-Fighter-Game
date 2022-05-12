@@ -43,7 +43,7 @@ public class Player {
 	public void removeItemFromInventory(Item item) {
 		inventory.get(item.getIndex()).remove(item);
 	}
-
+	
 	public ArrayList<Monster> getParty() {
 		return party;
 	}
@@ -139,6 +139,15 @@ public class Player {
 		}
 		return fainted;	
 	}
-	
+
+	public int inventoryNumItems() {
+		int numItems = 0;
+		for (ArrayList<Item> items: inventory) {
+			for(Item item: items) {
+				numItems += 1;
+			}
+		}
+		return numItems;
+	}
 	
 }
