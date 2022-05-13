@@ -3,8 +3,6 @@ package monsterfighter.ui.gui;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
-import java.util.Observable;
-import java.util.Observer;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -24,6 +22,7 @@ public class BattleSelectionScreen extends Screen{
 	
 	private JList<Battle> listWildBattles;
 	private JList<Battle> listTrainerBattles;
+	private JButton btnBattle;
 	
 
 	protected BattleSelectionScreen(GameEnvironment gameEnvironment, String backButtonRoute) {
@@ -48,30 +47,15 @@ public class BattleSelectionScreen extends Screen{
 		lblBattleHeader.setBounds(28, 11, 109, 44);
 		container.add(lblBattleHeader);
 		
-		JLabel lblBattleIntructions_1 = new JLabel("Win fights to gain rewards and strengthen your team");
-		lblBattleIntructions_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblBattleIntructions_1.setHorizontalAlignment(SwingConstants.LEFT);
-		lblBattleIntructions_1.setBounds(28, 54, 480, 28);
-		container.add(lblBattleIntructions_1);
-		
-		JLabel lblBattleIntructions_2 = new JLabel("Each opponent may be fought only once");
-		lblBattleIntructions_2.setHorizontalAlignment(SwingConstants.LEFT);
-		lblBattleIntructions_2.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblBattleIntructions_2.setBounds(28, 81, 480, 28);
-		container.add(lblBattleIntructions_2);
-		
-		JLabel lblBattleIntructions_3 = new JLabel("New opponents arrive each day");
-		lblBattleIntructions_3.setHorizontalAlignment(SwingConstants.LEFT);
-		lblBattleIntructions_3.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblBattleIntructions_3.setBounds(28, 109, 480, 28);
-		container.add(lblBattleIntructions_3);
-		
-		JLabel lblBattleIntructions_4 = new JLabel("Choose a battle from either list and press battle to begin");
-		lblBattleIntructions_4.setHorizontalAlignment(SwingConstants.LEFT);
-		lblBattleIntructions_4.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblBattleIntructions_4.setBounds(28, 137, 480, 28);
-		container.add(lblBattleIntructions_4);
-		
+		JLabel lblBattleIntructions = new JLabel("<html>Win fights to gain rewards and strengthen your team<p style='margin-top:10'>"
+				+ "Each opponent may be fought only once<p style='margin-top:10'>"
+				+ "New opponents arrive each day<p style='margin-top:10'>"
+				+ "Choose a battle from either list and press battle to begin</html>");
+		lblBattleIntructions.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblBattleIntructions.setHorizontalAlignment(SwingConstants.LEFT);
+		lblBattleIntructions.setBounds(28, 47, 436, 125);
+		container.add(lblBattleIntructions);
+				
 		JLabel lblWildBattle = new JLabel("Wild Monsters");
 		lblWildBattle.setFont(new Font("Tahoma", Font.BOLD, 16));
 		lblWildBattle.setBounds(28, 165, 188, 44);
@@ -88,12 +72,21 @@ public class BattleSelectionScreen extends Screen{
 		
 		JButton btnBack = new JButton("Back");
 		btnBack.setBounds(10, 426, 105, 42);
-		btnBack.addActionListener(e -> getGameEnvironment().transitionScreen(getBackButtonRoute(), "BATTLE_SELECTION", true));
+		btnBack.addActionListener(e -> {
+			getGameEnvironment().setSelectedObject(null);
+			getGameEnvironment().transitionScreen(getBackButtonRoute(), "BATTLE_SELECT", true);
+		});
 		container.add(btnBack);
 		
-		JButton btnBattle = new JButton("Battle");
+		btnBattle = new JButton("Battle");
+		btnBattle.setEnabled(false);
 		btnBattle.setBounds(359, 426, 105, 42);
-		btnBattle.addActionListener(e -> getGameEnvironment().transitionScreen("BATTLE", "BATTLE_SELECTION", true));
+		btnBattle.addActionListener(e -> {
+			getGameEnvironment().startBattle();
+			if (getGameEnvironment().getBattleRunning()) {
+				getGameEnvironment().transitionScreen("BATTLE", "BATTLE_SELECT", true);
+			}
+		});
 		container.add(btnBattle);
 		
 	}
@@ -117,7 +110,8 @@ public class BattleSelectionScreen extends Screen{
 				if (!listWildBattles.isSelectionEmpty()) {
 					listTrainerBattles.clearSelection();
 				}
-				getGameEnvironment().setSelectedObject(listWildBattles.getSelectedValue());
+				getGameEnvironment().getBattles().setCurrentBattle(listWildBattles.getSelectedValue());
+				btnBattle.setEnabled(true);
 			}
 			
 		});
@@ -144,7 +138,8 @@ public class BattleSelectionScreen extends Screen{
 				if (!listTrainerBattles.isSelectionEmpty()) {
 					listWildBattles.clearSelection();
 				}
-				getGameEnvironment().setSelectedObject(listTrainerBattles.getSelectedValue());
+				getGameEnvironment().getBattles().setCurrentBattle(listTrainerBattles.getSelectedValue());
+				btnBattle.setEnabled(true);
 			}
 			
 		});

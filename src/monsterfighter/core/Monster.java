@@ -18,12 +18,12 @@ public class Monster implements Purchasable{
 	}
 	
 	public enum Type {
-		NORMAL("Normal", Color.GRAY),
-	    FIRE("Fire", Color.RED),
-	    WATER("Water", Color.BLUE),
-	    GRASS("Grass", Color.GREEN),
-	    LIGHT("Light", Color.WHITE),
-	    DARK("Dark", Color.BLACK);
+		NORMAL("NORMAL", Color.GRAY),
+	    FIRE("FIRE", Color.RED),
+	    WATER("WATER", Color.BLUE),
+	    GRASS("GRASS", new Color(34,139,34)),
+	    LIGHT("LIGHT", new Color(255, 215, 0)),
+	    DARK("DARK", Color.BLACK);
 
 	    public final String value;
 	    public final Color colour;

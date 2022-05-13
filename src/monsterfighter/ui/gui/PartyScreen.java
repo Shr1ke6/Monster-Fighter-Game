@@ -134,6 +134,8 @@ public class PartyScreen extends Screen{
 				}
 				if (btnSwitchMonsters!=null && btnSwitchMonsters.isSelected() && !getGameEnvironment().getBattleRunning()) {
 					getGameEnvironment().switchMonsters(selectedMonsterSwitch, selectedMonster);
+					selectedMonsterSwitch = null;
+					//if 
 					paintBtnsMonsters();
 				}
 			}
@@ -242,7 +244,8 @@ public class PartyScreen extends Screen{
 			btnUseItem.setBounds(304, 358, 105, 42);
 			container.add(btnUseItem);
 			listOptionButtons.add(btnUseItem);
-			
+		
+		} if (getBackButtonRoute().equals("MAIN_MENU") || getBackButtonRoute().equals("BATTLE")) {
 			btnSwitchMonsters = new JToggleButton("Switch");
 			btnSwitchMonsters.setEnabled(false);
 			btnSwitchMonsters.addActionListener(e -> { 
@@ -278,7 +281,6 @@ public class PartyScreen extends Screen{
 			container.add(btnUseItem);
 			listOptionButtons.add(btnUseItem);
 		}
-
 	}
 	
 	private void optionPaneNickname() {

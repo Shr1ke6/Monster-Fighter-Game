@@ -646,7 +646,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 			takeTurn(battle, party, inventory);
 			int health = party.get(0).getCurrentHealth();
 			Monster opponentsActiveMonster = battle.getMonsters().get(0);
-			gameEnvironment.manageBattle(battle, battleID);
+			gameEnvironment.manageBattle(battle);
 			if (opponentsActiveMonster.getStatus().equals(Monster.Status.CONSCIOUS)) {
 				System.out.println("Opponent's " + opponentsActiveMonster.getNickname() + " did " + (health - party.get(0).getCurrentHealth()) + " damage to " + party.get(0).getNickname() + "\n");
 			}

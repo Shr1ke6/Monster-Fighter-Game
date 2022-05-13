@@ -17,6 +17,9 @@ public class Battles {
 	
 	// List of trainer names
 	private final List<String> trainers = Arrays.asList("Ben","Matt","Lee","Ian","John","Eva","Nancy","Haley","Jade","Beth");
+	
+	// Points to a battle in wildBattles or trainerBattles
+	private Battle currentBattle;
 
 	private Random rng = new Random();
 	
@@ -47,6 +50,14 @@ public class Battles {
 	
 	public void removeTrainerBattle(Battle trainerBattle) {
 		trainerBattles.remove(trainerBattle);
+	}
+	
+	public void setCurrentBattle(Battle currentBattle) {
+		this.currentBattle = currentBattle;
+	}
+	
+	public Battle getCurrentBattle() {
+		return currentBattle;
 	}
 
 	public void fillBattles(List<Item> allItems, List<Monster> allMonsters, GameEnvironment.Difficulty difficulty, int day, int partySize) {

@@ -131,16 +131,21 @@ public class InventoryScreen extends Screen{
 		listOptionButtons = new ArrayList<AbstractButton>();
 		
 		JButton btnBack = new JButton("Back");
-		btnBack.addActionListener(e -> {
-		if (getBackButtonRoute().equals("PARTY") || getBackButtonRoute().equals("SHOP")) {
-			getGameEnvironment().transitionScreen(getBackButtonRoute(), "MAIN_MENU", true);
-			getGameEnvironment().setSelectedObject(null);
-		} else if (getBackButtonRoute().equals("BATTLE")) {
-			getGameEnvironment().transitionScreen(getBackButtonRoute(), "BATTLE_SELECT", true);
-		} else {
-			getGameEnvironment().transitionScreen(getBackButtonRoute(), "INVENTORY", true);
-		}
+		btnBack.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (getBackButtonRoute().equals("MAIN_MENU")) {
+					getGameEnvironment().transitionScreen(getBackButtonRoute(), "INVENTORY", true);
+				} else {
+					getGameEnvironment().transitionScreen(getBackButtonRoute(), "MAIN_MENU", true);
+					getGameEnvironment().setSelectedObject(null);
+				}	
+			}
+			
 		});
+
+
 		btnBack.setBounds(10, 358, 105, 42);
 		container.add(btnBack);
 		
@@ -167,21 +172,34 @@ public class InventoryScreen extends Screen{
 		} else {
 			btnUseItem = new JButton("Use Item");
 			btnUseItem.setEnabled(false);
-			btnUseItem.addActionListener(e -> {
-			if (getBackButtonRoute().equals("PARTY") || getBackButtonRoute().equals("BATTLE")) {
-				int inventorySize = getGameEnvironment().getInventoryUI().size();
-				getGameEnvironment().useItem(selectedMonster, listInventory.getSelectedValue().get(0));
-				if (inventorySize != getGameEnvironment().getInventoryUI().size()) {
-					listInventory.clearSelection();
-					inventoryListModel.removeAllElements();
-					inventoryListModel.addAll(getGameEnvironment().getInventoryUI());
+			btnUseItem.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					int inventorySize = getGameEnvironment().getPlayer().inventoryNumItems();
+					if (getBackButtonRoute().equals("PARTY")) {
+						getGameEnvironment().useItem(selectedMonster, listInventory.getSelectedValue().get(0));
+						if (inventorySize != getGameEnvironment().getPlayer().inventoryNumItems()) {
+							listInventory.clearSelection();
+							inventoryListModel.removeAllElements();
+							inventoryListModel.addAll(getGameEnvironment().getInventoryUI());
+						}
+						setTextLabelMonster();
+					} else if (getBackButtonRoute().equals("BATTLE")) {
+						getGameEnvironment().useItem(selectedMonster, listInventory.getSelectedValue().get(0));
+						if (inventorySize != getGameEnvironment().getPlayer().inventoryNumItems()) { 
+							getGameEnvironment().setSelectedObject(listInventory.getSelectedValue().get(0));
+							getGameEnvironment().transitionScreen(getBackButtonRoute(), "INVENTORY", true);
+						}
+					} else {
+						getGameEnvironment().setSelectedObject(listInventory.getSelectedValue().get(0));
+						getGameEnvironment().transitionScreen("PARTY", "INVENTORY", true);
+						
+					}
+					
 				}
-				setTextLabelMonster();
-			} else {
-				getGameEnvironment().setSelectedObject(listInventory.getSelectedValue().get(0));
-				getGameEnvironment().transitionScreen("PARTY", "INVENTORY", false);
-				
-			}});
+			});
+
 			btnUseItem.setBounds(419, 358, 105, 42);
 			container.add(btnUseItem);
 			listOptionButtons.add(btnUseItem);

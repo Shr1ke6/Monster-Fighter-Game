@@ -17,7 +17,7 @@ public class WildBattle extends Battle{
 	
 	@Override
 	public String toString() {
-		String description = getMonsters().get(0).basicDescription() + " " + super.toString() + " Reward: " + reward;
+		String description = "Monster: " + getMonsters().get(0).getName() + " Type: " + getMonsters().get(0).getType().value + " " + super.toString() + " Reward: " + reward.getName();
 		return description;
 	}
 	

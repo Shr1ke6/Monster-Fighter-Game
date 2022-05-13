@@ -139,6 +139,21 @@ public class Player {
 		}
 		return fainted;	
 	}
+	
+	/**
+	 * Returns the number of conscious Monster's within the player's party
+	 * 
+	 * @return integer The number of Monster's in party with Status.CONSCIOUS
+	 */
+	public int getConsciousMonsters() {
+		int conscious = party.size();
+		for (Monster monster: party ) {
+			if (monster.getStatus() == Monster.Status.FAINTED) {
+				conscious -= 1;
+			}
+		}
+		return conscious;
+	}
 
 	public int inventoryNumItems() {
 		int numItems = 0;
