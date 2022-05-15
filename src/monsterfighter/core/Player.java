@@ -4,26 +4,36 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Class that models a player 
+ */
 public class Player {
 	
-	// The ArrayList containing the players Item's
+	// The ArrayList containing the player's items
 	private final List<ArrayList<Item>> inventory = new ArrayList<ArrayList<Item>>();
 	
-	// The ArrayList containing the players Monster's
+	// The ArrayList containing the player's monsters
 	private ArrayList<Monster> party = new ArrayList<Monster>();
 	
-	// The name of the user using this manager
+	// The name of the player using this manager
 	private String name;
 	
-	// The users gold
+	// The player's gold
 	private int goldBalance = 0;
 	
-	// The total gold the user earned over the course of the game
+	// The total gold the player earned over the course of the game
 	private int totalGold = 0;
 	
-	// The users points
+	// The player's points
 	private int points = 0;
 	
+	/**
+	 * Constructs a player with a given name, and formats the player's
+	 * inventory using the total number of items in the game.
+	 * 
+	 * @param name The name of the player
+	 * @param numItems
+	 */
 	public Player(String name, int numItems) {
 		this.name = name;
 		//Adds in an ArrayList for each item 
@@ -32,18 +42,40 @@ public class Player {
 		}
 	}
 	
+	/**
+	 * Gets the players inventory.
+	 * 
+	 * @return An 2D containing items that acts as the players inventory
+	 */
 	public List<ArrayList<Item>> getInventory() {
 		return inventory;
 	}
 	
+	/**
+	 * Adds an {@link Item} to the corresponding ArrayList in the 
+	 * players inventory.
+	 * 
+	 * @param item The item to be added to the players inventory
+	 */
 	public void addItemToInventory(Item item) {
 		inventory.get(item.getIndex()).add(item);
 	}
 	
+	/**
+	 * Removes an {@link Item} from the corresponding ArrayList in the 
+	 * players inventory.
+	 * 
+	 * @param item The item type to be removed from the players inventory
+	 */
 	public void removeItemFromInventory(Item item) {
 		inventory.get(item.getIndex()).remove(item);
 	}
 	
+	/**
+	 * Gets the player's party of {@link Monster}'s.
+	 * 
+	 * @return An array of monsters
+	 */
 	public ArrayList<Monster> getParty() {
 		return party;
 	}
@@ -95,14 +127,14 @@ public class Player {
 		return points;
 	}
 
-	public void setPoints(int points) {
-		this.points = points;
+	public void increasePoints(int points) {
+		this.points += points;
 	}
 	
 	/**
 	 * Checks to see if inventory is empty
 	 * 
-	 * @return isEmpty States whether the user's {@link inventory} is empty or not
+	 * @return isEmpty States whether the player's {@link inventory} is empty or not
 	 */
 	public boolean inventoryIsEmpty() {
 		boolean isEmpty = true;

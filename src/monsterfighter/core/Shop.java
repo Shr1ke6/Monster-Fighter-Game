@@ -26,7 +26,7 @@ public class Shop {
 		for (int i = 0; i <= items.size() + 2; i++) {
 			shopInventory.add(new ArrayList<Purchasable>());
 			if (i > 2) {
-				for (int j = 0; j < ((items.get(i-3).getStoreQuantity()) * ((int) Math.ceil((double)day / 5))) ; j++) {
+				for (int j = 0; j < ((items.get(i-3).getShopQuantity()) * ((int) Math.ceil((double)day / 5))) ; j++) {
 					shopInventory.get(i).add(new Item(items.get(i-3)));
 				}
 			} else {

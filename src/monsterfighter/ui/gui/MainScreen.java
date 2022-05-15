@@ -58,25 +58,25 @@ public class MainScreen extends Screen{
 		JButton btnBattle = new JButton("Battle");
 		btnBattle.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnBattle.setBounds(165, 128, 143, 73);
-		btnBattle.addActionListener(e -> getGameEnvironment().transitionScreen("BATTLE_SELECT", "MAIN_MENU", true));
+		btnBattle.addActionListener(e -> getGameEnvironment().transitionScreen("BATTLE_SELECT", "MAIN_MENU"));
 		container.add(btnBattle);
 
 		JButton btnShop = new JButton("Shop");
 		btnShop.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnShop.setBounds(165, 212, 143, 73);
-		btnShop.addActionListener(e -> getGameEnvironment().transitionScreen("SHOP", "MAIN_MENU", true));
+		btnShop.addActionListener(e -> getGameEnvironment().transitionScreen("SHOP", "MAIN_MENU"));
 		container.add(btnShop);
 
 		JButton btnViewParty = new JButton("View Party");
 		btnViewParty.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnViewParty.setBounds(165, 295, 143, 73);
-		btnViewParty.addActionListener(e -> getGameEnvironment().transitionScreen("PARTY", "MAIN_MENU", true));
+		btnViewParty.addActionListener(e -> getGameEnvironment().transitionScreen("PARTY", "MAIN_MENU"));
 		container.add(btnViewParty);
 
 		JButton btnInventory = new JButton("Inventory");
 		btnInventory.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnInventory.setBounds(165, 378, 143, 73);
-		btnInventory.addActionListener(e -> getGameEnvironment().transitionScreen("INVENTORY", "MAIN_MENU", true));
+		btnInventory.addActionListener(e -> getGameEnvironment().transitionScreen("INVENTORY", "MAIN_MENU"));
 		container.add(btnInventory);
 
 		JButton btnRest = new JButton("Rest");
@@ -87,7 +87,7 @@ public class MainScreen extends Screen{
 			public void actionPerformed(ActionEvent e){
 				boolean lastDay = getGameEnvironment().getDay()==getGameEnvironment().getTotalDays();
 				if (lastDay) {
-					getGameEnvironment().transitionScreen("GAME_OVER", "MAIN_MENU", true);
+					getGameEnvironment().transitionScreen("GAME_OVER", "MAIN_MENU");
 				} else {
 					partyCopy = new ArrayList<Monster>();
 					for (Monster monster: getGameEnvironment().getPlayer().getParty()) {

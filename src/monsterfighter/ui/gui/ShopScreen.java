@@ -79,7 +79,7 @@ public class ShopScreen extends Screen{
 	
 	private void addButtons(Container container) {
 		JButton btnBack = new JButton("Back");
-		btnBack.addActionListener(e -> getGameEnvironment().transitionScreen(getBackButtonRoute(), "SHOP", true));
+		btnBack.addActionListener(e -> getGameEnvironment().transitionScreen(getBackButtonRoute(), "SHOP"));
 		btnBack.setBounds(10, 358, 105, 42);
 		container.add(btnBack);
 		
@@ -103,12 +103,12 @@ public class ShopScreen extends Screen{
 		container.add(btnBuy);
 		
 		JButton btnSellItem = new JButton("Item");
-		btnSellItem.addActionListener(e -> getGameEnvironment().transitionScreen("INVENTORY", "SHOP", true));
+		btnSellItem.addActionListener(e -> getGameEnvironment().transitionScreen("INVENTORY", "SHOP"));
 		btnSellItem.setBounds(419, 11, 105, 42);
 		container.add(btnSellItem);
 		
 		JButton btnSellMonster = new JButton("Monster");
-		btnSellMonster.addActionListener(e -> getGameEnvironment().transitionScreen("PARTY", "SHOP", true));
+		btnSellMonster.addActionListener(e -> getGameEnvironment().transitionScreen("PARTY", "SHOP"));
 		btnSellMonster.setBounds(304, 11, 105, 42);
 		container.add(btnSellMonster);
 	}

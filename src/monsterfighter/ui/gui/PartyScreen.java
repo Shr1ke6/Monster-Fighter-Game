@@ -132,10 +132,19 @@ public class PartyScreen extends Screen{
 					lblSellPrice.setVisible(true);
 					lblSellPrice.setText("Sell Price: " + selectedMonster.getSellPrice());
 				}
-				if (btnSwitchMonsters!=null && btnSwitchMonsters.isSelected() && !getGameEnvironment().getBattleRunning()) {
+				if (btnSwitchMonsters!=null && btnSwitchMonsters.isSelected()) {
+					Monster monster = getGameEnvironment().getPlayer().getLeadingMonster();
 					getGameEnvironment().switchMonsters(selectedMonsterSwitch, selectedMonster);
+					if (!monster.equals(getGameEnvironment().getPlayer().getLeadingMonster()) && getGameEnvironment().getBattleRunning()) {
+						getGameEnvironment().setSelectedObject(monster);
+						getGameEnvironment().transitionScreen(getBackButtonRoute(), "PARTY");
+					}
 					selectedMonsterSwitch = null;
-					//if 
+					buttonGroupPartyMonsters.clearSelection();
+					btnSwitchMonsters.setSelected(false);
+					for (AbstractButton button: listOptionButtons) {
+						button.setEnabled(buttonGroupPartyMonsters.getSelection()!=null);
+					}
 					paintBtnsMonsters();
 				}
 			}
@@ -178,7 +187,7 @@ public class PartyScreen extends Screen{
 		
 		if (getGameEnvironment().getPlayer().getParty().size()>=1) {
 			btnMonsterOne.setText(getGameEnvironment().getPlayer().getParty().get(0).getNickname());
-			btnMonsterOne.setToolTipText(getGameEnvironment().getPlayer().getParty().get(0).toolTipText());
+			btnMonsterOne.setToolTipText(getGameEnvironment().getPlayer().getParty().get(0).tooltipText());
 		} else {
 			btnMonsterOne.setEnabled(false);
 			btnMonsterOne.setText(null);
@@ -186,7 +195,7 @@ public class PartyScreen extends Screen{
 		
 		if (getGameEnvironment().getPlayer().getParty().size()>=2) {
 			btnMonsterTwo.setText(getGameEnvironment().getPlayer().getParty().get(1).getNickname());
-			btnMonsterTwo.setToolTipText(getGameEnvironment().getPlayer().getParty().get(1).toolTipText());
+			btnMonsterTwo.setToolTipText(getGameEnvironment().getPlayer().getParty().get(1).tooltipText());
 		} else {
 			btnMonsterTwo.setEnabled(false);
 			btnMonsterTwo.setText(null);
@@ -194,7 +203,7 @@ public class PartyScreen extends Screen{
 		
 		if (getGameEnvironment().getPlayer().getParty().size()>=3) {
 			btnMonsterThree.setText(getGameEnvironment().getPlayer().getParty().get(2).getNickname());
-			btnMonsterThree.setToolTipText(getGameEnvironment().getPlayer().getParty().get(2).toolTipText());
+			btnMonsterThree.setToolTipText(getGameEnvironment().getPlayer().getParty().get(2).tooltipText());
 		} else {
 			btnMonsterThree.setEnabled(false);
 			btnMonsterThree.setText(null);
@@ -202,7 +211,7 @@ public class PartyScreen extends Screen{
 		
 		if (getGameEnvironment().getPlayer().getParty().size()==4) {
 			btnMonsterFour.setText(getGameEnvironment().getPlayer().getParty().get(3).getNickname());
-			btnMonsterFour.setToolTipText(getGameEnvironment().getPlayer().getParty().get(3).toolTipText());
+			btnMonsterFour.setToolTipText(getGameEnvironment().getPlayer().getParty().get(3).tooltipText());
 		} else {
 			btnMonsterFour.setEnabled(false);
 			btnMonsterFour.setText(null);
@@ -214,11 +223,14 @@ public class PartyScreen extends Screen{
 		listOptionButtons = new ArrayList<AbstractButton>();
 		
 		JButton btnBack = new JButton("Back");
+		if (getBackButtonRoute().equals("BATTLE") && getGameEnvironment().getPlayer().getLeadingMonster().getStatus().equals(Monster.Status.FAINTED)) {
+			btnBack.setEnabled(false);
+		}
 		btnBack.addActionListener(e -> {
 			if (getBackButtonRoute().equals("MAIN_MENU")) {
-				getGameEnvironment().transitionScreen(getBackButtonRoute(), "PARTY", true);
+				getGameEnvironment().transitionScreen(getBackButtonRoute(), "PARTY");
 			} else {
-				getGameEnvironment().transitionScreen(getBackButtonRoute(), "MAIN_MENU", true);
+				getGameEnvironment().transitionScreen(getBackButtonRoute(), "MAIN_MENU");
 			}
 		});
 		btnBack.setBounds(10, 358, 105, 42);
@@ -239,7 +251,7 @@ public class PartyScreen extends Screen{
 			btnUseItem.setEnabled(false);
 			btnUseItem.addActionListener(e -> {
 				getGameEnvironment().setSelectedObject(selectedMonster);
-				getGameEnvironment().transitionScreen("INVENTORY", "PARTY", false);
+				getGameEnvironment().transitionScreen("INVENTORY", "PARTY");
 			});
 			btnUseItem.setBounds(304, 358, 105, 42);
 			container.add(btnUseItem);
@@ -275,7 +287,7 @@ public class PartyScreen extends Screen{
 			btnUseItem.setEnabled(false);
 			btnUseItem.addActionListener(e -> {
 				getGameEnvironment().useItem(selectedMonster, selectedItem);
-				getGameEnvironment().transitionScreen(getBackButtonRoute(), "MAIN_MENU", true);
+				getGameEnvironment().transitionScreen(getBackButtonRoute(), "MAIN_MENU");
 			});
 			btnUseItem.setBounds(419, 358, 105, 42);
 			container.add(btnUseItem);
@@ -369,7 +381,7 @@ public class PartyScreen extends Screen{
 			public void actionPerformed(ActionEvent e) {
 				sellMonster();
 				JOptionPane.getRootFrame().dispose();
-				getGameEnvironment().transitionScreen("GAME_OVER", "PARTY", true);
+				getGameEnvironment().transitionScreen("GAME_OVER", "PARTY");
 			}
 		});
 		

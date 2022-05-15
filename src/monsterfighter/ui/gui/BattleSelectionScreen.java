@@ -74,7 +74,7 @@ public class BattleSelectionScreen extends Screen{
 		btnBack.setBounds(10, 426, 105, 42);
 		btnBack.addActionListener(e -> {
 			getGameEnvironment().setSelectedObject(null);
-			getGameEnvironment().transitionScreen(getBackButtonRoute(), "BATTLE_SELECT", true);
+			getGameEnvironment().transitionScreen(getBackButtonRoute(), "BATTLE_SELECT");
 		});
 		container.add(btnBack);
 		
@@ -84,7 +84,7 @@ public class BattleSelectionScreen extends Screen{
 		btnBattle.addActionListener(e -> {
 			getGameEnvironment().startBattle();
 			if (getGameEnvironment().getBattleRunning()) {
-				getGameEnvironment().transitionScreen("BATTLE", "BATTLE_SELECT", true);
+				getGameEnvironment().transitionScreen("BATTLE", "BATTLE_SELECT");
 			}
 		});
 		container.add(btnBattle);

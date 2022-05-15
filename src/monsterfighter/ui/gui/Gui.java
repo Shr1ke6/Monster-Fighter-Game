@@ -56,7 +56,7 @@ public class Gui implements GameEnvironmentUi{
         screen.quit();
     }
     
-    public void transitionScreen(String name, String back, boolean screenClose) {
+    public void transitionScreen(String name, String back) {
     	Option option = Option.valueOf(name);
     	screen.quit();
     	switch (option) {

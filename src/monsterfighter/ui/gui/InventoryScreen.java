@@ -136,9 +136,9 @@ public class InventoryScreen extends Screen{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (getBackButtonRoute().equals("MAIN_MENU")) {
-					getGameEnvironment().transitionScreen(getBackButtonRoute(), "INVENTORY", true);
+					getGameEnvironment().transitionScreen(getBackButtonRoute(), "INVENTORY");
 				} else {
-					getGameEnvironment().transitionScreen(getBackButtonRoute(), "MAIN_MENU", true);
+					getGameEnvironment().transitionScreen(getBackButtonRoute(), "MAIN_MENU");
 					getGameEnvironment().setSelectedObject(null);
 				}	
 			}
@@ -189,11 +189,11 @@ public class InventoryScreen extends Screen{
 						getGameEnvironment().useItem(selectedMonster, listInventory.getSelectedValue().get(0));
 						if (inventorySize != getGameEnvironment().getPlayer().inventoryNumItems()) { 
 							getGameEnvironment().setSelectedObject(listInventory.getSelectedValue().get(0));
-							getGameEnvironment().transitionScreen(getBackButtonRoute(), "INVENTORY", true);
+							getGameEnvironment().transitionScreen(getBackButtonRoute(), "INVENTORY");
 						}
 					} else {
 						getGameEnvironment().setSelectedObject(listInventory.getSelectedValue().get(0));
-						getGameEnvironment().transitionScreen("PARTY", "INVENTORY", true);
+						getGameEnvironment().transitionScreen("PARTY", "INVENTORY");
 						
 					}
 					

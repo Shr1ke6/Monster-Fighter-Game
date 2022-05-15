@@ -1,7 +1,6 @@
 package monsterfighter.ui.gui;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -68,8 +67,9 @@ public class BattleScreen extends Screen{
 			setBattleTextSwitchMonsters();
 		} else if (getBackButtonRoute().equals("MAIN_MENU")) {
 			setBattleTextBasic();
-		}
+		} 
 	}
+
 
 	private void addOpponentPanel(Container container) {
 		opponentPanel = new JPanel();
@@ -184,24 +184,25 @@ public class BattleScreen extends Screen{
 		pnlBattleMessages.setLayout(null);
 		
 		lblBattleMessage = new JLabel();
-		lblBattleMessage.setBounds(10, 11, 434, 102);
 		lblBattleMessage.setHorizontalAlignment(SwingConstants.CENTER);
+		lblBattleMessage.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblBattleMessage.setBounds(10, 11, 434, 102);
 		pnlBattleMessages.add(lblBattleMessage);
 	}
 	
 	private void setBattleTextStartBattle() {
 		String message = "<html>";
 		if (opponent instanceof WildBattle) {
-			message += "A wild " + opponent.getMonsters().get(0).getName() + "attacked!<br>";
+			message += "A wild " + opponent.getMonsters().get(0).getName() + " attacked!<br>";
 		} else {
-			message += "Trainer " + ((TrainerBattle) opponent).getTrainer() + " sent out " + opponent.getMonsters().get(0).getName() + "!";
+			message += "Trainer " + ((TrainerBattle) opponent).getTrainer() + " sent out " + opponent.getMonsters().get(0).getName() + "!<br>";
 		}
-		message += "Go get em' " + getGameEnvironment().getPlayer().getLeadingMonster().getNickname() + "!</html>";
+		message += "Go get em' " + getGameEnvironment().getPlayer().getLeadingMonster().getNickname() + "!<br>";
 		addBattleText(message);
 	}
 	
 	private void setBattleTextBasic() {
-		String message = getGameEnvironment().getPlayer().getLeadingMonster().getNickname() + " is waiting on your instruction";
+		String message = "<html>" + getGameEnvironment().getPlayer().getLeadingMonster().getNickname() + " is waiting on your instruction<br>";
 		addBattleText(message);
 	}
 	
@@ -213,19 +214,17 @@ public class BattleScreen extends Screen{
 		
 		playerMonster.attack(opponentMonster);
 		getGameEnvironment().manageBattle(opponent);
-		setMonsterInformation();
 		String message = "<html>" + playerMonster.getNickname() + " did " + (opponentMonsterHealth - opponentMonster.getCurrentHealth())
 				+ " damage to opponent " + opponentMonster.getNickname() + "<br>";
 		if (opponentMonster.getStatus().equals(Monster.Status.FAINTED)) {
 			message += "Opponent " + opponentMonster.getNickname() + " fainted!<br>";
 			if (opponent instanceof TrainerBattle) {
-				message += "Trainer " + ((TrainerBattle) opponent).getTrainer() + " sent out " + opponent.getMonsters().get(0).getName() + "!";
+				message += "Trainer " + ((TrainerBattle) opponent).getTrainer() + " sent out " + opponent.getMonsters().get(0).getName() + "!<br>";
 			}
 		} else {
 			message += "Opponent " + opponentMonster.getNickname() + " did " + (playerMonsterHealth - playerMonster.getCurrentHealth())
-					+ " damage to " + playerMonster.getNickname();
+					+ " damage to " + playerMonster.getNickname() + "<br>";
 		}
-		message+="</html>";
 		addBattleText(message);
 	}
 
@@ -235,37 +234,41 @@ public class BattleScreen extends Screen{
 		int playerMonsterHealth = playerMonster.getCurrentHealth();
 
 		getGameEnvironment().manageBattle(opponent);
-		setMonsterInformation();
+
 		String message = "<html>Used " + ((Item) getGameEnvironment().getSelectedObject()).getName() + " on " 
 				+ getGameEnvironment().getPlayer().getLeadingMonster().getNickname() + "<br>";
 		message += "Opponent " + opponentMonster.getNickname() + " did " + (playerMonsterHealth - playerMonster.getCurrentHealth())
-				+ " damage to " + playerMonster.getNickname() + "</html>";
-		getGameEnvironment().setSelectedObject(null);
+				+ " damage to " + playerMonster.getNickname() + "<br>";
 		addBattleText(message);
-		
 	}
 
 	private void setBattleTextSwitchMonsters() {
 		Monster playerMonster = getGameEnvironment().getPlayer().getLeadingMonster();
 		Monster opponentMonster = opponent.getMonsters().get(0);
 		int playerMonsterHealth = playerMonster.getCurrentHealth();
-
-		getGameEnvironment().manageBattle(opponent);
-		setMonsterInformation();
-		
+			
 		String message = "<html>Switched " + ((Monster) getGameEnvironment().getSelectedObject()).getNickname() + " out with " 
 				+ getGameEnvironment().getPlayer().getLeadingMonster().getNickname() + "<br>";
-		message += "Opponent " + opponentMonster.getNickname() + " did " + (playerMonsterHealth - playerMonster.getCurrentHealth())
-				+ " damage to " + playerMonster.getNickname() + "</html>";
-		getGameEnvironment().setSelectedObject(null);
+		if (((Monster) getGameEnvironment().getSelectedObject()).getStatus().equals(Monster.Status.CONSCIOUS)) {
+			getGameEnvironment().manageBattle(opponent);
+			message += "Opponent " + opponentMonster.getNickname() + " did " + (playerMonsterHealth - playerMonster.getCurrentHealth())
+					+ " damage to " + playerMonster.getNickname() + "<br>";
+		}
 		addBattleText(message);
 	}
-	
+
 	private void addBattleText(String message) {
+		if (getGameEnvironment().getPlayer().getLeadingMonster().getStatus().equals(Monster.Status.FAINTED)) {
+			message += getGameEnvironment().getPlayer().getLeadingMonster().getNickname() + " fainted!<br>";
+		}
+		message+="</html>";
+		getGameEnvironment().setSelectedObject(null);
+		setMonsterInformation();
 		lblBattleMessage.setText(message);
 		if (!getGameEnvironment().getBattleRunning()) {
-			getGameEnvironment().setSelectedObject(null);
 			optionPanelEndBattle();
+		} else if (getGameEnvironment().getPlayer().getLeadingMonster().getStatus().equals(Monster.Status.FAINTED)) {
+			optionPanelSwitchFaintedMonster();
 		}
 	}
 
@@ -287,7 +290,7 @@ public class BattleScreen extends Screen{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				getGameEnvironment().transitionScreen("INVENTORY", "BATTLE", true);
+				getGameEnvironment().transitionScreen("INVENTORY", "BATTLE");
 			}
 			
 		});
@@ -299,7 +302,7 @@ public class BattleScreen extends Screen{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				getGameEnvironment().transitionScreen("PARTY", "BATTLE", true);
+				getGameEnvironment().transitionScreen("PARTY", "BATTLE");
 			}
 			
 		});
@@ -308,44 +311,72 @@ public class BattleScreen extends Screen{
 	}
 	
 	private void optionPanelEndBattle() {
-	final JButton btnOkay = new JButton("Okay");
-	JLabel lblMessage = new JLabel();
-	String message = "<html>";
-	
-	btnOkay.addActionListener(new ActionListener() {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
+		final JButton btnOkay = new JButton("Okay");
+		JLabel lblMessage = new JLabel();
+		String message = "<html>";
+		
+		btnOkay.addActionListener(new ActionListener() {
+		
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.getRootFrame().dispose();
+				getGameEnvironment().getBattles().setCurrentBattle(null);
+				getGameEnvironment().transitionScreen("BATTLE_SELECT", "MAIN_MENU");
+			}
+			
+		});
+		
+		if (!getGameEnvironment().getPlayer().partyFainted()) {
+			message += "You Won!<br>"
+					+ "Received:<br>"
+					+ "Points: " + opponent.getPoints() + "<br>";
+			if (opponent instanceof WildBattle) {
+				WildBattle wildOpponent = (WildBattle) opponent;
+				message += "Item: " + wildOpponent.getReward().getName()+ "<br>";
+			} else if (opponent instanceof TrainerBattle) {
+				TrainerBattle trainerOpponent = (TrainerBattle) opponent;
+				message += "Gold: " + trainerOpponent.getGold()+ "<br>";
+			}
+		} else {
+			message += "You Lost...<br>"
+					+ "Received:<br>"
+					+ "Points: " + (25 * (opponent.getMonsters().size() - opponent.getConsciousMonsters()));
+			
+		}
+		message+="</html>";
+		lblMessage.setText(message);
+		
+		int result = JOptionPane.showOptionDialog(null,  new Object[] {lblMessage}, "Battle Report", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, new JButton[]
+		        {btnOkay}, btnOkay);
+		if (result == -1) {
 			JOptionPane.getRootFrame().dispose();
 			getGameEnvironment().getBattles().setCurrentBattle(null);
-			getGameEnvironment().transitionScreen("BATTLE_SELECT", "MAIN_MENU", true);
+			getGameEnvironment().transitionScreen("BATTLE_SELECT", "MAIN_MENU");
 		}
-		
-	});
-	
-	if (!getGameEnvironment().getPlayer().partyFainted()) {
-		message += "You Won!<br>"
-				+ "Received:<br>"
-				+ "Points: " + opponent.getPoints() + "<br>";
-		if (opponent instanceof WildBattle) {
-			WildBattle wildOpponent = (WildBattle) opponent;
-			message += "Item: " + wildOpponent.getReward().getName()+ "<br>";
-		} else if (opponent instanceof TrainerBattle) {
-			TrainerBattle trainerOpponent = (TrainerBattle) opponent;
-			message += "Gold: " + trainerOpponent.getGold()+ "<br>";
-		}
-	} else {
-		message += "You Lost...<br>"
-				+ "Received:<br>"
-				+ "Points: " + (25 * (opponent.getMonsters().size() - opponent.getConsciousMonsters()));
-		
 	}
-	message+="</html>";
-	lblMessage.setText(message);
 	
-	JOptionPane.showOptionDialog(null,  new Object[] {lblMessage}, "Battle Report", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, new JButton[]
-	        {btnOkay}, btnOkay);
-}
-
+	private void optionPanelSwitchFaintedMonster() {
+		final JButton btnOkay = new JButton("Okay");
+		JLabel lblMessage = new JLabel("<html>" + getGameEnvironment().getPlayer().getLeadingMonster().getNickname() + " has fainted!<br>"
+				+ "Switch in another monster to carry on the fight</html>");
+		
+		btnOkay.addActionListener(new ActionListener() {
+		
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.getRootFrame().dispose();
+				getGameEnvironment().transitionScreen("PARTY", "BATTLE");
+			}
+			
+		});
+		
+		
+		int result = JOptionPane.showOptionDialog(null,  new Object[] {lblMessage}, "Monster Fainted", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, new JButton[]
+		        {btnOkay}, btnOkay);
+		if (result == -1) {
+			JOptionPane.getRootFrame().dispose();
+			getGameEnvironment().transitionScreen("PARTY", "BATTLE");
+		}
+	}
 
 }
