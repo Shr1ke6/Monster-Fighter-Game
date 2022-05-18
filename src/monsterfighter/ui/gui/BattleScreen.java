@@ -22,27 +22,59 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+/**
+ * A screen used to run a battle from a {@link GameEnvironment}.
+ */
 public class BattleScreen extends Screen{
 	
+	// The battle the user is fighting against
 	private Battle opponent;
 
+	// The panel for the opponent's monster
 	private JPanel opponentPanel;
+	
+	// The label for the name of the opponent's monster
 	private JLabel lblOpponentMonsterName;
+	
+	// The label for the size of the opponent's party
 	private JLabel lblOpponentPartySize;
+	
+	// The label of the opponent's monster's type
 	private JLabel lblOpponentType;
+	
+	// The panel representing the opponent's monster's health 
 	private JPanel panelOpponentHealthBar;
+	
+	// The label representing the opponent's monster's health
 	private JLabel lblOpponentHealth;
 	
+	// The panel for the player's monster
 	private JPanel userPanel;
+	
+	// The label for the name of the player's monster
 	private JLabel lblPlayerMonsterName;
-	private JLabel lblPlayerType;
+	
+	// The label of the player's monster's type
 	private JLabel lblPlayerPartySize;
+	
+	// The label for the size of the player's party
+	private JLabel lblPlayerType;
+	
+	// The panel representing the player's monster's health 
 	private JPanel panelPlayerHealthBar;
+	
+	// The label representing the player's monster's health
 	private JLabel lblPlayerHealth;
 	
+	// The label that displays the battle messages
 	private JLabel lblBattleMessage;
 	
-
+	/**
+	 * Creates this screen.
+	 * 
+	 * @param gameEnvironment The game environment that the screen communicates with
+	 * @param backButtonRoute A string representation of the screen that the back button transitions to
+	 */
 	protected BattleScreen(GameEnvironment gameEnvironment, String backButtonRoute) {
 		super("Monster Fighter Battle", gameEnvironment, backButtonRoute);
 	}
@@ -51,6 +83,9 @@ public class BattleScreen extends Screen{
 	protected void initialise(Container container) {
 		container.setSize(490, 517);
 		
+		Monster playerMonster = getGameEnvironment().getPlayer().getLeadingMonster();
+		Monster opponentMonster = opponent.getMonsters().get(0);
+		int playerMonsterHealth = playerMonster.getCurrentHealth();
 		opponent = getGameEnvironment().getBattles().getCurrentBattle();
 		
 		addOpponentPanel(container);
@@ -62,15 +97,23 @@ public class BattleScreen extends Screen{
 		if (getBackButtonRoute().equals("BATTLE_SELECT")) {
 			setBattleTextStartBattle();
 		} else if (getBackButtonRoute().equals("INVENTORY")) {
-			setBattleTextUseItem();
+			getGameEnvironment().manageBattle(opponent);
+			setBattleTextUseItem(playerMonster, opponentMonster, playerMonsterHealth);
 		} else if (getBackButtonRoute().equals("PARTY")) {
-			setBattleTextSwitchMonsters();
+			if (((Monster) getGameEnvironment().getSelectedObject()).getStatus().equals(Monster.Status.CONSCIOUS)) {
+				getGameEnvironment().manageBattle(opponent);
+			}
+			setBattleTextSwitchMonsters(playerMonster, opponentMonster, playerMonsterHealth);
 		} else if (getBackButtonRoute().equals("MAIN_MENU")) {
 			setBattleTextBasic();
 		} 
 	}
 
-
+	/**
+	 * Creates the opponent's {@link Monster} panel, along with the labels and panels that populate it, and adds it to the container.
+	 * 
+	 * @param container The container to add the panel to
+	 */
 	private void addOpponentPanel(Container container) {
 		opponentPanel = new JPanel();
 		opponentPanel.setBackground(Color.WHITE);
@@ -111,6 +154,11 @@ public class BattleScreen extends Screen{
 		opponentPanel.add(lblOpponentHealth);
 	}
 	
+	/**
+	 * Creates the {@link Player}'s {@link Monster} panel, along with the labels and panels that populate it, and adds it to the container.
+	 * 
+	 * @param container The container to add the panel to
+	 */
 	private void addPlayerPanel(Container container) {
 		userPanel = new JPanel();
 		userPanel.setBackground(Color.WHITE);
@@ -152,6 +200,9 @@ public class BattleScreen extends Screen{
 		
 	}
 	
+	/**
+	 * Updates the player and opponent {@link Monster} panels with the current details.
+	 */
 	private void setMonsterInformation() {
 		opponentPanel.setBorder(new MatteBorder(3, 3, 3, 3, (Color) opponent.getMonsters().get(0).getType().colour));
 		lblOpponentMonsterName.setText(opponent.getMonsters().get(0).getNickname());
@@ -175,7 +226,12 @@ public class BattleScreen extends Screen{
 				/ getGameEnvironment().getPlayer().getLeadingMonster().getMaxHealth()));
 		panelPlayerHealthBar.setBounds(12, 56, playerWidth, 26);
 	}
-
+	
+	/**
+	 * Creates the battle message panel, along with the battle message label, and adds it to the container.
+	 * 
+	 * @param container The container to add the panel to
+	 */
 	private void addBattleMessagePanel(Container container) {
 		JPanel pnlBattleMessages = new JPanel();
 		pnlBattleMessages.setBorder(new MatteBorder(2, 2, 2, 2, Color.LIGHT_GRAY));
@@ -190,6 +246,9 @@ public class BattleScreen extends Screen{
 		pnlBattleMessages.add(lblBattleMessage);
 	}
 	
+	/**
+	 * Sets the battle label text to the starting message.
+	 */
 	private void setBattleTextStartBattle() {
 		String message = "<html>";
 		if (opponent instanceof WildBattle) {
@@ -201,19 +260,24 @@ public class BattleScreen extends Screen{
 		addBattleText(message);
 	}
 	
+	/**
+	 * Sets the battle label text to the basic message.
+	 */
 	private void setBattleTextBasic() {
 		String message = "<html>" + getGameEnvironment().getPlayer().getLeadingMonster().getNickname() + " is waiting on your instruction<br>";
 		addBattleText(message);
 	}
 	
-	private void setBattleTextAttack() {
-		Monster playerMonster = getGameEnvironment().getPlayer().getLeadingMonster();
-		Monster opponentMonster = opponent.getMonsters().get(0);
-		int playerMonsterHealth = playerMonster.getCurrentHealth();
-		int opponentMonsterHealth = opponentMonster.getCurrentHealth();
-		
-		playerMonster.attack(opponentMonster);
-		getGameEnvironment().manageBattle(opponent);
+	/**
+	 * Sets the battle label text to the attack message.
+	 * 
+	 * @param opponentMonsterHealth The opponent's monster's health at the start of the turn
+	 * @param playerMonsterHealth The player's monster's health at the start of the turn
+	 * @param opponentMonster The opponent's monster at the start of the turn
+	 * @param playerMonster The player's monster at the start of the turn
+	 */
+	private void setBattleTextAttack(Monster playerMonster, Monster opponentMonster, int playerMonsterHealth, int opponentMonsterHealth) {
+
 		String message = "<html>" + playerMonster.getNickname() + " did " + (opponentMonsterHealth - opponentMonster.getCurrentHealth())
 				+ " damage to opponent " + opponentMonster.getNickname() + "<br>";
 		if (opponentMonster.getStatus().equals(Monster.Status.FAINTED)) {
@@ -228,13 +292,14 @@ public class BattleScreen extends Screen{
 		addBattleText(message);
 	}
 
-	private void setBattleTextUseItem() {
-		Monster playerMonster = getGameEnvironment().getPlayer().getLeadingMonster();
-		Monster opponentMonster = opponent.getMonsters().get(0);
-		int playerMonsterHealth = playerMonster.getCurrentHealth();
-
-		getGameEnvironment().manageBattle(opponent);
-
+	/**
+	 * Sets the battle label text to the use item message.
+	 * 
+	 * @param playerMonster The player's monster at the start of the turn
+	 * @param opponentMonster The opponent's monster at the start of the turn
+	 * @param playerMonsterHealth The player's monster's health before the turn
+	 */
+	private void setBattleTextUseItem(Monster playerMonster, Monster opponentMonster, int playerMonsterHealth) {
 		String message = "<html>Used " + ((Item) getGameEnvironment().getSelectedObject()).getName() + " on " 
 				+ getGameEnvironment().getPlayer().getLeadingMonster().getNickname() + "<br>";
 		message += "Opponent " + opponentMonster.getNickname() + " did " + (playerMonsterHealth - playerMonster.getCurrentHealth())
@@ -242,21 +307,29 @@ public class BattleScreen extends Screen{
 		addBattleText(message);
 	}
 
-	private void setBattleTextSwitchMonsters() {
-		Monster playerMonster = getGameEnvironment().getPlayer().getLeadingMonster();
-		Monster opponentMonster = opponent.getMonsters().get(0);
-		int playerMonsterHealth = playerMonster.getCurrentHealth();
-			
+	/**
+	 * Sets the battle label text to the switch monsters message.
+	 * 
+	 * @param playerMonster The player's monster at the start of the turn
+	 * @param opponentMonster The opponent's monster at the start of the turn
+	 * @param playerMonsterHealth The player's monster's health before the turn
+	 */
+	private void setBattleTextSwitchMonsters(Monster playerMonster, Monster opponentMonster, int playerMonsterHealth) {
+
 		String message = "<html>Switched " + ((Monster) getGameEnvironment().getSelectedObject()).getNickname() + " out with " 
 				+ getGameEnvironment().getPlayer().getLeadingMonster().getNickname() + "<br>";
 		if (((Monster) getGameEnvironment().getSelectedObject()).getStatus().equals(Monster.Status.CONSCIOUS)) {
-			getGameEnvironment().manageBattle(opponent);
 			message += "Opponent " + opponentMonster.getNickname() + " did " + (playerMonsterHealth - playerMonster.getCurrentHealth())
 					+ " damage to " + playerMonster.getNickname() + "<br>";
 		}
 		addBattleText(message);
 	}
 
+	/**
+	 * Sets the battle label text, and opens a pop up if either the battle stops or the player's {@link Monster} is {@link Monster.Status#FAINTED}.
+	 * 
+	 * @param message The text that will be displayed in the battle panel
+	 */
 	private void addBattleText(String message) {
 		if (getGameEnvironment().getPlayer().getLeadingMonster().getStatus().equals(Monster.Status.FAINTED)) {
 			message += getGameEnvironment().getPlayer().getLeadingMonster().getNickname() + " fainted!<br>";
@@ -272,13 +345,25 @@ public class BattleScreen extends Screen{
 		}
 	}
 
+	/**
+	 * Creates the buttons and adds them to the container.
+	 * 
+	 * @param container The container to add the buttons to
+	 */
 	private void addButtons(Container container) {
 		JButton btnAttack = new JButton("Attack");
 		btnAttack.addActionListener(new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				setBattleTextAttack();
+				Monster playerMonster = getGameEnvironment().getPlayer().getLeadingMonster();
+				Monster opponentMonster = opponent.getMonsters().get(0);
+				int playerMonsterHealth = playerMonster.getCurrentHealth();
+				int opponentMonsterHealth = opponentMonster.getCurrentHealth();
+				
+				playerMonster.attack(opponentMonster);
+				getGameEnvironment().manageBattle(opponent);
+				setBattleTextAttack(playerMonster, opponentMonster, playerMonsterHealth, opponentMonsterHealth);
 			}
 			
 		});
@@ -310,6 +395,9 @@ public class BattleScreen extends Screen{
 		container.add(btnSwitchMonster);
 	}
 	
+	/**
+	 * Creates an option panel for the end of the battle.
+	 */
 	private void optionPanelEndBattle() {
 		final JButton btnOkay = new JButton("Okay");
 		JLabel lblMessage = new JLabel();
@@ -355,6 +443,9 @@ public class BattleScreen extends Screen{
 		}
 	}
 	
+	/**
+	 * Creates an option panel for switching out a {@link Monster.Status#FAINTED} {@link Monster}.
+	 */
 	private void optionPanelSwitchFaintedMonster() {
 		final JButton btnOkay = new JButton("Okay");
 		JLabel lblMessage = new JLabel("<html>" + getGameEnvironment().getPlayer().getLeadingMonster().getNickname() + " has fainted!<br>"

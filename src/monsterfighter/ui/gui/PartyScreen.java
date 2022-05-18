@@ -22,23 +22,57 @@ import monsterfighter.core.Item;
 import monsterfighter.core.Monster;
 import monsterfighter.ui.GameEnvironmentUi;
 
+/**
+ * A screen used to access a {@link PLayer}'s party through a {@link GameEnvironment}
+ */
 public class PartyScreen extends Screen{
 	
+	// Button for setting a monsters nickname
 	private JButton btnNickname;
+	
+	// Button for using an item on a monster
 	private JButton btnUseItem;
+	
+	// Toggle button for switching monsters in the party
 	private JToggleButton btnSwitchMonsters;
+
+	// Button for selling a monster
 	private JButton btnSellMonster;
+
+	// Toggle button for the first monster in the party
 	private JToggleButton btnMonsterOne;
+
+	// Toggle button for the second monster in the party
 	private JToggleButton btnMonsterTwo;
+
+	// Toggle button for the third monster in the party
 	private JToggleButton btnMonsterThree;
+
+	// Toggle button for the fourth monster in the party
 	private JToggleButton btnMonsterFour;
+
+	// Toggle button representing the selected monster toggle button
 	private JToggleButton btnSelectedMonster;
+
+	// The monster correlating to the selected monster toggle button
 	private Monster selectedMonster;
+
+	// The 
 	private Monster selectedMonsterSwitch;
+
+	//
 	private Item selectedItem;
+
+	//
 	private List<AbstractButton> listOptionButtons;
+
+	//
 	private ButtonGroup buttonGroupPartyMonsters;
+
+	//
 	private JLabel lblGold;
+
+	//
 	private JLabel lblSellPrice;
 	
 	

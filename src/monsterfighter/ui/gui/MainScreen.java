@@ -16,11 +16,22 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+/**
+ * A screen used to access the main functions of a {@link GameEnvironment}
+ */
 public class MainScreen extends Screen{
 	
+	// Label for the current day
 	private JLabel lblDay;
+	
+	// A copy of the player's party
 	private ArrayList<Monster> partyCopy;
 
+	/**
+	 * Creates this screen.
+	 * 
+	 * @param gameEnvironment The game environment that the screen communicates with
+	 */
 	public MainScreen(GameEnvironment incomingGameEnvironment) {
 		super("Monster Fighter Main Menu", incomingGameEnvironment, null);
 	}
@@ -32,6 +43,11 @@ public class MainScreen extends Screen{
 		addBtns(container);
 	}
 	
+	/**
+	 * Creates the labels and adds them to the container.
+	 * 
+	 * @param container The container to add the labels to
+	 */
 	private void addLabels(Container container) { 
 		JLabel lblTrainerLabel = new JLabel("Trainer: " + getGameEnvironment().getPlayer().getName());
 		lblTrainerLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
@@ -54,6 +70,11 @@ public class MainScreen extends Screen{
 		container.add(lblPoints);
 	}
 	
+	/**
+	 * Creates the buttons for selling an item and adds them to the container.
+	 * 
+	 * @param container The container to add the buttons to
+	 */
 	private void addBtns(Container container) {
 		JButton btnBattle = new JButton("Battle");
 		btnBattle.setFont(new Font("Tahoma", Font.BOLD, 18));
@@ -111,6 +132,9 @@ public class MainScreen extends Screen{
 		container.add(btnQuit);
 	}
 	
+	/**
+	 * Creates an option panel for resting
+	 */
 	private void optionPanelRandomEvent() {
 		final JButton btnOkay = new JButton("Okay");
 		JLabel lblMessage = new JLabel();

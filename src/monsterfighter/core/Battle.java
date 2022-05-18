@@ -16,9 +16,9 @@ public abstract class Battle {
 	final private List<Monster> monsters;
 
 	/**
-	 * Creates a Battle, with a set number of points, and a party of monsters.
+	 * Creates a Battle, with a set number of points, and an array of {@link Monster}s.
 	 * 
-	 * @param points The number of points that is provided by winning the Battle
+	 * @param points  The amount of points that the battle should award upon victory
 	 * @param monsters The list of {@link Monster}'s that may appear in the Battle
 	 */
 	public Battle(int points, List<Monster> monsters) {
@@ -46,7 +46,7 @@ public abstract class Battle {
 	
 	/**
 	 * Gets the number of {@link Monster}'s that are 
-	 * {@link Monster.Status.CONSCIOUS}
+	 * {@link Monster.Status.CONSCIOUS}.
 	 * 
 	 * @return The number of {@link Monster}'s that are 
 	 * {@link Monster.Status.CONSCIOUS}
@@ -62,16 +62,16 @@ public abstract class Battle {
 	}
 	
 	/**
-	 * Adds the first {@link Monster} in the list to the end of the list
+	 * Adds the first {@link Monster} in the list to the end of the monster array.
 	 */
 	public void nextMonster() {
 		Collections.rotate(monsters, -1);
 	}
 	
 	/**
-	 * Gets a battle description for the first {@link Monster} in the list
+	 * Gets a battle description for the first {@link Monster} in the monster array.
 	 * 
-	 * @return A description including the {@link Monster} name, current health 
+	 * @return A description including the monster's name, current health 
 	 * and max health.
 	 */
 	public String battleStatus() {
@@ -80,7 +80,7 @@ public abstract class Battle {
 	}
 	
 	/**
-	 * Provides a basic description of this Battle
+	 * Provides a basic description of this Battle.
 	 * 
 	 * @return A description of the points provided by the Battle
 	 */

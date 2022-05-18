@@ -18,13 +18,26 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.ListSelectionModel;
 
+/**
+ * A screen used to select a battle from a {@link GameEnvironment}.
+ */
 public class BattleSelectionScreen extends Screen{
 	
+	// The list for the wild battles
 	private JList<Battle> listWildBattles;
+	
+	// The list for the trainer battles
 	private JList<Battle> listTrainerBattles;
+	
+	// The button to start a battle
 	private JButton btnBattle;
 	
-
+	/**
+	 * Creates this screen.
+	 * 
+	 * @param gameEnvironment The game environment that the screen communicates with
+	 * @param backButtonRoute A string representation of the screen that the back button transitions to
+	 */
 	protected BattleSelectionScreen(GameEnvironment gameEnvironment, String backButtonRoute) {
 		super("Battle Selection Screen", gameEnvironment, backButtonRoute);
 	}
@@ -39,7 +52,11 @@ public class BattleSelectionScreen extends Screen{
 		addListTrainerBattles(container);
 	}
 
-
+	/**
+	 * Creates the labels and adds them to the container.
+	 * 
+	 * @param container The container to add the labels to
+	 */
 	private void addLabels(Container container) {
 
 		JLabel lblBattleHeader = new JLabel("Battles");
@@ -68,6 +85,11 @@ public class BattleSelectionScreen extends Screen{
 		
 	}
 
+	/**
+	 * Creates the buttons and adds them to the container.
+	 * 
+	 * @param container The container to add the buttons to
+	 */
 	private void addBtns(Container container) {
 		
 		JButton btnBack = new JButton("Back");
@@ -91,6 +113,11 @@ public class BattleSelectionScreen extends Screen{
 		
 	}
 
+	/**
+	 * Creates the list that displays the {@link WildBattle}s and adds them to the container.
+	 * 
+	 * @param container The container to add the list to
+	 */
 	private void addListWildBattles(Container container) {
 		
 		// Create a ListModel to store the items in the JList
@@ -119,6 +146,11 @@ public class BattleSelectionScreen extends Screen{
 		container.add(listWildBattles);
 	}
 
+	/**
+	 * Creates the list that displays the {@link TrainerBattle}s and adds them to the container.
+	 * 
+	 * @param container The container to add the list to
+	 */
 	private void addListTrainerBattles(Container container) {
 		
 		// Create a ListModel to store the items in the JList

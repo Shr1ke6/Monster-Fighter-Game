@@ -15,6 +15,10 @@ import monsterfighter.core.Shop;
 import monsterfighter.core.TrainerBattle;
 import monsterfighter.core.WildBattle;
 
+/**
+ * A command line user interface for a {@link GameEnvironment}.
+ * Some methods adapted from the seng201 RocketManager example project.
+ */
 public class CmdLineUi implements GameEnvironmentUi {
 	
     // The scanner used to read input from the console
@@ -79,6 +83,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 		}
 	}
 
+	// Method adapted from the seng201 RocketManager example project.
 	@Override
 	public boolean confirmQuit() {
 		while (true) {
@@ -135,8 +140,9 @@ public class CmdLineUi implements GameEnvironmentUi {
     }
 
     /**
-     * Gets the user's name
-     * @return The user name
+     * Gets the player's name.
+     * 
+     * @return the player's name
      */
     private String getName() {
         while (true) {
@@ -155,9 +161,9 @@ public class CmdLineUi implements GameEnvironmentUi {
     }
 	
     /**
-     * Gets the number of days that the user selected for the game duration
+     * Gets the total number of days that the user selected for the game duration.
      * 
-     * @return The total number of days
+     * @return The total number of days the game may last for
      */
 	private int getDays() {
         while (true) {
@@ -175,7 +181,7 @@ public class CmdLineUi implements GameEnvironmentUi {
     }
 	
 	/**
-	 * Gets the difficulty selected by the user
+	 * Gets the difficulty selected by the user.
 	 * 
 	 * @return The game difficulty
 	 */
@@ -196,7 +202,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 	}
 	
 	/**
-	 * Outputs the difficulty options
+	 * Outputs the difficulty options.
 	 */
 	private void printDifficulties() {
 		int i = 0;
@@ -207,9 +213,9 @@ public class CmdLineUi implements GameEnvironmentUi {
 	}
 
 	/**
-	 * Gets the starting monster selected by the user
+	 * Gets the starting monster selected by the user.
 	 * 
-	 * @return The starting monster for the party
+	 * @return The starting monster for the player's party
 	 */
 	private Monster getStartingMonster() {
 		System.out.println("Select an option by inputting the corresponding number");
@@ -219,12 +225,12 @@ public class CmdLineUi implements GameEnvironmentUi {
 	}
 	
 	/**
+	 * Prompts the user to select a {@link Monster}.
 	 * 
-	 * 
-	 * @param message Description 
-	 * @param monsters
-	 * @param description
-	 * @return The ID used to select a monster from the party
+	 * @param message Message that is output to inform the user
+	 * @param monsters The monsters that are displayed to the user
+	 * @param description An integer that corresponds with a certain monster description
+	 * @return An index corresponding to the user's choice 
 	 */
 	private int chooseMonster(String message, List<Monster> monsters, int description) {
 		boolean battleRunning = gameEnvironment.getBattleRunning();
@@ -250,6 +256,13 @@ public class CmdLineUi implements GameEnvironmentUi {
 		}
 	}
 
+	/**
+	 * Outputs the given {@link Monster}s. Prints different descriptions, based on the
+	 * provided description integer.
+	 * 
+	 * @param monsters The monsters that are displayed to the user
+	 * @param description An integer that corresponds with a certain monster description
+	 */
 	private void printMonsters(List<Monster> monsters, int description) {
 		int i = 0;
 		if (description == 0) {
@@ -265,6 +278,11 @@ public class CmdLineUi implements GameEnvironmentUi {
 		}
 	}
 
+	/**
+	 * Prompts the user to choose a nickname for their starting {@link Monster}.
+	 * 
+	 *@return The monster's nickname
+	 */
 	private String getMonsterNickname() {
         while (true) {
             System.out.println("Enter a nickname for your monster or leave blank to skip");
@@ -281,6 +299,9 @@ public class CmdLineUi implements GameEnvironmentUi {
         }
     }
 	
+	/**
+	 * Outputs the set of options the user can access from the main menu.
+	 */
 	private void printOptions() {
 			int i = 0;
 		    for (Option option : Option.values()) {
@@ -288,7 +309,10 @@ public class CmdLineUi implements GameEnvironmentUi {
 		       i++;
 		    }
 		}
-		
+	
+	/**
+	 * Prompts the user to select a {@link Monster} from their party.
+	 */
 	private void accessParty() {
 		while (true) {
 			List<Monster> party = gameEnvironment.getPlayer().getParty();
@@ -305,6 +329,12 @@ public class CmdLineUi implements GameEnvironmentUi {
 		}
 	}
 	
+	/**
+	 * Switches two {@link Monster}s selected by the user.
+	 * 
+	 * @param monsterID An index corresponding to a {@link Monster} in the {@link player}'s party
+	 * @param message Message that is output to inform the user
+	 */
 	private void switchMonsters(int monsterID, String message) {
 		List<Monster> party = gameEnvironment.getPlayer().getParty();
 		int monsterID2 = chooseMonster(message, party, 1);
@@ -312,7 +342,13 @@ public class CmdLineUi implements GameEnvironmentUi {
 				gameEnvironment.switchMonsters(party.get(monsterID), party.get(monsterID2));
 		}
 	}
-
+	
+	/**
+	 * Prompts the user to select an option for their selected {@link Monster}.
+	 * 
+	 * @param monsterID An index corresponding to a {@link Monster} in the {@link player}'s party
+	 * @param party The user's party of monsters
+	 */
 	private void partyOptions(int monsterID, List<Monster> party) {
 		while (true) {
 			System.out.println("Select an option:\n"
@@ -339,8 +375,12 @@ public class CmdLineUi implements GameEnvironmentUi {
 		}
 	}
 	
+	/**
+	 * Prompts the user to select an {@link Item} from their inventory.
+	 */
 	private void accessInventory() {
 		while (true) {
+			// Inventory is a copy of the user's actual inventory that only includes arrays with items.
 			List<ArrayList<Item>> inventory = gameEnvironment.getInventoryUI();
 			if (!gameEnvironment.getPlayer().inventoryIsEmpty()) {
 				int inventoryID = chooseItem("Inventory:\n" + "-".repeat(11), inventory);
@@ -355,6 +395,48 @@ public class CmdLineUi implements GameEnvironmentUi {
 		}
 	}
 	
+	/**
+	 * Prompts the user to select an {@link Item}.
+	 * 
+	 * @param message Message that is output to inform the user
+	 * @param inventory The user's inventory of items.
+	 * @return An index corresponding to the user's choice 
+	 */
+	private int chooseItem(String message, List<ArrayList<Item>> inventory) {
+		while (true) {
+			System.out.println(message);
+			printInventory(inventory);
+			System.out.println("\n(" + inventory.size() + ") Back" );
+			try {
+				int inventoryID = scanner.nextInt();
+				scanner.nextLine();
+				if (inventoryID >= 0 && inventoryID <= inventory.size()) {
+					return inventoryID;
+				}
+			} catch (Exception e) {
+				scanner.nextLine();
+			}
+		}
+	}
+	
+	/**
+	 * Outputs the user's inventory.
+	 * 
+	 * @param inventory The {@link Player} inventory
+	 */
+	private void printInventory(List<ArrayList<Item>> inventory) {
+		int i = 0;
+		for (ArrayList<Item> items : inventory) {
+			System.out.println("(" + i + ") " + items.size() + "x " + items.get(0));
+		        i++;
+	    }
+	}
+	
+	/**
+	 * Prompts the user to select an option for their selected {@link Item}.
+	 * 
+	 * @param inventoryID An index corresponding to an array in the {@link player}'s inventory
+	 */
 	private void inventoryOptions(int inventoryID) {
 		while (true) {
 			System.out.println("Select an option:\n"
@@ -374,6 +456,12 @@ public class CmdLineUi implements GameEnvironmentUi {
 		}
 	}
 	
+	/**
+	 * Uses an {@link Item} on a {@link Monster}.
+	 * 
+	 * @param objectID The index of the object in either the user's party or inventory
+	 * @param objectType An integer representing the type of the object. 0 for item and 1 for monster
+	 */
 	private void useItem(int objectID, int objectType){
 		List<Monster> party = gameEnvironment.getPlayer().getParty();
 		boolean battleRunning = gameEnvironment.getBattleRunning();
@@ -428,37 +516,10 @@ public class CmdLineUi implements GameEnvironmentUi {
 		}
 	}
 
-	
-	private int chooseItem(String message, List<ArrayList<Item>> inventory) {
-		while (true) {
-			System.out.println(message);
-			printInventory(inventory);
-			System.out.println("\n(" + inventory.size() + ") Back" );
-			try {
-				int inventoryID = scanner.nextInt();
-				scanner.nextLine();
-				if (inventoryID >= 0 && inventoryID <= inventory.size()) {
-					return inventoryID;
-				}
-			} catch (Exception e) {
-				scanner.nextLine();
-			}
-		}
-	}
-	
-	/*
-	 * Outputs the given user inventory
-	 * 
-	 * @param inventory 
+
+	/**
+	 * Prompts the user to select a {@link Shop} related option.
 	 */
-	private void printInventory(List<ArrayList<Item>> inventory) {
-		int i = 0;
-		for (ArrayList<Item> items : inventory) {
-			System.out.println("(" + i + ") " + items.size() + "x " + items.get(0));
-		        i++;
-	    }
-	}
-	
 	private void accessShop() {
 		while (true) {
 			System.out.println("Select a shop option:\n"
@@ -480,7 +541,10 @@ public class CmdLineUi implements GameEnvironmentUi {
 			}
 		}
 	}
-
+	
+	/**
+	 * Buys an object from the {@link Shop}.
+	 */
 	private void shopBuy() {
 		while (true) {
 			if (gameEnvironment.getShop().shopIsEmpty()) {
@@ -502,6 +566,12 @@ public class CmdLineUi implements GameEnvironmentUi {
 		}
 	}
 	
+	/**
+	 * Sells either a {@link Monster} from the {@link Player} party 
+	 * or an {@link Item} from the {@link Player} inventory.
+	 * 
+	 * @param option An integer representing the type of the object. 0 for item and 1 for monster
+	 */
 	private void sell(int option) {
 		while (true) {
 			if (option == 1) {
@@ -535,7 +605,13 @@ public class CmdLineUi implements GameEnvironmentUi {
 			}
 		}	
 	}
-		
+	
+	/**
+	 * Outputs the shop inventory.
+	 * 
+	 * @param message Message that is output to inform the user
+	 * @param shop The shop inventory
+	 */
 	public void printShopInventory(String message, List<ArrayList<Purchasable>> shop) {
 		System.out.println(message);
 		for (int i = 0; i < shop.size(); i++) {
@@ -543,7 +619,10 @@ public class CmdLineUi implements GameEnvironmentUi {
 		}
 		System.out.println("\n(" + shop.size() + ") Back" );
 	}
-
+	
+	/**
+	 * Prompts the user to select a {@link Battle} type.
+	 */
 	private void accessBattle() {
 		List<Battle> wildBattles = gameEnvironment.getBattles().getWildBattles();
 		List<Battle> trainerBattles = gameEnvironment.getBattles().getTrainerBattles();
@@ -576,6 +655,12 @@ public class CmdLineUi implements GameEnvironmentUi {
         }	
 	}
 	
+	/**
+	 * Prompts the user to select a {@link WildBattle} or {@link TrainerBattle}. 
+	 * 
+	 * @param battles The list of battles that the user can choose from
+	 * @param battleType An integer representing the type of battle. 0 for wild battle and 1 for trainer battle
+	 */
 	private void chooseBattle(List<Battle> battles, int battleType) {
 		while (true) {
 			if (battleType == 0) {
@@ -586,7 +671,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 					scanner.nextLine();
 					if (battleID >= 0 && battleID < battles.size()) {
 						// battleType == 0 for wild battle
-						startBattle(battles.get(battleID), battleID);
+						startBattle(battles.get(battleID));
 					} else if (battleID == battles.size()) {
 						break;
 					}
@@ -600,7 +685,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 					int battleID = scanner.nextInt();
 					scanner.nextLine();
 					if (battleID >= 0 && battleID < battles.size()) {
-						startBattle(battles.get(battleID), battleID);
+						startBattle(battles.get(battleID));
 					} else if (battleID == battles.size()) {
 						break;
 					}
@@ -611,6 +696,12 @@ public class CmdLineUi implements GameEnvironmentUi {
 		}
 	}
 	
+	/**
+	 * Outputs the {@link Battle}s.
+	 * 
+	 * @param message Message that is output to inform the user
+	 * @param battles The list of battles that are output to the user
+	 */
 	private void printBattles(String message, List<Battle> battles) {
 		System.out.println(message);
 		int i = 0;
@@ -620,17 +711,30 @@ public class CmdLineUi implements GameEnvironmentUi {
 		}
 	}
 	
-	private void startBattle(Battle battle, int battleID) {
+	/**
+	 * Attempts to start the chosen {@link Battle}.
+	 * 
+	 * @param battle The battle chosen by the user
+	 */
+	private void startBattle(Battle battle) {
 		gameEnvironment.startBattle();
 		List<Monster> party = gameEnvironment.getPlayer().getParty();
 		List<ArrayList<Item>> inventory = gameEnvironment.getInventoryUI();
 		boolean battleRunning = gameEnvironment.getBattleRunning();
 		if (battleRunning) {
-			runBattle(battle, battleID, party, inventory, battleRunning);
+			runBattle(battle, party, inventory, battleRunning);
 		}
 	}
-	
-	private void runBattle(Battle battle, int battleID, List<Monster> party, List<ArrayList<Item>> inventory, boolean battleRunning) {
+
+	/**
+	 * Runs the {@link Battle}.
+	 * 
+	 * @param battle The battle that the user is fighting
+	 * @param party The user's party of monsters
+	 * @param inventory The user's inventory
+	 * @param battleRunning A boolean that is true if the battle is running and false otherwise
+	 */
+	private void runBattle(Battle battle, List<Monster> party, List<ArrayList<Item>> inventory, boolean battleRunning) {
 	System.out.println("Go " + party.get(0).getNickname() + "!\n");
 		do {
 			if (party.get(0).getStatus().equals(Monster.Status.FAINTED)) {
@@ -655,6 +759,13 @@ public class CmdLineUi implements GameEnvironmentUi {
 		battleFinish(battle, party, inventory);
 	}
 	
+	/**
+	 * Handles the user's turn.
+	 * 
+	 * @param battle The battle that the user is fighting
+	 * @param party The user's party of monsters
+	 * @param inventory The user's inventory
+	 */
 	private void takeTurn(Battle battle, List<Monster> party, List<ArrayList<Item>> inventory) {
 		Monster activeMonster = party.get(0);
 		Monster opponent = battle.getMonsters().get(0);
@@ -695,11 +806,24 @@ public class CmdLineUi implements GameEnvironmentUi {
 		}
 	}
 	
+	/**
+	 * Outputs the battling {@link Monster}'s
+	 * 
+	 * @param battle The battle that the user is fighting
+	 * @param party The user's party of monsters
+	 */
 	private void battleStatus(Battle battle, List<Monster> party) {
 		System.out.println(battle.battleStatus() + "\n");
 		System.out.println(party.get(0).battleDescription() + "\n");
 	}
 	
+	/**
+	 * Handles the {@link Battle} ending.
+	 * 
+	 * @param battle The battle that the user is fighting
+	 * @param party The user's party of monsters
+	 * @param inventory The user's inventory
+	 */
 	private void battleFinish(Battle battle, List<Monster> party, List<ArrayList<Item>> inventory) {
 		if (!gameEnvironment.getPlayer().partyFainted()) {
 			System.out.println("You Won!\n"
@@ -720,6 +844,9 @@ public class CmdLineUi implements GameEnvironmentUi {
 		accessBattle();
 	}
 
+	/**
+	 * Transitions to the next day in game.
+	 */
 	public void accessRest() {
 		while (true) {
 			System.out.println("Are you sure you want to rest? (y/n) ");
@@ -731,7 +858,7 @@ public class CmdLineUi implements GameEnvironmentUi {
                 		partyCopy.add(monster);
                 	}
                 	gameEnvironment.nextDay();
-                	endOfTheWorld();
+                	endGame();
                 	printChanges(partyCopy);
                 	break;
                 } else if (input.matches("[nN]")) {
@@ -744,6 +871,11 @@ public class CmdLineUi implements GameEnvironmentUi {
         }
 	}
 	
+	/**
+	 * Outputs the {@link RandomEvent}s that occurred while resting.
+	 * 
+	 * @param partyCopy A shallow copy of the user's party that represents the party before resting
+	 */
 	public void printChanges(ArrayList<Monster> partyCopy) {
 		RandomEvent randomEvents = gameEnvironment.getRandomEvent();
 		List<Monster> party = gameEnvironment.getPlayer().getParty();
@@ -761,8 +893,10 @@ public class CmdLineUi implements GameEnvironmentUi {
 		
 	}
 
-	
-	public void endOfTheWorld() {
+	/**
+	 * Handles ending the game.
+	 */
+	public void endGame() {
 		gameEnvironment.getDay();
 		gameEnvironment.getTotalDays();
 		if (gameEnvironment.getDay() > gameEnvironment.getTotalDays()) {

@@ -8,11 +8,16 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JButton;
 
+/**
+ * A screen used to display the end game information of a {@link GameEnvironment}
+ */
 public class GameOverScreen extends Screen{
 
 
 	/**
-	 * Create the application.
+	 * Creates this screen.
+	 * 
+	 * @param gameEnvironment The game environment that the screen communicates with
 	 */
 	public GameOverScreen(GameEnvironment gameEnvironment) {
 		super("Game Over Screen", gameEnvironment, null);
@@ -27,6 +32,11 @@ public class GameOverScreen extends Screen{
 		
 	}
 
+	/**
+	 * Creates the labels and adds them to the container.
+	 * 
+	 * @param container The container to add the labels to
+	 */
 	private void addLabels(Container container) {
 		JLabel gameOverLabel = new JLabel("Game Over");
 		gameOverLabel.setFont(new Font("Tahoma", Font.BOLD, 18));
@@ -54,6 +64,11 @@ public class GameOverScreen extends Screen{
 		container.add(lblName);
 	}
 
+	/**
+	 * Creates the quit button and adds it to the container.
+	 * 
+	 * @param container The container to add the buttons to
+	 */
 	private void addBtnQuit(Container container) {
 		JButton btnQuit = new JButton("Quit");
 		btnQuit.addActionListener(e -> quit());

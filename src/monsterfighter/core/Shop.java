@@ -4,17 +4,32 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Class that models a shop
+ */
 public class Shop {
 
+	// The shops inventory
 	private ArrayList<ArrayList<Purchasable>> shopInventory;
 	
 	// Random number generator
 	private Random rng = new Random();
 	
+	/**
+	 * Constructs an empty shop.
+	 */
 	public Shop() {
 		this.shopInventory = new ArrayList<ArrayList<Purchasable>>();
 	}
 	
+	/**
+	 * Fills the shop with {@link Purchasable} objects, with the amount of each object
+	 * varying based on the given day.
+	 * 
+	 * @param day The current day the game is on
+	 * @param items All the items that populate the game
+	 * @param monsters All the monsters that populate the game
+	 */
 	public void fillShop(int day, List<Item> items, List<Monster> monsters) {
 		ArrayList<Integer> monsterIndices = new ArrayList<Integer>();
 		for (int i = 0; i < monsters.size(); i++) {
@@ -39,13 +54,19 @@ public class Shop {
 		}
 	}
 	
+	/**
+	 * Gets the shop inventory.
+	 * 
+	 * @return The list of purchasable objects in the shop
+	 */
 	public ArrayList<ArrayList<Purchasable>> getShopInventory() {
 		return shopInventory;
 	}
 	
 	/**
-	 * Checks to see if the shop is empty
-	 * @return isEmpty States whether the shop {@link shop} is empty or not
+	 * Checks to see if the shop is empty.
+	 * 
+	 * @return Boolean that is true if the shop is empty and false otherwise
 	 */
 	public boolean shopIsEmpty() {
 		boolean isEmpty = true;
@@ -57,6 +78,11 @@ public class Shop {
 		return isEmpty;
 	}
 	
+	/**
+	 * Removes the given object from the shop.
+	 * 
+	 * @param object The object to be removed from the shop
+	 */
 	public void removeObject(Purchasable object) {
 		for (int i = 0; i < shopInventory.size(); i++) {
 			if (object.getClass().equals(shopInventory.get(i).get(0).getClass()) && object.getIndex() == shopInventory.get(i).get(0).getIndex()) {

@@ -3,14 +3,18 @@ package monsterfighter.ui.gui;
 import monsterfighter.core.GameEnvironment;
 import monsterfighter.ui.GameEnvironmentUi;
 
+/**
+ * A graphical user interface that links to a {@link GameEnvironment}
+ */
 public class Gui implements GameEnvironmentUi{
 
+	// The game environment that this gui interacts with
 	private GameEnvironment gameEnvironment;
 	
+	// The active screen
 	private Screen screen;
 	
-	private Screen prevScreen;
-	
+	// An enum representing the screens that the user transition to from another screen
     private enum Option {
     	MAIN_MENU("Main Menu"),
         SHOP("Shop"),
@@ -27,6 +31,7 @@ public class Gui implements GameEnvironmentUi{
         }
     }
 	
+    // From seng201 rocket manager example project
     @Override
     public void setup(GameEnvironment gameEnvironment) {
         this.gameEnvironment = gameEnvironment;
@@ -34,11 +39,13 @@ public class Gui implements GameEnvironmentUi{
         screen.show();
     }
 
+    // From seng201 rocket manager example project
     @Override
     public void showError(String error) {
         screen.showError(error);
     }
 
+    // From seng201 rocket manager example project
     @Override
     public void start() {
         screen.quit();
@@ -46,16 +53,24 @@ public class Gui implements GameEnvironmentUi{
         screen.show();
     }
 
+    // From seng201 rocket manager example project
     @Override
     public boolean confirmQuit() {
         return screen.confirmQuit();
     }
 
+    // From seng201 rocket manager example project
     @Override
     public void quit() {
         screen.quit();
     }
     
+    /**
+     * Handles the transition between screens
+     * 
+     * @param name The name of the screen that will be shown
+     * @param back The name of screen that a back button implementation will transition to
+     */
     public void transitionScreen(String name, String back) {
     	Option option = Option.valueOf(name);
     	screen.quit();
@@ -86,15 +101,5 @@ public class Gui implements GameEnvironmentUi{
     	}
     	screen.show(); 
     }
-    /*
-	if (screenClose) {
-		screen.quit();
-	} else {
-		prevScreen = screen;
-	}
-	if (prevScreen!=null && screenClose) {
-		screen = prevScreen;
-		prevScreen=null;
-	} else {
-	*/
+ 
 }

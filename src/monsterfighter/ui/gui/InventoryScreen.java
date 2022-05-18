@@ -24,31 +24,61 @@ import java.awt.Container;
 import javax.swing.border.EtchedBorder;
 import javax.swing.ListSelectionModel;
 
+/**
+ * A screen used to access a {@link PLayer}'s inventory through a {@link GameEnvironment}
+ */
 public class InventoryScreen extends Screen{
 
+	// List of items in the player's inventory
 	private JList<ArrayList<Item>> listInventory;
+	
+	// ListModel for the inventory JList
 	private DefaultListModel<ArrayList<Item>> inventoryListModel;
+	
+	// Button to use an item
 	private JButton btnUseItem;
+	
+	// Button to sell an item
 	private JButton btnSellItem;
+	
+	// Selected monster to use an item on
 	private Monster selectedMonster;
+	
+	// Name of selected monster
 	private JLabel lblMonster;
+	
+	// Health of selected monster
 	private JLabel lblHealth;
+	
+	// Attack of selected monster
 	private JLabel lblAttack;
+	
+	// Combo box to select number of items to sell
 	private JComboBox<Integer> comboBoxNumItems;
+	
+	// Label that prompts the user how many items they want to sell
 	private JLabel lblSellAmount;
+	
+	// Label that lists the total sell price of the selected item
 	private JLabel lblSellPrice;
+	
+	// Label for the players gold
 	private JLabel lblGold;
+	
+	// List of the buttons in the container
 	private List<AbstractButton> listOptionButtons;
 	
-
+	/**
+	 * Creates this screen.
+	 * 
+	 * @param gameEnvironment The game environment that the screen communicates with
+	 * @param backButtonRoute A string representation of the screen that the back button transitions to
+	 */
 	protected InventoryScreen(GameEnvironment gameEnvironment, String backButtonRoute) {
 		super("Monster Fighter Inventory", gameEnvironment, backButtonRoute);
 	}
 	
 
-	/**
-	 * Initialize the contents of the container.
-	 */
 	@Override
 	protected void initialise(Container container) {
 		container.setSize(550, 450);
@@ -70,6 +100,11 @@ public class InventoryScreen extends Screen{
 		}
 	}
 	
+	/**
+	 * Creates the labels for selling an item and adds them to the container.
+	 * 
+	 * @param container The container to add the labels to
+	 */
 	private void addLabelsSell(Container container) {
 		
 		lblSellAmount = new JLabel("How many would you like to sell?");
@@ -91,6 +126,11 @@ public class InventoryScreen extends Screen{
 	}
 
 
+	/**
+	 * Creates the label for the inventory title and adds it to the container.
+	 * 
+	 * @param container The container to add the label to
+	 */
 	private void addLabelInventory(Container container) {
 		JLabel inventroyLabel = new JLabel("Inventory");
 		inventroyLabel.setFont(new Font("Tahoma", Font.BOLD, 18));
@@ -98,6 +138,11 @@ public class InventoryScreen extends Screen{
 		container.add(inventroyLabel);
 	}
 	
+	/**
+	 * Creates the labels for the selected monster adds them to the container.
+	 * 
+	 * @param container The container to add the labels to
+	 */
 	private void addLabelsMonster(Container container) {
 		lblMonster = new JLabel();
 		lblMonster.setFont(new Font("Tahoma", Font.BOLD, 18));
@@ -117,6 +162,9 @@ public class InventoryScreen extends Screen{
 		setTextLabelMonster();
 	}
 	
+	/**
+	 * Sets the label text for the selected monster labels
+	 */
 	private void setTextLabelMonster() {
 		String txtMonsterName = "Monster: " + selectedMonster.getNickname();
 		if (selectedMonster.getStatus().equals(Monster.Status.FAINTED)) {
@@ -127,6 +175,11 @@ public class InventoryScreen extends Screen{
 		lblAttack.setText("Attack: " + selectedMonster.getAttack());
 	}
 	
+	/**
+	 * Creates the buttons and adds them to the container.
+	 * 
+	 * @param container The container to add the buttons to
+	 */
 	private void addBtns(Container container) {
 		listOptionButtons = new ArrayList<AbstractButton>();
 		
@@ -206,6 +259,11 @@ public class InventoryScreen extends Screen{
 		}	
 	}
 	
+	/**
+	 * Creates the list representing the {@link Player}'s inventory and adds it to the container.
+	 * 
+	 * @param container The container to add the list to
+	 */
 	private void addListInventory(Container container) {
 		
 		inventoryListModel = new DefaultListModel<ArrayList<Item>>();
@@ -234,6 +292,11 @@ public class InventoryScreen extends Screen{
 		container.add(listInventory);
 	}
 	
+	/**
+	 * Creates the combo box to select number of items to sell and adds it to the container.
+	 * 
+	 * @param container The container to add the combo box to
+	 */
 	private void addComboBox(Container container) {
 		comboBoxNumItems = new JComboBox<Integer>();
 		comboBoxNumItems.setVisible(false);
@@ -250,6 +313,9 @@ public class InventoryScreen extends Screen{
 		container.add(comboBoxNumItems);
 	}
 	
+	/**
+	 * Displays the sell item graphic.
+	 */
 	private void sellDisplay() {
 		
 		comboBoxNumItems.setVisible(listInventory.getSelectedValue()!=null);

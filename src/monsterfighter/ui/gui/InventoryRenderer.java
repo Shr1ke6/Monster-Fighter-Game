@@ -9,10 +9,18 @@ import javax.swing.ListCellRenderer;
 
 import monsterfighter.core.Item;
 
+/**
+ * Custom renderer for the inventory JList in a {@link InventoryScreen}
+ * @see <a href="https://stackoverflow.com/questions/70000338/custom-render-jpanel-in-a-jlist">Custom List Cell Renderer</a>
+ */
 public class InventoryRenderer implements ListCellRenderer<ArrayList<Item>>{
 	
+	// The label that will be displayed 
 	private final JLabel label;
 	
+	/**
+	 * Constructs the inventory renderer
+	 */
 	public InventoryRenderer() {
 		this.label = new JLabel();
 		label.setOpaque(true);
