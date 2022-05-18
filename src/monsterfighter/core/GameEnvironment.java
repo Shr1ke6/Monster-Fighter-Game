@@ -338,17 +338,7 @@ public class GameEnvironment {
 			if (battleRunning && monsterSwitch.getStatus() == Monster.Status.FAINTED) {
 				throw new IllegalStateException(monsterSwitch.getNickname() + " is fainted. Choose another monster");
 			}
-			int monsterID = 4;
-			int monsterSwitchID = 4;
-			for (int i = 0; i < player.getParty().size(); i++) {
-				if (player.getParty().get(i).equals(monster)) {
-					monsterID = i;
-				}
-				if (player.getParty().get(i).equals(monsterSwitch)) {
-					monsterSwitchID = i;
-				}
-			}
-			player.switchMonsters(monsterID, monsterSwitchID);
+			player.switchMonsters(monster, monsterSwitch);
 		} catch (IllegalStateException e) {
 			ui.showError(e.getMessage());
 		}
@@ -458,7 +448,7 @@ public class GameEnvironment {
 			int i = 0;
 			for (Monster monster: player.getParty()) {
 				if (monster.getStatus().equals(Monster.Status.CONSCIOUS)) {
-					player.switchMonsters(0,i);
+					player.switchMonsters(player.getLeadingMonster(),player.getParty().get(i));
 					break;
 				} i++;
 			}

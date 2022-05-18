@@ -195,14 +195,28 @@ public class Player {
 	}
 	
 	/**
-	 * Given the index of two {@link Monster}'s in the player's party, 
+	 * Given two {@link Monster}'s in the player's party, 
 	 * switches them around.
 	 * 
-	 * @param monsterID1 Index of the monster that is to be switched in party
-	 * @param monsterID2 Index of the monster that is to be switched with in party
+	 * @param monster The monster that is to be switched in party
+	 * @param monster The monster that is to be switched with in party
 	 */
-	public void switchMonsters(int monsterID1, int monsterID2) {
-		Collections.swap(party, monsterID1, monsterID2);
+	public void switchMonsters(Monster monster, Monster monsterSwitch) {
+		int monsterID = -1;
+		int monsterSwitchID = -1;
+		for (int i = 0; i < party.size(); i++) {
+			if (party.get(i).equals(monster)) {
+				monsterID = i;
+			}
+			if (party.get(i).equals(monsterSwitch)) {
+				monsterSwitchID = i;
+			}
+		}
+		if (monsterID!=-1 && monsterSwitchID!=-1 ) {
+			Collections.swap(party, monsterID, monsterSwitchID);
+		} else {
+			throw new IllegalStateException("Monster/s not in party");
+		}
 	}
 	
 	/**
