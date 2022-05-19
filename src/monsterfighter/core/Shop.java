@@ -52,6 +52,7 @@ public class Shop {
 				Monster monster = new Monster(monsters.get(monsterIndices.get(randomNumber)));
 				monster.scaleMonster(day - 1);
 				shopInventory.get(i).add(monster);
+				monsterIndices.remove(i);
 			}
 		}
 	}
