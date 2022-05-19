@@ -80,6 +80,11 @@ public class Player {
 		return party;
 	}
 
+	/**
+	 * Adds a {@link Monster} to the party.
+	 * 
+	 * @param monster The {@link Monster} to be added to the party
+	 */
 	public void addMonsterToParty(Monster monster) {
 		if (party.size() >= 4) {
 			throw new IllegalStateException("Party full, cannot add another monster to party!\n");	
@@ -88,22 +93,38 @@ public class Player {
 		}
 	}
 	
+	/**
+	 * Removes a {@link Monster} from the party.
+	 * 
+	 * @param monster The {@link Monster} to be removed from the party
+	 */
 	public void removeMonsterFromParty(Monster monster) {
 		party.remove(monster);
 	}	
 	
+	/**
+	 * Gets the {@link Monster} from the first slot in the party.
+	 * 
+	 * @return The {@link Monster} that occupies the first index of the party
+	 */
 	public Monster getLeadingMonster() {
 		return party.get(0);
 	}
 
+	/**
+	 * Gets the player's name
+	 * 
+	 * @return The player's name
+	 */
 	public String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
+	/**
+	 * Get's the player's gold balance.
+	 * 
+	 * @return 
+	 */
 	public int getGoldBalance() {
 		return goldBalance;
 	}
@@ -147,19 +168,36 @@ public class Player {
 	}
 	
 	/**
-	 * Given the index of two monsters in party, switches them around.
+	 * Given the two {@link Monsters} in party, switches them around.
 	 * 
-	 * @param monsterID_1 Index of the monster that is to be switched in party
-	 * @param monsterID_2 Index of the monster that is to be switched with in party
+	 * @param monster The monster that is to be switched in party
+	 * @param monsterSwitch The monster that is to be switched with in party
 	 */
-	public void switchMonsters(int monsterID1, int monsterID2) {
-		Collections.swap(party, monsterID1, monsterID2);
+	public void switchMonsters(Monster monster, Monster monsterSwitch) {
+		int monsterID = -1;
+		int monsterSwitchID = -1;
+			
+		int i = 0;	
+		for (Monster m : party) {
+			if (m.equals(monster)) {
+				monsterID = i;
+			}
+			else if (m.equals(monsterSwitch)) {
+				monsterSwitchID = i;
+			}
+			i++;
+		}
+		if (monsterID!=-1 && monsterSwitchID!=-1) {
+			Collections.swap(party, monsterID, monsterSwitchID);
+		} else {
+			throw new IllegalStateException("Invalid Monsters selected");
+		}
 	}
 	
 	/**
 	 * Returns a boolean based on whether there exists a conscious monster in party
 	 * 
-	 * @return boolean that's true if all the monster's in party are fainted 
+	 * @return Boolean that's true if all the monster's in party are fainted 
 	 * or false if there exists a conscious monster
 	 */
 	public boolean partyFainted() {
@@ -175,7 +213,7 @@ public class Player {
 	/**
 	 * Returns the number of conscious Monster's within the player's party
 	 * 
-	 * @return integer The number of Monster's in party with Status.CONSCIOUS
+	 * @return The number of Monster's in party with Status.CONSCIOUS
 	 */
 	public int getConsciousMonsters() {
 		int conscious = party.size();
@@ -187,6 +225,11 @@ public class Player {
 		return conscious;
 	}
 
+	/**
+	 * Returns the number of items in the player's inventory
+	 * 
+	 * @return 
+	 */
 	public int inventoryNumItems() {
 		int numItems = 0;
 		for (ArrayList<Item> items: inventory) {

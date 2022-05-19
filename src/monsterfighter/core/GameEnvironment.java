@@ -119,7 +119,7 @@ public class GameEnvironment {
 		this.ui = ui;
 		this.allMonsters = monsters;
 		// Adds and scales three monsters to the starting monsters list
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < Math.min(3, monsters.size()); i++) {
 			Monster monster = new Monster(monsters.get(i));
 			monster.scaleMonster(1);
 			this.startingMonsters.add(monster);
@@ -150,7 +150,7 @@ public class GameEnvironment {
 	 * @param difficulty The chosen difficulty for the game
 	 */
 	public void onSetupFinished(String name, int totalDays, Monster startingMonster, String nickname, Difficulty difficulty) {
-		this.player = new Player(name, allItems.size());
+		this.player = new Player(name, allItems);
 		this.totalDays = totalDays;
 		player.addMonsterToParty(startingMonster);
 		for (int i = 0; i < 3; i++) {

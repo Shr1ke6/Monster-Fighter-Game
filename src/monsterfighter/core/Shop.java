@@ -38,18 +38,20 @@ public class Shop {
 		if (shopInventory.size() > 0) {
 			shopInventory.clear();
 		}
-		for (int i = 0; i <= items.size() + 2; i++) {
+		for (int i = 0; i < items.size() + Math.min(3, monsterIndices.size()); i++) {
 			shopInventory.add(new ArrayList<Purchasable>());
-			if (i > 2) {
-				for (int j = 0; j < ((items.get(i-3).getShopQuantity()) * ((int) Math.ceil((double)day / 5))) ; j++) {
-					shopInventory.get(i).add(new Item(items.get(i-3)));
+			// Adds items to shop
+			if (i < items.size()) {
+				// Fills each item array with the appropriate quantity of items
+				for (int j = 0; j < ((items.get(i).getShopQuantity()) * ((int) Math.ceil((double)day / 5))) ; j++) {
+					shopInventory.get(i).add(new Item(items.get(i)));
 				}
+			// Adds Monsters to shop
 			} else {
 				int randomNumber = rng.nextInt(monsterIndices.size());
 				Monster monster = new Monster(monsters.get(monsterIndices.get(randomNumber)));
 				monster.scaleMonster(day - 1);
 				shopInventory.get(i).add(monster);
-				monsterIndices.remove(randomNumber);
 			}
 		}
 	}
