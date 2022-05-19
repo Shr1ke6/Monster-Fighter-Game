@@ -13,12 +13,14 @@ import monsterfighter.core.Player;
 
 public class PlayerTest {
 	String name = "pep";
-	Player player = new Player(name, 6);
+	
 	private int goldBalance = 1;
 	int gold = 200;
 	private int totalGold = 0;
-	final List<Item> items = new ArrayList<>(1);
-	private final List<ArrayList<Item>> inventory = new ArrayList<ArrayList<Item>>();
+	List<Item> items = new ArrayList<>();
+
+	Player player = new Player(name, items);
+	private List<ArrayList<Item>> inventory = new ArrayList<ArrayList<Item>>();
 	
 	
 
@@ -33,7 +35,7 @@ public class PlayerTest {
 	public void testPlayer() {
 		
 		Assertions.assertEquals("pep", player.getName());
-		Assertions.assertEquals(6, player.getInventory().size());
+		Assertions.assertEquals(0, player.getInventory().size());
 	}
 	@Test
 	public void testAddMonsterToParty() {
@@ -93,15 +95,16 @@ public class PlayerTest {
 
 	@Test
 	public void inventoryIsEmpty() {
-		items.add(new Item(0, "Small Potion", 20, Item.Stat.CURRENTHEALTH, 100, 3));
-		inventory.add((ArrayList<Item>) items);
-		boolean isEmpty = true;
-		for (ArrayList<Item> item : inventory) {
-			if (!item.isEmpty()) {
-				isEmpty = false;
-			}
-		}
-		Assertions.assertEquals(false, isEmpty);
+		List<Item> items = new ArrayList<>();
+		items.add(new Item(0, "Small Potion", 40, Item.Stat.CURRENTHEALTH, 25, 3));
+		items.add(new Item(1, "Big Potion", 80, Item.Stat.CURRENTHEALTH, 50, 2));
+		items.add(new Item(2, "Huge Potion", 120, Item.Stat.CURRENTHEALTH, 80, 1));
+		items.add(new Item(3, "Attack Snack", 5, Item.Stat.ATTACK, 50, 1));
+		items.add(new Item(4, "Max Health Snack", 10, Item.Stat.MAXHEALTH, 50, 1));
+		items.add(new Item(5, "Revive candy", 40, Item.Stat.STATUS, 60, 1));
+		Player player = new Player(name, items);
+		player.addItemToInventory(items.get(0));
+		Assertions.assertEquals(false, player.inventoryIsEmpty());
 	}
 	
 	@Test

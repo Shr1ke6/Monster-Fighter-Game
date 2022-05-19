@@ -1,4 +1,5 @@
 package test;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,44 +8,76 @@ import org.junit.jupiter.api.Test;
 
 import monsterfighter.core.Item;
 import monsterfighter.core.Monster;
-import monsterfighter.core.Purchasable;
+
+import monsterfighter.core.Shop;
 
 
 public class ShopTest {
-    int day = 1;
-    ArrayList<ArrayList<Purchasable>> shopInventory = new ArrayList<ArrayList<Purchasable>>();
-    final List<Item> items = new ArrayList<>(1);
-    Monster monster = new Monster(0, "Fireboy", Monster.Type.FIRE, 50, 20, 200);
+	
+	
+	
+	@Test
+	public void testFillShop() {
+		int day = 1;
+		List<Item> items = new ArrayList<>(5);
+		
+		items.add(new Item(0, "Small Potion", 40, Item.Stat.CURRENTHEALTH, 25, 3));
+		items.add(new Item(1, "Big Potion", 80, Item.Stat.CURRENTHEALTH, 50, 2));
+		items.add(new Item(2, "Huge Potion", 120, Item.Stat.CURRENTHEALTH, 80, 1));
+		items.add(new Item(3, "Attack Snack", 5, Item.Stat.ATTACK, 50, 1));
+		items.add(new Item(4, "Max Health Snack", 10, Item.Stat.MAXHEALTH, 50, 1));
+		items.add(new Item(5, "Revive candy", 40, Item.Stat.STATUS, 60, 1));
+		
+		List<Monster> monsters = new ArrayList<>(6);
+		
+		monsters.add(new Monster(0, "Fireboy", Monster.Type.FIRE, 40, 20, 200));
+		monsters.add(new Monster(1, "Watergirl", Monster.Type.WATER, 55, 15, 200));
+		monsters.add(new Monster(2, "Dirt", Monster.Type.GRASS, 80, 10, 200));
+		monsters.add(new Monster(3, "BrightStar", Monster.Type.LIGHT, 60, 12, 200));
+		monsters.add(new Monster(4, "DarkStar", Monster.Type.DARK, 30, 24, 200));
+		monsters.add(new Monster(5, "Normie", Monster.Type.NORMAL, 120, 6, 200));
+		
+		Shop shop = new Shop();
+		shop.fillShop(day, items, monsters);
+		
+		Assertions.assertEquals(9, shop.getShopInventory().size());
 
+	}
+	
+	@Test
+	public void TestShopIsEmpty() {
+		int day = 1;
+		List<Item> items = new ArrayList<>(5);
+		
+		items.add(new Item(0, "Small Potion", 40, Item.Stat.CURRENTHEALTH, 25, 3));
+		items.add(new Item(1, "Big Potion", 80, Item.Stat.CURRENTHEALTH, 50, 2));
+		items.add(new Item(2, "Huge Potion", 120, Item.Stat.CURRENTHEALTH, 80, 1));
+		items.add(new Item(3, "Attack Snack", 5, Item.Stat.ATTACK, 50, 1));
+		items.add(new Item(4, "Max Health Snack", 10, Item.Stat.MAXHEALTH, 50, 1));
+		items.add(new Item(5, "Revive candy", 40, Item.Stat.STATUS, 60, 1));
+		
+		List<Monster> monsters = new ArrayList<>(6);
+		
+		monsters.add(new Monster(0, "Fireboy", Monster.Type.FIRE, 40, 20, 200));
+		monsters.add(new Monster(1, "Watergirl", Monster.Type.WATER, 55, 15, 200));
+		monsters.add(new Monster(2, "Dirt", Monster.Type.GRASS, 80, 10, 200));
+		monsters.add(new Monster(3, "BrightStar", Monster.Type.LIGHT, 60, 12, 200));
+		monsters.add(new Monster(4, "DarkStar", Monster.Type.DARK, 30, 24, 200));
+		monsters.add(new Monster(5, "Normie", Monster.Type.NORMAL, 120, 6, 200));
+		
+		Shop shop = new Shop();
+		shop.fillShop(day, items, monsters);
+		
+		Assertions.assertEquals(false, shop.shopIsEmpty());
+	
+	}
+	
 
-    @Test
-    public void testFillShop() {
-        shopInventory.add(new ArrayList<Purchasable>());
-        shopInventory.add(new ArrayList<Purchasable>());
-        shopInventory.add(new ArrayList<Purchasable>());
-        Assertions.assertEquals(3, shopInventory.size());
-
-    }
-
-    @Test
-    public void TestShopIsEmpty() {
-        boolean isEmpty = true;
-        ArrayList<Purchasable> object = new ArrayList<Purchasable>();
-        object.add(monster);
-        shopInventory.add(new ArrayList<Purchasable>());
-        if (!object.isEmpty()) {
-                isEmpty = false;
-        }
-        Assertions.assertEquals(false, isEmpty);
-    }
-
-    @Test 
-    public void TestRemoveObject() {
-        shopInventory.add(new ArrayList<Purchasable>());
-        shopInventory.add(new ArrayList<Purchasable>());
-        shopInventory.remove(0);
-        Assertions.assertEquals(1, shopInventory.size());
-
-    }
+	public void TestRemoveObject() {
+		
+		
+		
+	}
 
 }
+
