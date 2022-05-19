@@ -332,10 +332,12 @@ public class GameEnvironment {
 	 * 
 	 * @param monster The {@link Monster} being switched
 	 * @param monsterSwitch The {@link Monster} being switched with.
+	 * @throws IllegalStateException if a battle is running and the user tries to switch in a fainted monster
 	 */
 	public void switchMonsters(Monster monster, Monster monsterSwitch) {
 		try {
-			if (battleRunning && monsterSwitch.getStatus().equals(Monster.Status.FAINTED)) {
+			if (battleRunning && ((monsterSwitch.isFainted() && monster.equals(player.getLeadingMonster())
+					||(monster.isFainted() && monsterSwitch.equals(player.getLeadingMonster()))))) {
 				throw new IllegalStateException(monsterSwitch.getNickname() + " is fainted. Choose another monster");
 			}
 			player.switchMonsters(monster, monsterSwitch);
@@ -363,7 +365,7 @@ public class GameEnvironment {
 	/**
 	 * Sells an item from the {@link Player}'s inventory.
 	 * 
-	 * @param item The {@link Item} to be sold
+	 * @param item The item to be sold
 	 */
 	public void sellItem(Item item) {
 		player.setGoldBalance(item.getSellPrice());
@@ -373,7 +375,7 @@ public class GameEnvironment {
 	/**
 	 * Sells a monster from the {@link Player}'s party
 	 * 
-	 * @param monster The {@link Monster} to be sold
+	 * @param monster The monster to be sold
 	 */
 	public void sellMonster(Monster monster) {
 		player.setGoldBalance(monster.getSellPrice());
@@ -383,24 +385,17 @@ public class GameEnvironment {
 	/**
 	 * Purchases a {@link Monster} or {@link Item} from the shop.
 	 * 
-	 * @param object The {@link Monster} or {@link Item} that is to be purchased. 
+	 * @param object The monster or item that is to be purchased.
 	 */
 	public void purchase(Purchasable object) {
 		try {
-			if (shop.getShopInventory().size() == 0) {
-				throw new IllegalStateException("No Items left! Come back tomorrow for new stock");	
-			}
-			if (player.getGoldBalance() >= object.getBuyPrice()) {
-				if (object instanceof Monster) {
-					player.addMonsterToParty((Monster) object);
-				} else {
-					player.addItemToInventory((Item) object);
-				}
-				player.setGoldBalance(-object.getBuyPrice());
-				shop.removeObject(object);
+			player.setGoldBalance(-object.getBuyPrice());
+			if (object instanceof Monster) {
+				player.addMonsterToParty((Monster) object);
 			} else {
-				throw new IllegalStateException("Not enough gold!\n");
+				player.addItemToInventory((Item) object);
 			}
+			shop.removeObject(object);
 		} catch (IllegalStateException e) {
 			ui.showError(e.getMessage());
 		}
@@ -439,6 +434,8 @@ public class GameEnvironment {
 	/**
 	 * Attempts to start a battle if the player's party has any monsters 
 	 * that are conscious. Throws an error otherwise.
+	 * 
+	 * @throws IllegalStateException if there are no monsters in the players party that can fight
 	 */
 	public void startBattle() {
 		try {
@@ -447,7 +444,7 @@ public class GameEnvironment {
 			}
 			int i = 0;
 			for (Monster monster: player.getParty()) {
-				if (monster.getStatus().equals(Monster.Status.CONSCIOUS)) {
+				if (!monster.isFainted()) {
 					player.switchMonsters(player.getLeadingMonster(),player.getParty().get(i));
 					break;
 				} i++;

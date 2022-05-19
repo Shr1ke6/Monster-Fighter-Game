@@ -266,6 +266,15 @@ public class Monster implements Purchasable{
 	}
 	
 	/**
+	 * Returns true if the monster is {@link Status#FAINTED} and false otherwise.
+	 * 
+	 * @return The status of the monster
+	 */
+	public boolean isFainted() {
+		return status.equals(Status.FAINTED);
+	}
+	
+	/**
 	 * Sets the monster's max health based on the current max health plus the 
 	 * additional health amount.
 	 * 

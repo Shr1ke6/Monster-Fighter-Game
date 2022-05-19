@@ -84,6 +84,7 @@ public class Player {
 	 * Adds a {@link Monster} to the party.
 	 * 
 	 * @param monster The {@link Monster} to be added to the party
+	 * @throws IllegalStateException if the players party is already full
 	 */
 	public void addMonsterToParty(Monster monster) {
 		if (party.size() >= 4) {
@@ -129,17 +130,38 @@ public class Player {
 		return goldBalance;
 	}
 
+	/**
+	 * Adds or subtracts gold from the player's gold balance
+	 * 
+	 * @param gold The amount of gold that will be added to or taken from 
+	 * the players gold balance
+	 * @throws IllegalStateException if adding the gold will put the players 
+	 * gold balance into the negatives
+	 */
 	public void setGoldBalance(int gold) {
+		if (goldBalance+gold<0) {
+			throw new IllegalStateException("Not enough gold!");
+		}
 		this.goldBalance += gold;
 		if (gold > 0) {
 			increaseTotalGold(gold);
 		}
 	}
 
+	/**
+	 * Returns the total gold the player has ever earned
+	 * 
+	 * @return The total gold that the player has ever had in their gold balance
+	 */
 	public int getTotalGold() {
 		return totalGold;
 	}
 
+	/**
+	 * Increases the players total gold
+	 * 
+	 * @param gold
+	 */
 	public void increaseTotalGold(int gold) {
 		this.totalGold += gold;
 	}
@@ -168,10 +190,12 @@ public class Player {
 	}
 	
 	/**
-	 * Given the two {@link Monsters} in party, switches them around.
+	 * Given the two {@link Monster}s in party, switches them around.
 	 * 
 	 * @param monster The monster that is to be switched in party
 	 * @param monsterSwitch The monster that is to be switched with in party
+	 * @throws IllegalStateException if the given monsters are not 
+	 * in the players party
 	 */
 	public void switchMonsters(Monster monster, Monster monsterSwitch) {
 		int monsterID = -1;
@@ -179,10 +203,10 @@ public class Player {
 			
 		int i = 0;	
 		for (Monster m : party) {
-			if (m.equals(monster)) {
+			if (monster.equals(m)) {
 				monsterID = i;
 			}
-			else if (m.equals(monsterSwitch)) {
+			if (monsterSwitch.equals(m)) {
 				monsterSwitchID = i;
 			}
 			i++;
