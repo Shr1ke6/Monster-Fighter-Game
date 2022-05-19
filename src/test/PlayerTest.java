@@ -23,9 +23,6 @@ public class PlayerTest {
 	private List<ArrayList<Item>> inventory = new ArrayList<ArrayList<Item>>();
 	
 	
-
-
-
 	public PlayerTest() {
 		
 	}
@@ -83,13 +80,9 @@ public class PlayerTest {
 	
 	@Test
 	public void testSetGoldBalance() {
-		goldBalance += gold;
-		if (gold > 0) {
-			totalGold += gold;
-		}
-		
-		Assertions.assertEquals(201, goldBalance);
-		Assertions.assertEquals(200, totalGold);
+		player.setGoldBalance(gold);
+		Assertions.assertEquals(1, goldBalance);
+
 		
 	}
 
@@ -131,7 +124,7 @@ public class PlayerTest {
 		Monster monster1 = new Monster(1, "Fireboy", Monster.Type.FIRE, 50, 20, 200);
 		player.addMonsterToParty(monster);
 		player.addMonsterToParty(monster1);
-		Collections.swap(player.getParty(), 0, 1);
+		player.switchMonsters(0, 1);
 		Assertions.assertEquals(monster1, player.getParty().get(0));
 		Assertions.assertEquals(monster, player.getParty().get(1));
 	}
@@ -142,29 +135,25 @@ public class PlayerTest {
 		Monster monster1 = new Monster(1, "Fireboy", Monster.Type.FIRE, 50, 20, 200);
 		player.addMonsterToParty(monster);
 		player.addMonsterToParty(monster1);
-		boolean fainted = true;
-		for (int i = 0; i < player.getParty().size(); i++) {
-			if (monster.getStatus() == Monster.Status.CONSCIOUS) {
-				fainted = false;
-			}
-		}
-		Assertions.assertEquals(false, fainted);
+		player.partyFainted();
+		
+		Assertions.assertEquals(false, player.partyFainted());
 		
 	}
 	
 	@Test
+	public void testGetConsciousMonsters() {
+		player.getConsciousMonsters();
+		Assertions.assertEquals(0, player.getConsciousMonsters());
+	}
+	
+	@Test
 	public void testInventoryNumItems() {
-		items.add(new Item(0, "Small Potion", 20, Item.Stat.CURRENTHEALTH, 100, 3));
-		inventory.add((ArrayList<Item>) items);
-		int numItems = 0;
-		for (ArrayList<Item> items: inventory) {
-			for(Item item: items) {
-				numItems += 1;
-			}
-		}
-		Assertions.assertEquals(1, numItems);
+		player.inventoryNumItems();
+		Assertions.assertEquals(0, player.inventoryNumItems());
 	}
 		
+	
 			
 	
 	
