@@ -158,18 +158,28 @@ public class Player {
 	}
 
 	/**
-	 * Increases the players total gold
+	 * Increases the players total gold.
 	 * 
-	 * @param gold
+	 * @param gold The amount of gold to add to the players total gold
 	 */
 	public void increaseTotalGold(int gold) {
 		this.totalGold += gold;
 	}
 
+	/**
+	 * Gets the player's points.
+	 * 
+	 * @return The amount of points the player has acquired
+	 */
 	public int getPoints() {
 		return points;
 	}
 
+	/**
+	 * Increases the player's points
+	 * 
+	 * @param points The number of points to add the player's points
+	 */
 	public void increasePoints(int points) {
 		this.points += points;
 	}
@@ -227,13 +237,13 @@ public class Player {
 	public boolean partyFainted() {
 		boolean fainted = true;
 		for (Monster monster: party) {
-			if (monster.getStatus() == Monster.Status.CONSCIOUS) {
+			if (!monster.isFainted()) {
 				fainted = false;
 			}
 		}
 		return fainted;	
 	}
-	
+
 	/**
 	 * Returns the number of conscious Monster's within the player's party
 	 * 
@@ -242,7 +252,7 @@ public class Player {
 	public int getConsciousMonsters() {
 		int conscious = party.size();
 		for (Monster monster: party ) {
-			if (monster.getStatus() == Monster.Status.FAINTED) {
+			if (monster.isFainted()) {
 				conscious -= 1;
 			}
 		}

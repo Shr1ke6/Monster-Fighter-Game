@@ -10,8 +10,8 @@ import javax.swing.ListCellRenderer;
 import monsterfighter.core.Item;
 
 /**
- * Custom renderer for the inventory JList in a {@link InventoryScreen}
- * @see <a href="https://stackoverflow.com/questions/70000338/custom-render-jpanel-in-a-jlist">Custom List Cell Renderer</a>
+ * Custom renderer for the inventory JList in a {@link InventoryScreen}.
+ * @see <a href="https://stackoverflow.com/a/70007594">Custom List Cell Renderer</a>
  */
 public class InventoryRenderer implements ListCellRenderer<ArrayList<Item>>{
 	
@@ -27,10 +27,10 @@ public class InventoryRenderer implements ListCellRenderer<ArrayList<Item>>{
 	}
 	
 	@Override
-	public Component getListCellRendererComponent(JList<? extends ArrayList<Item>> list, ArrayList<Item> value,
+	public Component getListCellRendererComponent(JList<? extends ArrayList<Item>> list, ArrayList<Item> items,
 			int index, boolean isSelected, boolean cellHasFocus) {
 		
-        label.setText("[" + value.size() + "] " + value.get(0).toString());
+        label.setText("[" + items.size() + "] " + items.get(0).toString());
 
         if (isSelected) {
             label.setBackground(list.getSelectionBackground());

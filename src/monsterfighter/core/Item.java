@@ -142,7 +142,6 @@ public class Item implements Purchasable{
 		switch (stat) {
         case MAXHEALTH:
         	monster.setMaxHealth(amount);
-        	monster.receiveHealth(amount);
         	break;
         case ATTACK:
         	monster.setAttack(amount);
@@ -153,7 +152,7 @@ public class Item implements Purchasable{
         	} else if (monster.getCurrentHealth() == monster.getMaxHealth()){
         		throw new IllegalStateException("Cannot use " + name + ", " + monster.getNickname() + "'s health is already at max\n");
         	} else {
-        		throw new IllegalStateException("Cannot use " + name + ", " + monster.getNickname() + "has fainted and must first be revived\n");
+        		throw new IllegalStateException("Cannot use " + name + ", " + monster.getNickname() + " is unconscious and must first be revived\n");
         	}
         	break;
         case STATUS:
