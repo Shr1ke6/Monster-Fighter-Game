@@ -169,6 +169,7 @@ public class PartyScreen extends Screen{
 				if (btnSwitchMonsters!=null && btnSwitchMonsters.isSelected()) {
 					Monster monster = getGameEnvironment().getPlayer().getLeadingMonster();
 					getGameEnvironment().switchMonsters(selectedMonsterSwitch, selectedMonster);
+					// If the player is fighting and they switched their leading monster around
 					if (!monster.equals(getGameEnvironment().getPlayer().getLeadingMonster()) && getGameEnvironment().getBattleRunning()) {
 						getGameEnvironment().setSelectedObject(monster);
 						getGameEnvironment().transitionScreen(getBackButtonRoute(), "PARTY");

@@ -101,6 +101,9 @@ public class MainScreen extends Screen{
 		container.add(btnInventory);
 
 		JButton btnRest = new JButton("Rest");
+		if (getGameEnvironment().getDay()==getGameEnvironment().getTotalDays()) {
+			btnRest.setText("End Game");
+			}
 		btnRest.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnRest.setBounds(165, 462, 143, 73);
 		btnRest.addActionListener(new ActionListener(){
@@ -155,7 +158,7 @@ public class MainScreen extends Screen{
 		} for (int i = 0; i < partyCopy.size(); i++) {
 			if (randomEvents.getMonsterLeaves().get(i)) {
 				message += partyCopy.get(i).getNickname() +
-						" left your party overnight. Best of luck " + getGameEnvironment().getPlayer().getParty().get(i).getNickname() + ".<br>";
+						" left your party overnight. Best of luck " + partyCopy.get(i).getNickname() + ".<br>";
 			} else if (randomEvents.getLevelUp().get(i) && !randomEvents.getMonsterLeaves().get(i)) {
 				message += partyCopy.get(i).getNickname() + "'s stats increased overnight.<br>";
 			} 

@@ -72,7 +72,7 @@ public class RandomEvent {
 	 */
 	public List<Boolean> monsterLevelUp(ArrayList<Monster> party) {
 		List<Boolean> levelUp = new ArrayList<>(party.size());
-		double odds = 0.2;
+		double odds = 0.1;
 		for (int i = 0; i < party.size(); i++) {
 			odds += party.get(i).getWins()*0.05;
 			if (party.get(i).getFaintedToday()) {
@@ -115,7 +115,7 @@ public class RandomEvent {
 	 * player's party
 	 */
 	public boolean monsterJoins(ArrayList<Monster> party) {
-		double odds = 0 + (0.05 * (4 - party.size()));
+		double odds = 0 + (0.04 * (4 - party.size()));
 		boolean joins = Math.random() < odds;
 		return joins;
 	

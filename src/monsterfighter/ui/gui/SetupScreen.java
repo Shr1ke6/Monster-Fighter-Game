@@ -238,7 +238,7 @@ public class SetupScreen extends Screen{
 		
 		lblNicknameReq.setText(validMonsterNickname ? null : GameEnvironmentUi.MONSTER_NAME_REQUIREMENTS);
 
-		btnAccept.setEnabled(validName && !listDifficulty.isSelectionEmpty() && !listStartingMonster.isSelectionEmpty());
+		btnAccept.setEnabled(validName && validMonsterNickname && !listDifficulty.isSelectionEmpty() && !listStartingMonster.isSelectionEmpty());
 	}
 
 

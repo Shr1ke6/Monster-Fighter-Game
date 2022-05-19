@@ -612,7 +612,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 	 * @param message Message that is output to inform the user
 	 * @param shop The shop inventory
 	 */
-	public void printShopInventory(String message, List<ArrayList<Purchasable>> shop) {
+	private void printShopInventory(String message, List<ArrayList<Purchasable>> shop) {
 		System.out.println(message);
 		for (int i = 0; i < shop.size(); i++) {
 			System.out.println("(" + i + ") " + shop.get(i).size() + "x " + shop.get(i).get(0).buyDescription());
@@ -847,7 +847,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 	/**
 	 * Transitions to the next day in game.
 	 */
-	public void accessRest() {
+	private void accessRest() {
 		while (true) {
 			System.out.println("Are you sure you want to rest? (y/n) ");
             try {
@@ -876,7 +876,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 	 * 
 	 * @param partyCopy A shallow copy of the user's party that represents the party before resting
 	 */
-	public void printChanges(ArrayList<Monster> partyCopy) {
+	private void printChanges(ArrayList<Monster> partyCopy) {
 		RandomEvent randomEvents = gameEnvironment.getRandomEvent();
 		List<Monster> party = gameEnvironment.getPlayer().getParty();
 		
@@ -896,7 +896,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 	/**
 	 * Handles ending the game.
 	 */
-	public void endGame() {
+	private void endGame() {
 		gameEnvironment.getDay();
 		gameEnvironment.getTotalDays();
 		if (gameEnvironment.getDay() > gameEnvironment.getTotalDays()) {

@@ -83,11 +83,12 @@ public class BattleScreen extends Screen{
 	protected void initialise(Container container) {
 		container.setSize(490, 517);
 		
+		opponent = getGameEnvironment().getBattles().getCurrentBattle();
+		
 		Monster playerMonster = getGameEnvironment().getPlayer().getLeadingMonster();
 		Monster opponentMonster = opponent.getMonsters().get(0);
 		int playerMonsterHealth = playerMonster.getCurrentHealth();
-		opponent = getGameEnvironment().getBattles().getCurrentBattle();
-		
+
 		addOpponentPanel(container);
 		addPlayerPanel(container);
 		setMonsterInformation();
@@ -428,8 +429,18 @@ public class BattleScreen extends Screen{
 		} else {
 			message += "You Lost...<br>"
 					+ "Received:<br>"
-					+ "Points: " + (25 * (opponent.getMonsters().size() - opponent.getConsciousMonsters()));
+					+ "Points: 0<br>";
 			
+		}
+		message += "<br>Team:<br>";
+		for (Monster monster: getGameEnvironment().getPlayer().getParty()) {
+			message += monster.getNickname() + " | ";
+			if (monster.getStatus().equals(Monster.Status.CONSCIOUS)) {
+				message += " Health " + monster.getCurrentHealth() + "/" + monster.getMaxHealth();
+			} else {
+				message += " [FAINTED]";
+			}
+			message += "<br>";
 		}
 		message+="</html>";
 		lblMessage.setText(message);

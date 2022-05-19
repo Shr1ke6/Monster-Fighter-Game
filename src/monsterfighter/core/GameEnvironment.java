@@ -335,7 +335,7 @@ public class GameEnvironment {
 	 */
 	public void switchMonsters(Monster monster, Monster monsterSwitch) {
 		try {
-			if (battleRunning && monsterSwitch.getStatus() == Monster.Status.FAINTED) {
+			if (battleRunning && monsterSwitch.getStatus().equals(Monster.Status.FAINTED)) {
 				throw new IllegalStateException(monsterSwitch.getNickname() + " is fainted. Choose another monster");
 			}
 			player.switchMonsters(monster, monsterSwitch);
