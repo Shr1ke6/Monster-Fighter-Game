@@ -2,7 +2,6 @@ package monsterfighter.ui.gui;
 
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.EventQueue;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -11,13 +10,19 @@ import javax.swing.JOptionPane;
 
 import monsterfighter.core.GameEnvironment;
 
+/**
+ * Defines common behaviour supported by a gui screen.
+ * Class adapted from the Screen class in the seng201 RocketManager example project.
+ */
 public abstract class Screen {
 
     // The frame for this screen
     private JFrame frame;
 
+    // The game environment that the screen interacts with
     private final GameEnvironment gameEnvironment;
     
+    // The name of the screen that a back button implementation will transition to
     private final String backButtonRoute;
 
     /**
@@ -34,6 +39,7 @@ public abstract class Screen {
 
     /**
      * Initialises this screen's UI.
+     * Method adapted from the seng201 rocket manager example project.
      */
     private void initialise(final String title) {
         frame = new JFrame();
@@ -62,6 +68,7 @@ public abstract class Screen {
 
     /**
      * Creates and adds the required graphical components to the given container.
+     *  Method adapted from the seng201 rocket manager example project.
      *
      * @param container The container to add content to
      */
@@ -69,6 +76,7 @@ public abstract class Screen {
 
     /**
      * Gets the top level component of this screen.
+     * Method adapted from the seng201 rocket manager example project.
      *
      * @return The top level component
      */
@@ -78,6 +86,7 @@ public abstract class Screen {
 
     /**
      * Gets the {@link GameEnvironment} that this screen supports.
+     * Method adapted from the seng201 rocket manager example project.
      *
      * @return The game environment for this screen
      */
@@ -96,6 +105,7 @@ public abstract class Screen {
 
     /**
      * Shows this screen by making it visible.
+     * Method adapted from the seng201 rocket manager example project.
      */
     protected void show() {
         frame.setVisible(true);
@@ -103,6 +113,7 @@ public abstract class Screen {
 
     /**
      * Confirms if the user wants to quit this screen.
+     * Method adapted from the seng201 rocket manager example project.
      *
      * @return true to quit, false otherwise
      */
@@ -114,6 +125,7 @@ public abstract class Screen {
 
     /**
      * Quits this screen. This should dispose of the screen as necessary.
+     * Method adapted from the seng201 rocket manager example project.
      */
     void quit() {
         frame.dispose();
@@ -121,6 +133,7 @@ public abstract class Screen {
 
     /**
      * Reports the given error to the user.
+     * Method adapted from the seng201 rocket manager example project.
      *
      * @param error The error to report
      */

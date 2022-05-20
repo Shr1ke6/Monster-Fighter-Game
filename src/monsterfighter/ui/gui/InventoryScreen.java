@@ -25,7 +25,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.ListSelectionModel;
 
 /**
- * A screen used to access a {@link PLayer}'s inventory through a {@link GameEnvironment}
+ * A screen used to access a player's inventory through a {@link GameEnvironment}
  */
 public class InventoryScreen extends Screen{
 
@@ -86,7 +86,9 @@ public class InventoryScreen extends Screen{
 		if (getBackButtonRoute().equals("PARTY")) {
 			selectedMonster = (Monster)getGameEnvironment().getSelectedObject();
 		} else if (getBackButtonRoute().equals("BATTLE")) {
-			selectedMonster = getGameEnvironment().getPlayer().getParty().get(0);
+			System.out.println(getGameEnvironment().getPlayer().getLeadingMonster());
+			System.out.println(getGameEnvironment().getPlayer().getParty());
+			selectedMonster = getGameEnvironment().getPlayer().getLeadingMonster();
 		}
 		
 		addLabelInventory(container);
@@ -176,7 +178,7 @@ public class InventoryScreen extends Screen{
 	}
 	
 	/**
-	 * Creates the buttons and adds them to the container.
+	 * Creates the option buttons and adds them to the container.
 	 * 
 	 * @param container The container to add the buttons to
 	 */
@@ -205,19 +207,24 @@ public class InventoryScreen extends Screen{
 		if (getBackButtonRoute().equals("SHOP")) {
 			btnSellItem = new JButton("Sell");
 			btnSellItem.setEnabled(false);
-			btnSellItem.addActionListener(e -> {
-				int inventorySize = getGameEnvironment().getInventoryUI().size();
-				for (int i = 0; i < (int)comboBoxNumItems.getSelectedItem(); i++) {
-					getGameEnvironment().sellItem(listInventory.getSelectedValue().get(0));
+			btnSellItem.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					int inventorySize = getGameEnvironment().getInventoryUI().size();
+					for (int i = 0; i < (int)comboBoxNumItems.getSelectedItem(); i++) {
+						getGameEnvironment().sellItem(listInventory.getSelectedValue().get(0));
+					}
+					lblGold.setText("Gold: " + getGameEnvironment().getPlayer().getGoldBalance());
+					if (inventorySize != getGameEnvironment().getInventoryUI().size()) {
+						listInventory.clearSelection();
+						inventoryListModel.removeAllElements();
+						inventoryListModel.addAll(getGameEnvironment().getInventoryUI());
+					}
+					getParentComponent().repaint();
+					sellDisplay();
 				}
-				lblGold.setText("Gold: " + getGameEnvironment().getPlayer().getGoldBalance());
-				if (inventorySize != getGameEnvironment().getInventoryUI().size()) {
-					listInventory.clearSelection();
-					inventoryListModel.removeAllElements();
-					inventoryListModel.addAll(getGameEnvironment().getInventoryUI());
-				}
-				getParentComponent().repaint();
-				sellDisplay();
+				
 		});
 			btnSellItem.setBounds(419, 358, 105, 42);
 			container.add(btnSellItem);
@@ -239,9 +246,10 @@ public class InventoryScreen extends Screen{
 						}
 						setTextLabelMonster();
 					} else if (getBackButtonRoute().equals("BATTLE")) {
+						Item item = listInventory.getSelectedValue().get(0);
 						getGameEnvironment().useItem(selectedMonster, listInventory.getSelectedValue().get(0));
 						if (inventorySize != getGameEnvironment().getPlayer().inventoryNumItems()) { 
-							getGameEnvironment().setSelectedObject(listInventory.getSelectedValue().get(0));
+							getGameEnvironment().setSelectedObject(item);
 							getGameEnvironment().transitionScreen(getBackButtonRoute(), "INVENTORY");
 						}
 					} else {
@@ -260,7 +268,7 @@ public class InventoryScreen extends Screen{
 	}
 	
 	/**
-	 * Creates the list representing the {@link Player}'s inventory and adds it to the container.
+	 * Creates the list representing the player's inventory and adds it to the container.
 	 * 
 	 * @param container The container to add the list to
 	 */

@@ -30,7 +30,7 @@ public class MainScreen extends Screen{
 	/**
 	 * Creates this screen.
 	 * 
-	 * @param gameEnvironment The game environment that the screen communicates with
+	 * @param incomingGameEnvironment The game environment that the screen communicates with
 	 */
 	public MainScreen(GameEnvironment incomingGameEnvironment) {
 		super("Monster Fighter Main Menu", incomingGameEnvironment, null);
@@ -44,19 +44,19 @@ public class MainScreen extends Screen{
 	}
 	
 	/**
-	 * Creates the labels and adds them to the container.
+	 * Creates the generic labels and adds them to the container.
 	 * 
 	 * @param container The container to add the labels to
 	 */
 	private void addLabels(Container container) { 
 		JLabel lblTrainerLabel = new JLabel("Trainer: " + getGameEnvironment().getPlayer().getName());
 		lblTrainerLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblTrainerLabel.setBounds(10, 26, 300, 22);
+		lblTrainerLabel.setBounds(10, 26, 350, 22);
 		container.add(lblTrainerLabel);
 		
 		lblDay = new JLabel("Day: " + getGameEnvironment().getDay() + " / " + getGameEnvironment().getTotalDays());
 		lblDay.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblDay.setBounds(372, 23, 100, 29);
+		lblDay.setBounds(354, 31, 110, 14);
 		container.add(lblDay);
 			
 		JLabel lblGold = new JLabel("Gold: " + getGameEnvironment().getPlayer().getGoldBalance());
@@ -66,7 +66,7 @@ public class MainScreen extends Screen{
 		
 		JLabel lblPoints = new JLabel("Points: " + getGameEnvironment().getPlayer().getPoints());
 		lblPoints.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblPoints.setBounds(354, 63, 100, 14);
+		lblPoints.setBounds(354, 63, 110, 14);
 		container.add(lblPoints);
 	}
 	

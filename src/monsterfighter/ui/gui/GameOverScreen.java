@@ -5,6 +5,8 @@ import java.awt.Container;
 import monsterfighter.core.GameEnvironment;
 
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+
 import java.awt.Font;
 import javax.swing.JButton;
 
@@ -33,34 +35,39 @@ public class GameOverScreen extends Screen{
 	}
 
 	/**
-	 * Creates the labels and adds them to the container.
+	 * Creates the generic labels and adds them to the container.
 	 * 
 	 * @param container The container to add the labels to
 	 */
 	private void addLabels(Container container) {
 		JLabel gameOverLabel = new JLabel("Game Over");
-		gameOverLabel.setFont(new Font("Tahoma", Font.BOLD, 18));
-		gameOverLabel.setBounds(217, 11, 100, 80);
+		gameOverLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		gameOverLabel.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 26));
+		gameOverLabel.setBounds(10, 11, 514, 80);
 		container.add(gameOverLabel);
 		
 		JLabel lblPoints = new JLabel("Points: " + getGameEnvironment().getPlayer().getPoints());
+		lblPoints.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPoints.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblPoints.setBounds(40, 171, 167, 30);
+		lblPoints.setBounds(10, 229, 514, 30);
 		container.add(lblPoints);
 		
 		JLabel lblTotalGold = new JLabel("Total Gold: " + getGameEnvironment().getPlayer().getTotalGold());
+		lblTotalGold.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTotalGold.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblTotalGold.setBounds(40, 238, 167, 30);
+		lblTotalGold.setBounds(10, 293, 514, 30);
 		container.add(lblTotalGold);
 		
 		JLabel lblDays = new JLabel("Day: " + getGameEnvironment().getDay() + "/" + getGameEnvironment().getTotalDays());
+		lblDays.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDays.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblDays.setBounds(40, 304, 167, 30);
+		lblDays.setBounds(10, 165, 514, 30);
 		container.add(lblDays);
 		
 		JLabel lblName = new JLabel("Name: " + getGameEnvironment().getPlayer().getName());
+		lblName.setHorizontalAlignment(SwingConstants.CENTER);
 		lblName.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblName.setBounds(40, 101, 167, 30);
+		lblName.setBounds(10, 103, 514, 30);
 		container.add(lblName);
 	}
 

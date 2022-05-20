@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"monsterfighter.ui.gui"}];updateSearchResults();
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"monsterfighter"},{"l":"monsterfighter.core"},{"l":"monsterfighter.ui"},{"l":"monsterfighter.ui.gui"},{"l":"test"}];updateSearchResults();

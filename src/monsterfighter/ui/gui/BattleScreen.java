@@ -101,7 +101,7 @@ public class BattleScreen extends Screen{
 			getGameEnvironment().manageBattle(opponent);
 			setBattleTextUseItem(playerMonster, opponentMonster, playerMonsterHealth);
 		} else if (getBackButtonRoute().equals("PARTY")) {
-			if (((Monster) getGameEnvironment().getSelectedObject()).getStatus().equals(Monster.Status.CONSCIOUS)) {
+			if (!((Monster) getGameEnvironment().getSelectedObject()).isFainted()) {
 				getGameEnvironment().manageBattle(opponent);
 			}
 			setBattleTextSwitchMonsters(playerMonster, opponentMonster, playerMonsterHealth);
@@ -156,7 +156,7 @@ public class BattleScreen extends Screen{
 	}
 	
 	/**
-	 * Creates the {@link Player}'s {@link Monster} panel, along with the labels and panels that populate it, and adds it to the container.
+	 * Creates the player's {@link Monster} panel, along with the labels and panels that populate it, and adds it to the container.
 	 * 
 	 * @param container The container to add the panel to
 	 */
@@ -281,7 +281,7 @@ public class BattleScreen extends Screen{
 
 		String message = "<html>" + playerMonster.getNickname() + " did " + (opponentMonsterHealth - opponentMonster.getCurrentHealth())
 				+ " damage to opponent " + opponentMonster.getNickname() + "<br>";
-		if (opponentMonster.getStatus().equals(Monster.Status.FAINTED)) {
+		if (opponentMonster.isFainted()) {
 			message += "Opponent " + opponentMonster.getNickname() + " fainted!<br>";
 			if (opponent instanceof TrainerBattle) {
 				message += "Trainer " + ((TrainerBattle) opponent).getTrainer() + " sent out " + opponent.getMonsters().get(0).getName() + "!<br>";
@@ -319,7 +319,7 @@ public class BattleScreen extends Screen{
 
 		String message = "<html>Switched " + ((Monster) getGameEnvironment().getSelectedObject()).getNickname() + " out with " 
 				+ getGameEnvironment().getPlayer().getLeadingMonster().getNickname() + "<br>";
-		if (((Monster) getGameEnvironment().getSelectedObject()).getStatus().equals(Monster.Status.CONSCIOUS)) {
+		if (!((Monster) getGameEnvironment().getSelectedObject()).isFainted()) {
 			message += "Opponent " + opponentMonster.getNickname() + " did " + (playerMonsterHealth - playerMonster.getCurrentHealth())
 					+ " damage to " + playerMonster.getNickname() + "<br>";
 		}
@@ -332,7 +332,7 @@ public class BattleScreen extends Screen{
 	 * @param message The text that will be displayed in the battle panel
 	 */
 	private void addBattleText(String message) {
-		if (getGameEnvironment().getPlayer().getLeadingMonster().getStatus().equals(Monster.Status.FAINTED)) {
+		if (getGameEnvironment().getPlayer().getLeadingMonster().isFainted()) {
 			message += getGameEnvironment().getPlayer().getLeadingMonster().getNickname() + " fainted!<br>";
 		}
 		message+="</html>";
@@ -341,7 +341,7 @@ public class BattleScreen extends Screen{
 		lblBattleMessage.setText(message);
 		if (!getGameEnvironment().getBattleRunning()) {
 			optionPanelEndBattle();
-		} else if (getGameEnvironment().getPlayer().getLeadingMonster().getStatus().equals(Monster.Status.FAINTED)) {
+		} else if (getGameEnvironment().getPlayer().getLeadingMonster().isFainted()) {
 			optionPanelSwitchFaintedMonster();
 		}
 	}
@@ -435,7 +435,7 @@ public class BattleScreen extends Screen{
 		message += "<br>Team:<br>";
 		for (Monster monster: getGameEnvironment().getPlayer().getParty()) {
 			message += monster.getNickname() + " | ";
-			if (monster.getStatus().equals(Monster.Status.CONSCIOUS)) {
+			if (!monster.isFainted()) {
 				message += " Health " + monster.getCurrentHealth() + "/" + monster.getMaxHealth();
 			} else {
 				message += " [FAINTED]";

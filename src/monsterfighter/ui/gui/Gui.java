@@ -5,6 +5,7 @@ import monsterfighter.ui.GameEnvironmentUi;
 
 /**
  * A graphical user interface that links to a {@link GameEnvironment}
+ * Class adapted from the Gui class in the seng201 RocketManager example project.
  */
 public class Gui implements GameEnvironmentUi{
 
@@ -31,7 +32,6 @@ public class Gui implements GameEnvironmentUi{
         }
     }
 	
-    // From seng201 rocket manager example project
     @Override
     public void setup(GameEnvironment gameEnvironment) {
         this.gameEnvironment = gameEnvironment;
@@ -39,13 +39,11 @@ public class Gui implements GameEnvironmentUi{
         screen.show();
     }
 
-    // From seng201 rocket manager example project
     @Override
     public void showError(String error) {
         screen.showError(error);
     }
 
-    // From seng201 rocket manager example project
     @Override
     public void start() {
         screen.quit();
@@ -53,23 +51,21 @@ public class Gui implements GameEnvironmentUi{
         screen.show();
     }
 
-    // From seng201 rocket manager example project
     @Override
     public boolean confirmQuit() {
         return screen.confirmQuit();
     }
 
-    // From seng201 rocket manager example project
     @Override
     public void quit() {
         screen.quit();
     }
     
     /**
-     * Handles the transition between screens
+     * Handles the transition between screens.
      * 
      * @param name The name of the screen that will be shown
-     * @param back The name of screen that a back button implementation will transition to
+     * @param back The name of the screen that a back button implementation will transition to
      */
     public void transitionScreen(String name, String back) {
     	Option option = Option.valueOf(name);
