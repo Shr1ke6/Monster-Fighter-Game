@@ -212,6 +212,7 @@ public class SetupScreen extends Screen{
 		startingMonsterListModel.addAll(getGameEnvironment().getStartingMonsters());
 		
 		listStartingMonster = new JList<Monster>(startingMonsterListModel);
+		listStartingMonster.setCellRenderer(new StartingMonstersRenderer());
 		listStartingMonster.setVisibleRowCount(-1);
 		listStartingMonster.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listStartingMonster.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));

@@ -146,7 +146,7 @@ public class GameEnvironment {
 	 * @param name The name of the {@link Player}
 	 * @param totalDays The total number of days that the game can run for
 	 * @param startingMonster The starting {@link Monster} that the user chose
-	 * @param nickname The nickname that user chose for their starting {@link Monster}
+	 * @param nickname The nickname that the user chose for their starting {@link Monster}
 	 * @param difficulty The chosen difficulty for the game
 	 */
 	public void onSetupFinished(String name, int totalDays, Monster startingMonster, String nickname, Difficulty difficulty) {
@@ -338,7 +338,8 @@ public class GameEnvironment {
 		try {
 			if (battleRunning && ((monsterSwitch.isFainted() && monster.equals(player.getLeadingMonster())
 					||(monster.isFainted() && monsterSwitch.equals(player.getLeadingMonster()))))) {
-				throw new IllegalStateException(monsterSwitch.getNickname() + " is fainted. Choose another monster");
+				
+				throw new IllegalStateException("Cannot switch in a fainted monster. Choose another monster");
 			}
 			player.switchMonsters(monster, monsterSwitch);
 		} catch (IllegalStateException e) {
@@ -479,9 +480,9 @@ public class GameEnvironment {
 	 * @param opponent The battle that the player is fighting
 	 */
 	public void opponentTurn(Battle opponent) {
-		if (opponent.getMonsters().get(0).getStatus().equals(Monster.Status.FAINTED) && opponent.getConsciousMonsters() > 0) {
+		if (opponent.getMonsters().get(0).isFainted() && opponent.getConsciousMonsters() > 0) {
 			opponent.nextMonster();
-		} else if (!opponent.getMonsters().get(0).getStatus().equals(Monster.Status.FAINTED)) {
+		} else if (!opponent.getMonsters().get(0).isFainted()) {
 			opponent.getMonsters().get(0).attack(player.getLeadingMonster());
 		}
 		
@@ -493,9 +494,7 @@ public class GameEnvironment {
 	 * @param opponent The battle that the player fought against
 	 */
 	public void rewards(Battle opponent) {
-		if (player.partyFainted()) {
-			player.increasePoints(opponent.getMonsters().size() - opponent.getConsciousMonsters() * 25);
-		} else if (opponent.getConsciousMonsters() == 0) {
+		if (opponent.getConsciousMonsters() == 0) {
 			player.increasePoints(opponent.getPoints());
 			if (opponent instanceof WildBattle) {
 				WildBattle wildOpponent = (WildBattle) opponent;

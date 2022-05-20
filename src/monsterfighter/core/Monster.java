@@ -209,7 +209,7 @@ public class Monster implements Purchasable{
 	}
 	
 	/**
-	 * Returns whether or not the monster has fainted in the current day
+	 * Returns whether or not the monster has fainted in the current day.
 	 * 
 	 * @return whether the monster has fainted in the day
 	 */
@@ -283,6 +283,9 @@ public class Monster implements Purchasable{
 	 */
 	public void setMaxHealth(int healthBuff) {
 		maxHealth += healthBuff;
+		if (!isFainted()) {
+			receiveHealth(healthBuff);
+		}
 	}
 	
 	/**

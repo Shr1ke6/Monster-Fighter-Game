@@ -54,28 +54,33 @@ public class PartyScreen extends Screen{
 	// Toggle button representing the selected monster toggle button
 	private JToggleButton btnSelectedMonster;
 
-	// The monster correlating to the selected monster toggle button
+	// Monster that correlates to the selected monster toggle button
 	private Monster selectedMonster;
 
-	// The 
+	// Monster to switch the previously selected monster with
 	private Monster selectedMonsterSwitch;
 
-	//
+	// Item to use on a selected monster
 	private Item selectedItem;
 
-	//
+	// List of all buttons on the screen
 	private List<AbstractButton> listOptionButtons;
 
-	//
+	// ButtonGroup of all the monster toggle buttons
 	private ButtonGroup buttonGroupPartyMonsters;
 
-	//
+	// Label for a players gold
 	private JLabel lblGold;
 
-	//
+	// Label for the sell price of a selected monster
 	private JLabel lblSellPrice;
 	
-	
+	/**
+	 * Creates this screen.
+	 * 
+	 * @param gameEnvironment The game environment that the screen communicates with
+	 * @param backButtonRoute A string representation of the screen that the back button transitions to
+	 */
 	protected PartyScreen(GameEnvironment gameEnvironment, String backButtonRoute) {
 		super("Monster Fighter Party", gameEnvironment, backButtonRoute);
 	}

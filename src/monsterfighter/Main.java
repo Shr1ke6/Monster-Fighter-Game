@@ -39,12 +39,12 @@ public class Main {
 		
 		final List<Item> items = new ArrayList<>(5);
 		
-		items.add(new Item(0, "Small Potion", 40, Item.Stat.CURRENTHEALTH, 25, 3));
-		items.add(new Item(1, "Big Potion", 80, Item.Stat.CURRENTHEALTH, 50, 2));
-		items.add(new Item(2, "Huge Potion", 120, Item.Stat.CURRENTHEALTH, 80, 1));
+		items.add(new Item(0, "Small Potion", 40, Item.Stat.CURRENTHEALTH, 20, 3));
+		items.add(new Item(1, "Big Potion", 80, Item.Stat.CURRENTHEALTH, 40, 2));
+		items.add(new Item(2, "Huge Potion", 120, Item.Stat.CURRENTHEALTH, 60, 1));
 		items.add(new Item(3, "Attack Snack", 5, Item.Stat.ATTACK, 50, 1));
 		items.add(new Item(4, "Max Health Snack", 10, Item.Stat.MAXHEALTH, 50, 1));
-		items.add(new Item(5, "Revive candy", 40, Item.Stat.STATUS, 60, 1));
+		items.add(new Item(5, "Revive candy", 40, Item.Stat.STATUS, 40, 1));
 		
 		GameEnvironmentUi ui;
 

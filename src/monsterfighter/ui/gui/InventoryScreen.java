@@ -145,7 +145,7 @@ public class InventoryScreen extends Screen{
 	 */
 	private void addLabelsMonster(Container container) {
 		lblMonster = new JLabel();
-		lblMonster.setFont(new Font("Tahoma", Font.BOLD, 18));
+		lblMonster.setFont(new Font("Tahoma", Font.BOLD, 16));
 		lblMonster.setBounds(125, 312, 284, 54);
 		container.add(lblMonster);
 		
@@ -166,12 +166,12 @@ public class InventoryScreen extends Screen{
 	 * Sets the label text for the selected monster labels
 	 */
 	private void setTextLabelMonster() {
-		String txtMonsterName = "Monster: " + selectedMonster.getNickname();
-		if (selectedMonster.getStatus().equals(Monster.Status.FAINTED)) {
-			txtMonsterName += "[FAINTED]";
+		lblMonster.setText("Monster: " + selectedMonster.getNickname());
+		String textLblHealth = "Health: " + selectedMonster.getCurrentHealth() + "/" + selectedMonster.getMaxHealth();
+		if (selectedMonster.isFainted()) {
+			textLblHealth += " [FAINTED]";
 		}
-		lblMonster.setText(txtMonsterName);
-		lblHealth.setText("Health: " + selectedMonster.getCurrentHealth() + "/" + selectedMonster.getMaxHealth());
+		lblHealth.setText(textLblHealth);
 		lblAttack.setText("Attack: " + selectedMonster.getAttack());
 	}
 	
