@@ -7,6 +7,7 @@ import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import monsterfighter.core.GameEnvironment;
 import monsterfighter.core.Item;
 import monsterfighter.core.Monster;
 import monsterfighter.core.Player;
@@ -14,13 +15,16 @@ import monsterfighter.core.Player;
 public class PlayerTest {
 	String name = "pep";
 	
-	private int goldBalance = 1;
+	
 	int gold = 200;
-	private int totalGold = 0;
-	List<Item> items = new ArrayList<>();
+
+	ArrayList<Item> items = new ArrayList<>();
+	
+	
 
 	Player player = new Player(name, items);
-	private List<ArrayList<Item>> inventory = new ArrayList<ArrayList<Item>>();
+	Player player1 = new Player(name, items);
+
 	
 	
 	public PlayerTest() {
@@ -75,14 +79,19 @@ public class PlayerTest {
 		player.addMonsterToParty(monster2);
 		player.addMonsterToParty(monster3);
 		
-		Assertions.assertEquals(monster, player.getParty().get(0));
+		Assertions.assertEquals(monster, player.getLeadingMonster());
 	}
 	
 	@Test
 	public void testSetGoldBalance() {
+		
+	
 		player.setGoldBalance(gold);
-		Assertions.assertEquals(1, goldBalance);
-
+		player.increaseTotalGold(gold);
+		player.increaseTotalGold(gold);
+		Assertions.assertEquals(200, player.getGoldBalance());
+		Assertions.assertEquals(600, player.getTotalGold());
+		Assertions.assertThrows(IllegalStateException.class, () -> player1.setGoldBalance(-200));
 		
 	}
 
@@ -100,59 +109,98 @@ public class PlayerTest {
 		Assertions.assertEquals(false, player.inventoryIsEmpty());
 	}
 	
-	@Test
-	public void testAddItemToInventory() {
-		items.add(new Item(0, "Small Potion", 20, Item.Stat.CURRENTHEALTH, 100, 3));
-		inventory.add((ArrayList<Item>) items);
-		Assertions.assertEquals(items, inventory.get(0));
-		
-	}
-	@Test
-	public void testRemoveItemFromInventory() {
-		items.add(new Item(0, "Small Potion", 20, Item.Stat.CURRENTHEALTH, 100, 3));
-		inventory.add((ArrayList<Item>) items);
-		inventory.remove((ArrayList<Item>) items);
-		Assertions.assertThrows(IndexOutOfBoundsException.class, () -> inventory.get(0));
-	}
 	
-		
 		
 	@Test
 	public void testSwitchMonsters() {
-		
+	
 		Monster monster = new Monster(0, "Fireboy", Monster.Type.FIRE, 50, 20, 200);
 		Monster monster1 = new Monster(1, "Fireboy", Monster.Type.FIRE, 50, 20, 200);
 		player.addMonsterToParty(monster);
 		player.addMonsterToParty(monster1);
-		player.switchMonsters(0, 1);
+		player.switchMonsters(monster, monster1);
+		
+	
+		player1.addMonsterToParty(monster1);
+		
+
+		
+		
 		Assertions.assertEquals(monster1, player.getParty().get(0));
 		Assertions.assertEquals(monster, player.getParty().get(1));
+	
+		Assertions.assertThrows(IllegalStateException.class, () -> player1.switchMonsters(monster, monster));
 	}
 	
 	@Test
 	public void testPartyFainted() {
-		Monster monster = new Monster(0, "Fireboy", Monster.Type.FIRE, 50, 20, 200);
+
 		Monster monster1 = new Monster(1, "Fireboy", Monster.Type.FIRE, 50, 20, 200);
-		player.addMonsterToParty(monster);
+		Monster monster2 = new Monster(1, "Fireboy", Monster.Type.FIRE, 50, 20, 200);
+	
 		player.addMonsterToParty(monster1);
 		player.partyFainted();
 		
+	
+	
+		player1.addMonsterToParty(monster2);
+		
+		int damage = 60;
+		monster2.receiveDamage(damage);
+		
+
+		
 		Assertions.assertEquals(false, player.partyFainted());
+		Assertions.assertEquals(true, player1.partyFainted());
 		
 	}
 	
 	@Test
 	public void testGetConsciousMonsters() {
+		
+		Monster monster1 = new Monster(1, "Fireboy", Monster.Type.FIRE, 50, 20, 200);
+		Monster monster2 = new Monster(1, "Fireboy", Monster.Type.FIRE, 50, 20, 200);
+		player.addMonsterToParty(monster1);
+		player1.addMonsterToParty(monster2);
+		int damage = 60;
+		monster2.receiveDamage(damage);
+		
+	
 		player.getConsciousMonsters();
-		Assertions.assertEquals(0, player.getConsciousMonsters());
+		player1.getConsciousMonsters();
+		Assertions.assertEquals(1, player.getConsciousMonsters());
+		Assertions.assertEquals(0, player1.getConsciousMonsters());
 	}
 	
 	@Test
 	public void testInventoryNumItems() {
-		player.inventoryNumItems();
-		Assertions.assertEquals(0, player.inventoryNumItems());
-	}
 		
+		ArrayList<Item> items1 = new ArrayList<>();
+		items1.add(new Item(0, "Small Potion", 40, Item.Stat.CURRENTHEALTH, 25, 3));
+		items1.add(new Item(1, "Big Potion", 80, Item.Stat.CURRENTHEALTH, 50, 2));
+		
+		
+		
+		player.inventoryNumItems();
+		
+		Player player1 = new Player(name, items1);
+		Item item = new Item(0, "Small Potion", 40, Item.Stat.CURRENTHEALTH, 25, 3);
+		Item item1 = new Item(0, "Small Potion", 40, Item.Stat.CURRENTHEALTH, 25, 3);
+		Item item2 = new Item(0, "Small Potion", 40, Item.Stat.CURRENTHEALTH, 25, 3);
+		player1.addItemToInventory(item);
+		player1.addItemToInventory(item1);
+		player1.addItemToInventory(item2);
+		player1.removeItemFromInventory(item2);
+		
+		
+		
+		
+		player1.inventoryNumItems();
+		Assertions.assertEquals(0, player.inventoryNumItems());
+		Assertions.assertEquals(2, player1.inventoryNumItems());
+	}
+	
+	
 	
 			
 	

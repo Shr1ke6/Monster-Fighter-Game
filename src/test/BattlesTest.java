@@ -19,16 +19,17 @@ import monsterfighter.core.Player;
 import monsterfighter.core.WildBattle;
 
 class BattlesTest {
-	Battles wildBattles = new Battles();
-	Battles trainerBattles = new Battles();
+	
+
+
+
 
 	@Test
-	public void testBattles() {
-		List<String> trainers = Arrays.asList("Ben","Matt","Lee","Ian","John","Eva","Nancy","Haley","Jade","Beth");
-	}
-	
-	@Test
 	public void testFillBattles() {
+		Battles wildBattles = new Battles();
+		Battles trainerBattles = new Battles();
+		
+		
 		Battles battle = trainerBattles;
 		
 		List<Item> allItems = new ArrayList<>();
@@ -51,43 +52,24 @@ class BattlesTest {
 		allMonsters1.add(new Monster(1, "Watergirl", Monster.Type.WATER, 55, 15, 200));
 		
 		battle1.fillBattles(allItems1, allMonsters1, Difficulty.EASY, 1, 2);
+		battle.fillBattles(allItems1, allMonsters1, Difficulty.EASY, 1, 2);
+		
+		wildBattles.fillBattles(allItems1, allMonsters1, Difficulty.EASY, 1, 2);
+		trainerBattles.fillBattles(allItems1, allMonsters1, Difficulty.EASY, 1, 2);
+		
+		Assertions.assertEquals(battle1, wildBattles);
+		Assertions.assertEquals(battle, trainerBattles);
+	}
 		
 		
-
+		
 	
-		
-	}
-	@Test
-	public void testFillTrainerBattles() {
-		List<String> trainers = Arrays.asList("Ben","Beth");
-		
-		Battles battle = trainerBattles;
-		
-		
-		List<Item> allItems = new ArrayList<>();
-		allItems.add(new Item(0, "Small Potion", 40, Item.Stat.CURRENTHEALTH, 25, 3));
-		allItems.add(new Item(1, "Big Potion", 80, Item.Stat.CURRENTHEALTH, 50, 2));
-		
-		List<Monster> allMonsters = new ArrayList<>();
-		allMonsters.add(new Monster(0, "Fireboy", Monster.Type.FIRE, 40, 20, 200));
-		allMonsters.add(new Monster(1, "Watergirl", Monster.Type.WATER, 55, 15, 200));
-		
-		List<String> trainers1 = Arrays.asList("Ben","Beth");
-		
-		Battles battle1 = trainerBattles;
-		List<Item> allItems1 = new ArrayList<>();
-		List<Monster> allMonsters1 = new ArrayList<>();
-		
-		battle.fillTrainerBattles(allItems, allMonsters, Difficulty.EASY, 1, 2);
-		
-		
-		
-		
-	}
 	
 
 	@Test
 	public void testCalculatePoints() {
+		Battles wildBattles = new Battles();
+		Battles trainerBattles = new Battles();
 		String battleType = "Wild"; 
 		int partySize = 2;
 		Battles battle = wildBattles;
@@ -104,6 +86,7 @@ class BattlesTest {
 	
 	@Test
 	public void testCalculateGold() {
+		Battles wildBattles = new Battles();
 		Battles battle = wildBattles;
 		int partySize = 2;
 		
