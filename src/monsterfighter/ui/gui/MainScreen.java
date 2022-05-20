@@ -30,7 +30,7 @@ public class MainScreen extends Screen{
 	/**
 	 * Creates this screen.
 	 * 
-	 * @param gameEnvironment The game environment that the screen communicates with
+	 * @param incomingGameEnvironment The game environment that the screen communicates with
 	 */
 	public MainScreen(GameEnvironment incomingGameEnvironment) {
 		super("Monster Fighter Main Menu", incomingGameEnvironment, null);
@@ -44,7 +44,7 @@ public class MainScreen extends Screen{
 	}
 	
 	/**
-	 * Creates the labels and adds them to the container.
+	 * Creates the generic labels and adds them to the container.
 	 * 
 	 * @param container The container to add the labels to
 	 */

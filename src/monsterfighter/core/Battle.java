@@ -46,15 +46,15 @@ public abstract class Battle {
 	
 	/**
 	 * Gets the number of {@link Monster}'s that are 
-	 * {@link Monster.Status.CONSCIOUS}.
+	 * {@link Monster.Status#CONSCIOUS}.
 	 * 
 	 * @return The number of {@link Monster}'s that are 
-	 * {@link Monster.Status.CONSCIOUS}
+	 * {@link Monster.Status#CONSCIOUS}
 	 */
 	public int getConsciousMonsters() {
 		int conscious = monsters.size();
 		for (Monster monster: monsters ) {
-			if (monster.getStatus() == Monster.Status.FAINTED) {
+			if (monster.isFainted()) {
 				conscious -= 1;
 			}
 		}

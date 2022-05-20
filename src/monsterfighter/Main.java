@@ -15,7 +15,7 @@ import monsterfighter.ui.gui.Gui;
 /**
  * Class where application execution begins. If {@code cmd} is passed as a program argument the
  * application will run as a command line application, otherwise a GUI will be used.
- * Class adapted from the seng201 RocketManager example project.
+ * Class adapted from the Main class in the seng201 RocketManager example project.
  */
 public class Main {
 	

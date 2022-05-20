@@ -8,6 +8,9 @@ import java.util.Random;
 import monsterfighter.ui.gui.Gui;
 import monsterfighter.ui.GameEnvironmentUi;
 
+/**
+ * Manages the Monster Fighter application.
+ */
 public class GameEnvironment {
 
     // The user interface to be used by this manager
@@ -179,12 +182,12 @@ public class GameEnvironment {
 	}
 	
 	/**
-	 * Calls the {@link Gui#transitionScreen(String, String, boolean)} method if a 
-	 * {@link Screen} transition is requested.
+	 * Calls the {@link Gui#transitionScreen(String, String)} method if a 
+	 * screen transition is requested.
 	 * 
-	 * @param option A string representation of the screen that is being transitioned to
+	 * @param destination A string representation of the screen that is being transitioned to
 	 * @param back A string representation of the screen that is transitioned to by a 
-	 * {@link Screen}'s back button
+	 * screen's back button
 	 */
 	public void transitionScreen(String destination, String back) {
 		if (ui instanceof Gui) {

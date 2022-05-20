@@ -68,9 +68,9 @@ public class Battles {
 	}
 
 	/**
-	 * Gets the {@link TrainerBattles}'s available in Battles.
+	 * Gets the {@link TrainerBattle}'s available in Battles.
 	 * 
-	 * @return the {@link TrainerBattles}'s available in Battles
+	 * @return the {@link TrainerBattle}'s available in Battles
 	 */
 	public ArrayList<Battle> getTrainerBattles() {
 		return trainerBattles;
@@ -118,7 +118,7 @@ public class Battles {
 	 * Parent function that links to the functions that populate
 	 * the {@link WildBattle}'s and {@link TrainerBattle}'s lists.
 	 * 
-	 * @param allItems List of all available {@link Items}'s
+	 * @param allItems List of all available {@link Item}'s
 	 * @param allMonsters List of all available {@link Monster}'s
 	 * @param difficulty The {@link GameEnvironment.Difficulty} chosen by the user
 	 * @param day The current day for the game
@@ -134,7 +134,7 @@ public class Battles {
 	 * Fills the {@link WildBattle}'s list with {@link WildBattle}'s 
 	 * based on given parameters.
 	 * 
-	 * @param allItems List of all available {@link Items}'s
+	 * @param allItems List of all available {@link Item}'s
 	 * @param allMonsters List of all available {@link Monster}'s
 	 * @param difficulty The {@link GameEnvironment.Difficulty} chosen by the user
 	 * @param day The current day for the game
@@ -168,7 +168,7 @@ public class Battles {
 	 * Fills the {@link TrainerBattle}'s list with {@link TrainerBattle}'s 
 	 * based on given parameters.
 	 * 
-	 * @param allItems List of all available {@link Items}'s
+	 * @param allItems List of all available {@link Item}'s
 	 * @param allMonsters List of all available {@link Monster}'s
 	 * @param difficulty The {@link GameEnvironment.Difficulty} chosen by the user
 	 * @param day The current day for the game
@@ -209,7 +209,7 @@ public class Battles {
 	 * based on given parameters.
 	 * 
 	 * @param battleType The type of {@link Battle}
-	 * @param partySize The number of {@link Monsters} in the {@link Battle} 
+	 * @param partySize The number of {@link Monster}s in the {@link Battle} 
 	 * @param difficulty The {@link GameEnvironment.Difficulty} chosen by the user
 	 * @return The quantity of points for a {@link Battle}
 	 */
@@ -226,7 +226,7 @@ public class Battles {
 	 * Calculates the correct amount of gold that a {@link Battle} should have 
 	 * based on given parameters.
 	 * 
-	 * @param partySize The number of {@link Monsters} in the {@link Battle} 
+	 * @param partySize The number of {@link Monster}s in the {@link Battle} 
 	 * @param difficulty The {@link GameEnvironment.Difficulty} chosen by the user
 	 * @return The amount of gold for a {@link Battle}
 	 */

@@ -21,16 +21,38 @@ import monsterfighter.core.Purchasable;
 
 import javax.swing.JComboBox;
 
+/**
+ * A screen used to access a shop inventory through a {@link GameEnvironment}
+ */
 public class ShopScreen extends Screen{
 
+	// Combo box for selecting the number of objects to purchase
 	private JComboBox<Integer> comboBoxNumItems;
+	
+	// JList for the shop inventory
 	private JList<ArrayList<Purchasable>> listShop;
+	
+	// Label that prompts the user on how many items they'd like to buy
 	private JLabel lblBuyAmount;
+	
+	// Button that handles buying an item from the shop
 	private JButton btnBuy;
+	
+	// Label for the price of an item
 	private JLabel lblPrice;
+	
+	// Label for the players gold
 	private JLabel lblGold;
+	
+	// List model for the shop inventory
 	private DefaultListModel<ArrayList<Purchasable>> listShopModel;
 
+	/**
+	 * Creates this screen.
+	 * 
+	 * @param gameEnvironment The game environment that the screen communicates with
+	 * @param backButtonRoute A string representation of the screen that the back button transitions to
+	 */
 	protected ShopScreen(GameEnvironment gameEnvironment, String backButtonRoute) {
 		super("Monster Fighter Shop", gameEnvironment, backButtonRoute);
 	}
@@ -45,6 +67,11 @@ public class ShopScreen extends Screen{
 		addListShop(container);
 	}
 
+	/**
+	 * Creates the generic labels and adds them to the container.
+	 * 
+	 * @param container The container to add the labels to
+	 */
 	private void addLabels(Container container) {
 		
 		JLabel lblShop = new JLabel("Shop");
@@ -77,6 +104,11 @@ public class ShopScreen extends Screen{
 		
 	}
 	
+	/**
+	 * Creates the option buttons and adds them to the container.
+	 * 
+	 * @param container The container to add the buttons to
+	 */
 	private void addButtons(Container container) {
 		JButton btnBack = new JButton("Back");
 		btnBack.addActionListener(e -> getGameEnvironment().transitionScreen(getBackButtonRoute(), "SHOP"));
@@ -113,6 +145,11 @@ public class ShopScreen extends Screen{
 		container.add(btnSellMonster);
 	}
 	
+	/**
+	 * Creates the combo box to pick the number of items to sell and adds it to the container.
+	 * 
+	 * @param container The container to add the combo box to
+	 */
 	private void addComboBox(Container container) {
 		comboBoxNumItems = new JComboBox<Integer>();
 		comboBoxNumItems.setVisible(false);
@@ -136,6 +173,11 @@ public class ShopScreen extends Screen{
 		
 	}
 	
+	/**
+	 * Creates the list to display the items in the shop and adds it to the container.
+	 * 
+	 * @param container The container to add the list to
+	 */
 	private void addListShop(Container container) {
 
 		listShopModel = new DefaultListModel<ArrayList<Purchasable>>();
@@ -162,6 +204,10 @@ public class ShopScreen extends Screen{
 		
 	}
 		
+	/**
+	 * Check for whether an items price should be displayed 
+	 * and whether the buy button should be enabled.
+	 */
 	private void checkCanBuy() {
 		
 		comboBoxNumItems.setVisible(listShop.getSelectedValue()!=null);

@@ -17,7 +17,8 @@ import monsterfighter.core.WildBattle;
 
 /**
  * A command line user interface for a {@link GameEnvironment}.
- * Some methods adapted from the seng201 RocketManager example project.
+ * Aspects of this class were adapted from the CmdLineUI class in 
+ * the seng201 RocketManager example project.
  */
 public class CmdLineUi implements GameEnvironmentUi {
 	
@@ -48,6 +49,7 @@ public class CmdLineUi implements GameEnvironmentUi {
     
     /**
      * Creates an instance of this UI
+     * Method adapted from the seng201 rocket manager example project.
      */
     public CmdLineUi() {
         this.scanner = new Scanner(System.in);
@@ -66,7 +68,10 @@ public class CmdLineUi implements GameEnvironmentUi {
 	    
 	       
 	}
-
+	
+	/**
+	 * Method adapted from the seng201 rocket manager example project.
+	 */
 	@Override
 	public void start() {
 		while (!finish) {
@@ -83,7 +88,9 @@ public class CmdLineUi implements GameEnvironmentUi {
 		}
 	}
 
-	// Method adapted from the seng201 RocketManager example project.
+	/**
+	 * Method adapted from the seng201 rocket manager example project.
+	 */
 	@Override
 	public boolean confirmQuit() {
 		while (true) {
@@ -98,11 +105,17 @@ public class CmdLineUi implements GameEnvironmentUi {
         }
 	}
 	
+	/**
+	 * Method adapted from the seng201 rocket manager example project.
+	 */
 	@Override
 	public void quit() {
 		finish = true;
 	}
 
+	/**
+	 * Method adapted from the seng201 rocket manager example project.
+	 */
 	@Override
 	public void showError(String error) {
 		System.out.println(error);
@@ -110,6 +123,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 	
 	/**
 	 * Handles the given option by performing the appropriate action.
+	 * Method adapted from the seng201 rocket manager example project.
 	 * 
 	 * @param option The selected option to be carried out
 	 */
@@ -235,7 +249,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 	private int chooseMonster(String message, List<Monster> monsters, int description) {
 		boolean battleRunning = gameEnvironment.getBattleRunning();
 		// Checks whether there exists a user monster currently fighting that has fainted
-		boolean conscious = !battleRunning || monsters.get(0).getStatus().equals(Monster.Status.CONSCIOUS);
+		boolean conscious = !battleRunning || !monsters.get(0).isFainted();
 		while (true) {
 			System.out.println(message);
 			printMonsters(monsters, description);
@@ -332,7 +346,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 	/**
 	 * Switches two {@link Monster}s selected by the user.
 	 * 
-	 * @param monsterID An index corresponding to a {@link Monster} in the {@link player}'s party
+	 * @param monsterID An index corresponding to a {@link Monster} in the player's party
 	 * @param message Message that is output to inform the user
 	 */
 	private void switchMonsters(int monsterID, String message) {
@@ -346,7 +360,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 	/**
 	 * Prompts the user to select an option for their selected {@link Monster}.
 	 * 
-	 * @param monsterID An index corresponding to a {@link Monster} in the {@link player}'s party
+	 * @param monsterID An index corresponding to a {@link Monster} in the player's party
 	 * @param party The user's party of monsters
 	 */
 	private void partyOptions(int monsterID, List<Monster> party) {
@@ -422,7 +436,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 	/**
 	 * Outputs the user's inventory.
 	 * 
-	 * @param inventory The {@link Player} inventory
+	 * @param inventory The user's inventory
 	 */
 	private void printInventory(List<ArrayList<Item>> inventory) {
 		int i = 0;
@@ -435,7 +449,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 	/**
 	 * Prompts the user to select an option for their selected {@link Item}.
 	 * 
-	 * @param inventoryID An index corresponding to an array in the {@link player}'s inventory
+	 * @param inventoryID An index corresponding to an array in the player's inventory
 	 */
 	private void inventoryOptions(int inventoryID) {
 		while (true) {
@@ -567,8 +581,8 @@ public class CmdLineUi implements GameEnvironmentUi {
 	}
 	
 	/**
-	 * Sells either a {@link Monster} from the {@link Player} party 
-	 * or an {@link Item} from the {@link Player} inventory.
+	 * Sells either a {@link Monster} from the user's party 
+	 * or an {@link Item} from the user's inventory.
 	 * 
 	 * @param option An integer representing the type of the object. 0 for item and 1 for monster
 	 */
@@ -737,10 +751,10 @@ public class CmdLineUi implements GameEnvironmentUi {
 	private void runBattle(Battle battle, List<Monster> party, List<ArrayList<Item>> inventory, boolean battleRunning) {
 	System.out.println("Go " + party.get(0).getNickname() + "!\n");
 		do {
-			if (party.get(0).getStatus().equals(Monster.Status.FAINTED)) {
+			if (party.get(0).isFainted()) {
 				System.out.println(party.get(0).getName() + " fainted!");
 			}
-			while (party.get(0).getStatus().equals(Monster.Status.FAINTED)) {
+			while (party.get(0).isFainted()) {
 				Monster activeMonster = party.get(0);
 				switchMonsters(0, "Select a monster to switch into battle");
 				if (!activeMonster.equals(party.get(0))) {
@@ -751,7 +765,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 			int health = party.get(0).getCurrentHealth();
 			Monster opponentsActiveMonster = battle.getMonsters().get(0);
 			gameEnvironment.manageBattle(battle);
-			if (opponentsActiveMonster.getStatus().equals(Monster.Status.CONSCIOUS)) {
+			if (!opponentsActiveMonster.isFainted()) {
 				System.out.println("Opponent's " + opponentsActiveMonster.getNickname() + " did " + (health - party.get(0).getCurrentHealth()) + " damage to " + party.get(0).getNickname() + "\n");
 			}
 			battleRunning = gameEnvironment.getBattleRunning();
@@ -782,7 +796,7 @@ public class CmdLineUi implements GameEnvironmentUi {
 					int health = opponent.getCurrentHealth();
 					party.get(0).attack(battle.getMonsters().get(0));
 					System.out.println(activeMonster.getNickname() + " did " + (health - opponent.getCurrentHealth()) + " damage to opponent's " + opponent.getNickname());
-					if (opponent.getStatus().equals(Monster.Status.FAINTED)) {
+					if (opponent.isFainted()) {
 						System.out.println("Opponent's " + opponent.getNickname() + " fainted!");
 					}
 					System.out.print("\n");

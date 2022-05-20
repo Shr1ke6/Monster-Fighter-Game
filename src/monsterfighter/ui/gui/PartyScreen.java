@@ -23,7 +23,7 @@ import monsterfighter.core.Monster;
 import monsterfighter.ui.GameEnvironmentUi;
 
 /**
- * A screen used to access a {@link PLayer}'s party through a {@link GameEnvironment}
+ * A screen used to access a player's party through a {@link GameEnvironment}
  */
 public class PartyScreen extends Screen{
 	
@@ -102,6 +102,11 @@ public class PartyScreen extends Screen{
 		}
 	}
 
+	/**
+	 * Creates the labels for selling a monster adds them to the container.
+	 * 
+	 * @param container The container to add the labels to
+	 */
 	private void addLabelsSell(Container container) {
 		
 		lblGold = new JLabel("Gold: " + getGameEnvironment().getPlayer().getGoldBalance());
@@ -117,6 +122,11 @@ public class PartyScreen extends Screen{
 		
 	}
 
+	/**
+	 * Creates the generic labels and adds them to the container.
+	 * 
+	 * @param container The container to add the labels to
+	 */
 	private void addlabels(Container container) {
 		
 		JLabel partyLabel = new JLabel("Party");
@@ -146,7 +156,11 @@ public class PartyScreen extends Screen{
 		
 	}
 	
-
+	/**
+	 * Creates the toggle buttons that represent the party {@link Monster}s and adds them to the container.
+	 * 
+	 * @param container The container to add the toggle buttons to
+	 */
 	private void addMonsterBtns(Container container) {
 		
 		buttonGroupPartyMonsters = new ButtonGroup();
@@ -223,6 +237,9 @@ public class PartyScreen extends Screen{
 			
 	}
 	
+	/**
+	 * Sets the button text for the monster buttons.
+	 */
 	private void paintBtnsMonsters() {
 		
 		if (getGameEnvironment().getPlayer().getParty().size()>=1) {
@@ -258,12 +275,17 @@ public class PartyScreen extends Screen{
 		}
 	}
 	
+	/**
+	 * Creates the option buttons and adds them to the container.
+	 * 
+	 * @param container The container to add the buttons to
+	 */
 	private void addOptionBtns(Container container) {
 		
 		listOptionButtons = new ArrayList<AbstractButton>();
 		
 		JButton btnBack = new JButton("Back");
-		if (getBackButtonRoute().equals("BATTLE") && getGameEnvironment().getPlayer().getLeadingMonster().getStatus().equals(Monster.Status.FAINTED)) {
+		if (getBackButtonRoute().equals("BATTLE") && getGameEnvironment().getPlayer().getLeadingMonster().isFainted()) {
 			btnBack.setEnabled(false);
 		}
 		btnBack.addActionListener(e -> {
@@ -312,7 +334,8 @@ public class PartyScreen extends Screen{
 			btnSellMonster = new JButton("Sell");
 			btnSellMonster.setEnabled(false);
 			btnSellMonster.addActionListener(e -> {
-				if (getGameEnvironment().getPlayer().getGoldBalance() + selectedMonster.getSellPrice() < 200) {
+				if (getGameEnvironment().getPlayer().getGoldBalance() + selectedMonster.getSellPrice() < 200 && 
+						getGameEnvironment().getPlayer().getParty().size() == 1) {
 					 optionPaneEndGame();
 				} else {
 					sellMonster();
@@ -335,6 +358,9 @@ public class PartyScreen extends Screen{
 		}
 	}
 	
+	/**
+	 * Creates an option pane for giving a monster a nickname.
+	 */
 	private void optionPaneNickname() {
 		final JButton btnCancel = new JButton("Cancel");
 		final JButton btnAccept = new JButton("Accept");
@@ -388,6 +414,10 @@ public class PartyScreen extends Screen{
         {btnCancel, btnAccept}, btnCancel);
 	}
 	
+	/**
+	 * Creates an option pane for ending the game if the user decides to sell a monster,
+	 * while they have insufficient gold to buy another.
+	 */
 	private void optionPaneEndGame() {
 		final JButton btnCancel = new JButton("Cancel");
 		final JButton btnSellAnyway = new JButton("Sell Anyway");
@@ -429,6 +459,9 @@ public class PartyScreen extends Screen{
 		        {btnCancel, btnSellAnyway, btnEndGame}, btnCancel);
 	}
 	
+	/**
+	 * Updates the screen after a {@link Monster} is sold.
+	 */
 	private void sellMonster() {
 		getGameEnvironment().sellMonster(selectedMonster);
 		buttonGroupPartyMonsters.clearSelection();

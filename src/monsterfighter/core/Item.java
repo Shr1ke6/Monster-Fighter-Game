@@ -104,7 +104,7 @@ public class Item implements Purchasable{
 	}
 	
 	/**
-	 * Gets the {@link Monster} stat that is changed by the item
+	 * Gets the {@link Monster} stat that is changed by the item.
 	 * 
 	 * @return the stat that is changed
 	 */
@@ -114,9 +114,9 @@ public class Item implements Purchasable{
 	
 	/**
 	 * Gets the value of how many of the item should 
-	 * be stocked in the {@link Shop}
+	 * be stocked in the {@link Shop}.
 	 * 
-	 * @return
+	 * @return Returns the number of items in the shop
 	 */
 	public int getShopQuantity() {
 		return shopQuantity;

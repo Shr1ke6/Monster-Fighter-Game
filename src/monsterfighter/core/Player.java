@@ -32,7 +32,7 @@ public class Player {
 	 * inventory using the total number of items in the game.
 	 * 
 	 * @param name The name of the player
-	 * @param numItems
+	 * @param allItems All the items present in a {@link GameEnvironment}
 	 */
 	public Player(String name, List<Item> allItems) {
 		this.name = name;
@@ -113,7 +113,7 @@ public class Player {
 	}
 
 	/**
-	 * Gets the player's name
+	 * Gets the player's name.
 	 * 
 	 * @return The player's name
 	 */
@@ -131,7 +131,7 @@ public class Player {
 	}
 
 	/**
-	 * Adds or subtracts gold from the player's gold balance
+	 * Adds or subtracts gold from the player's gold balance.
 	 * 
 	 * @param gold The amount of gold that will be added to or taken from 
 	 * the players gold balance
@@ -149,7 +149,7 @@ public class Player {
 	}
 
 	/**
-	 * Returns the total gold the player has ever earned
+	 * Returns the total gold the player has ever earned.
 	 * 
 	 * @return The total gold that the player has ever had in their gold balance
 	 */
@@ -176,7 +176,7 @@ public class Player {
 	}
 
 	/**
-	 * Increases the player's points
+	 * Increases the player's points.
 	 * 
 	 * @param points The number of points to add the player's points
 	 */
@@ -185,9 +185,9 @@ public class Player {
 	}
 	
 	/**
-	 * Checks to see if inventory is empty
+	 * Checks to see if inventory is empty.
 	 * 
-	 * @return isEmpty States whether the player's {@link inventory} is empty or not
+	 * @return isEmpty States whether the player's inventory is empty or not
 	 */
 	public boolean inventoryIsEmpty() {
 		boolean isEmpty = true;
@@ -229,7 +229,7 @@ public class Player {
 	}
 	
 	/**
-	 * Returns a boolean based on whether there exists a conscious monster in party
+	 * Returns a boolean based on whether there exists a conscious monster in party.
 	 * 
 	 * @return Boolean that's true if all the monster's in party are fainted 
 	 * or false if there exists a conscious monster
@@ -245,9 +245,9 @@ public class Player {
 	}
 
 	/**
-	 * Returns the number of conscious Monster's within the player's party
+	 * Returns the number of conscious {@link Monster}'s within the player's party.
 	 * 
-	 * @return The number of Monster's in party with Status.CONSCIOUS
+	 * @return The number of {@link Monster}'s in party with Status.CONSCIOUS
 	 */
 	public int getConsciousMonsters() {
 		int conscious = party.size();
@@ -260,9 +260,9 @@ public class Player {
 	}
 
 	/**
-	 * Returns the number of items in the player's inventory
+	 * Returns the number of {@link Item}'s in the player's inventory.
 	 * 
-	 * @return 
+	 * @return The number of {@link Item}'s in the player's inventory
 	 */
 	public int inventoryNumItems() {
 		int numItems = 0;

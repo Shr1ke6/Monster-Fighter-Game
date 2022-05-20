@@ -33,7 +33,7 @@ public class GameOverScreen extends Screen{
 	}
 
 	/**
-	 * Creates the labels and adds them to the container.
+	 * Creates the generic labels and adds them to the container.
 	 * 
 	 * @param container The container to add the labels to
 	 */
