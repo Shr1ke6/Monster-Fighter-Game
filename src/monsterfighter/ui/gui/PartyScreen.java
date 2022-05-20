@@ -389,7 +389,7 @@ public class PartyScreen extends Screen{
 		fieldNickname.setColumns(50);
 		fieldNickname.getDocument().addDocumentListener(new DocumentListener() {
 	        protected void update() {
-	        	boolean validMonsterNickname = fieldNickname.getText().matches(GameEnvironmentUi.NAME_REGEX) || fieldNickname.getText().isEmpty();
+	        	boolean validMonsterNickname = fieldNickname.getText().matches(GameEnvironmentUi.NICKNAME_REGEX) || fieldNickname.getText().isEmpty();
 	            btnAccept.setEnabled(validMonsterNickname);
 	            lblNickname.setText(validMonsterNickname ? "Change Nickname" : "<html>Change Nickname <font color='red'>(" + GameEnvironmentUi.MONSTER_NAME_REQUIREMENTS + ")</font></html>");
 	        }

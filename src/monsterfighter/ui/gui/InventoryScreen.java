@@ -86,7 +86,9 @@ public class InventoryScreen extends Screen{
 		if (getBackButtonRoute().equals("PARTY")) {
 			selectedMonster = (Monster)getGameEnvironment().getSelectedObject();
 		} else if (getBackButtonRoute().equals("BATTLE")) {
-			selectedMonster = getGameEnvironment().getPlayer().getParty().get(0);
+			System.out.println(getGameEnvironment().getPlayer().getLeadingMonster());
+			System.out.println(getGameEnvironment().getPlayer().getParty());
+			selectedMonster = getGameEnvironment().getPlayer().getLeadingMonster();
 		}
 		
 		addLabelInventory(container);
@@ -244,9 +246,10 @@ public class InventoryScreen extends Screen{
 						}
 						setTextLabelMonster();
 					} else if (getBackButtonRoute().equals("BATTLE")) {
+						Item item = listInventory.getSelectedValue().get(0);
 						getGameEnvironment().useItem(selectedMonster, listInventory.getSelectedValue().get(0));
 						if (inventorySize != getGameEnvironment().getPlayer().inventoryNumItems()) { 
-							getGameEnvironment().setSelectedObject(listInventory.getSelectedValue().get(0));
+							getGameEnvironment().setSelectedObject(item);
 							getGameEnvironment().transitionScreen(getBackButtonRoute(), "INVENTORY");
 						}
 					} else {

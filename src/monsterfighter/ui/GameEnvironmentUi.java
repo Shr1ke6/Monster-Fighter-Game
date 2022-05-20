@@ -13,17 +13,22 @@ public interface GameEnvironmentUi {
     /**
      * A description of the naming convention for the {@link Player}'s name
      */
-    String NAME_REQUIREMENTS = "Name must contain only letters and may be from 1-12 characters";
+    String NAME_REQUIREMENTS = "Name must contain only letters and may be from 3-15 characters";
     
     /**
      * A description of the naming convention for a {@link Monster}'s nickname
      */
-    String MONSTER_NAME_REQUIREMENTS = "Nickname must contain only letters and have a max of 12 characters";
+    String MONSTER_NAME_REQUIREMENTS = "Nickname must contain only letters and have a max of 10 characters";
 
     /**
      * A regex for validating the name against the specified name requirements.
      */
-    String NAME_REGEX = "[a-zA-Z]{1,12}";
+    String NAME_REGEX = "[a-zA-Z]{3,15}";
+    
+    /**
+     * A regex for validating the monster nickname name against the specified name requirements.
+     */
+    String NICKNAME_REGEX = "[a-zA-Z]{1,10}";
     
     /**
      * A description of the day requirements for a game of Monster Fighter

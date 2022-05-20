@@ -98,7 +98,7 @@ class BattlesTest {
 		Battles battle1 = trainerBattles;
 		
 		Assertions.assertEquals(100, battle.calculatePoints(battleType, partySize, Difficulty.EASY));
-		Assertions.assertEquals(150, battle1.calculatePoints(battleType1, partySize1, Difficulty.EASY));
+		Assertions.assertEquals(200, battle1.calculatePoints(battleType1, partySize1, Difficulty.EASY));
 	
 	}
 	

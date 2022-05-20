@@ -142,7 +142,7 @@ public class BattleSelectionScreen extends Screen{
 			}
 			
 		});
-		listWildBattles.setBounds(28, 220, 420, 44);
+		listWildBattles.setBounds(28, 220, 420, 41);
 		container.add(listWildBattles);
 	}
 
@@ -175,7 +175,7 @@ public class BattleSelectionScreen extends Screen{
 			}
 			
 		});
-		listTrainerBattles.setBounds(28, 330, 420, 62);
+		listTrainerBattles.setBounds(28, 330, 420, 59);
 		container.add(listTrainerBattles);
 		
 	}

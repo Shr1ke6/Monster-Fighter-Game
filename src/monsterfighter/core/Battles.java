@@ -217,7 +217,7 @@ public class Battles {
 		int points = 50 * partySize + difficulty.battlePoints;
 		// Bonus points for taking on trainer battles
 		if (!battleType.equals("Wild")) {
-			points += 50;
+			points += 100;
 		}
 		return points;
 	}

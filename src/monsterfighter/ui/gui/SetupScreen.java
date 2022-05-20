@@ -256,7 +256,7 @@ public class SetupScreen extends Screen{
 				checkCanContinue();
 			}
 		});
-		listDifficulty.setBounds(99, 251, 365, 62);
+		listDifficulty.setBounds(99, 251, 365, 59);
 		container.add(listDifficulty);
 		
 	}
@@ -287,7 +287,7 @@ public class SetupScreen extends Screen{
 			}
 		});
 		
-		listStartingMonster.setBounds(10, 375, 454, 62);
+		listStartingMonster.setBounds(10, 375, 454, 53);
 		container.add(listStartingMonster);
 	}
 	
@@ -296,7 +296,7 @@ public class SetupScreen extends Screen{
 	 */
 	private void checkCanContinue() {
 		boolean validName = fieldName.getText().matches(GameEnvironmentUi.NAME_REGEX);
-		boolean validMonsterNickname = fieldMonsterNickname.getText().matches(GameEnvironmentUi.NAME_REGEX) || fieldMonsterNickname.getText().isEmpty();
+		boolean validMonsterNickname = fieldMonsterNickname.getText().matches(GameEnvironmentUi.NICKNAME_REGEX) || fieldMonsterNickname.getText().isEmpty();
 
 		// Hide the name requirements text if the input is valid
 		lblNameReq.setText(validName ? null : GameEnvironmentUi.NAME_REQUIREMENTS);

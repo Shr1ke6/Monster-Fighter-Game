@@ -69,8 +69,8 @@ public class GameEnvironment {
 	 * Represents the difficulty of a game.
 	 */
     public enum Difficulty {
-	    EASY(200, 50, 0,"Easy"),
-	    MEDIUM(100, 25, 50, "Medium"),
+	    EASY(200, 30, 0,"Easy"),
+	    MEDIUM(100, 15, 50, "Medium"),
 	    HARD(50, 0, 100, "Hard");
 
     	/**

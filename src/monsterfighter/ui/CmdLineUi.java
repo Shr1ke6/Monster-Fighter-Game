@@ -302,7 +302,7 @@ public class CmdLineUi implements GameEnvironmentUi {
             System.out.println("Enter a nickname for your monster or leave blank to skip");
             try {
                 String name = scanner.nextLine();
-                if (name.matches(NAME_REGEX) || name == "") {
+                if (name.matches(NICKNAME_REGEX) || name == "") {
                    return name;
                 }
                 System.out.println(MONSTER_NAME_REQUIREMENTS);
