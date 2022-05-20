@@ -426,6 +426,7 @@ public class GameEnvironment {
 		if (randomEvents.getMonsterJoins()) {
 			int randomNumber = rng.nextInt(allMonsters.size());
 			Monster monster = allMonsters.get(randomNumber);
+			monster.scaleMonster(day-1);
 			player.addMonsterToParty(monster);
 		}
 		for (Monster monster : player.getParty()) {

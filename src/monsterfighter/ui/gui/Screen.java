@@ -2,7 +2,6 @@ package monsterfighter.ui.gui;
 
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.EventQueue;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
