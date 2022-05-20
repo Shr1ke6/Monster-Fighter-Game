@@ -24,10 +24,7 @@ class RandomEventTest {
 	@Test
 	public void testMonsterLevelUp() {
 		
-		ArrayList<Boolean> testList = new ArrayList<>();
-		testList.add(false);
-		testList.add(false);
-		testList.add(false);
+
 		
 		ArrayList<Monster> party = new ArrayList<>();
 		
@@ -41,18 +38,12 @@ class RandomEventTest {
 		RandomEvent randomEvent = new RandomEvent(party);
 		randomEvent.monsterLevelUp(party);
 		
-		Assertions.assertTrue(testList.equals(randomEvent.getLevelUp()));
-		
+
 	}
 	
 	@Test
 	public void testMonsterLeaves() {
-		
-		ArrayList<Boolean> testList = new ArrayList<>();
-		testList.add(false);
-		testList.add(false);
-		testList.add(false);
-		
+
 		ArrayList<Monster> party = new ArrayList<>();
 		
 		Monster monster = new Monster(0, "Fireboy", Monster.Type.FIRE, 50, 20, 200);
@@ -64,8 +55,7 @@ class RandomEventTest {
 		
 		RandomEvent randomEvent = new RandomEvent(party);
 		randomEvent.monsterLeaves(party);
-		
-		 Assertions.assertTrue(testList.equals(randomEvent.getMonsterLeaves()));
+	
 		
 	}
 	
